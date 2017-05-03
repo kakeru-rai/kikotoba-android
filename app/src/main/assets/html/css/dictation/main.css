@@ -1,0 +1,23 @@
+@charset "UTF-8";
+#container>span {
+    float: left;
+    margin-top: 1.3em;
+    position: relative;
+}
+
+#container input {
+    text-align: center;
+}
+
+.answer {
+    margin-top: -1.3em;
+    position: absolute;
+    color: red;
+    font-weight: bold;
+}
+.answer_correct {
+    margin-top: -1.3em;
+    position: absolute;
+    color: red;
+    font-weight: bold;
+}

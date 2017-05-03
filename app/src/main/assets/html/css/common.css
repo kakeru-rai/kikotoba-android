@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+body {
+	font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, Georgia,serif,sans-serif;
+	font-size: 1.1em;
+	line-height: 1.6em;
+	color: #1a1a1a;
+	-webkit-text-size-adjust: 100%;
+	
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #EEEEEE;
+}
+img {
+    width: 100%
+}
+h1 {
+    text-align: center;
+	line-height: 1.2em;
+}

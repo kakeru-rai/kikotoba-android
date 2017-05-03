@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="net.snow69it.listeningworkout.SpeakingFragment"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/is_cleared"
+        android:text=" "
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right" />
+    <view
+        android:id="@+id/webview"
+        class="net.snow69it.listeningworkout.util.WebViewDefault"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:text="@string/dictation_play"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonPlay"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="@string/dictation_submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonSubmit"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+</LinearLayout>

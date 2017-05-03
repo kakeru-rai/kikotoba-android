@@ -1,0 +1,59 @@
+@charset "UTF-8";
+@import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+
+#popup {
+    display: none;
+    position: absolute;
+    background-color: #FFF;
+    border: solid 1px;
+    border-radius: 4px;
+    padding: 6px;
+    margin-left: 3%;
+    margin-bottom: 120px;
+    width: 90%;
+}
+
+#popupCloseButton {
+    position: absolute;
+    top: -15px;
+    right: -10px;
+    border-radius: 50%;
+    border: 1px solid;
+    outline: none;
+    background-color: #FFF;
+    padding: 5px 10px;
+}
+
+.current-playing {
+    background: #AFB;
+}
+
+.transcript {
+    display: none;
+}
+
+.paragraph {
+    padding: 0 12px 0 12px;
+}
+
+body {
+//    font-family: 'Noto Sans Japanese', serif;
+	font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, Georgia,serif,sans-serif;
+	font-size: 1.1em;
+	line-height: 1.6em;
+	color: #1a1a1a;
+	-webkit-text-size-adjust: 100%;
+	
+    margin: 0 auto;
+    margin-bottom: 320px;
+    padding: 0;
+    background-color: #EEEEEE;
+}
+img {
+    width: 100%
+}
+h1 {
+    text-align: center;
+	line-height: 1.2em;
+}
+

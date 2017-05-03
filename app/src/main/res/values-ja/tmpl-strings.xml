@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- caption -->
+    <string name="tmpl_bookmark">Bookmark</string>
+    <string name="tmpl_option">Option</string>
+    <string name="tmpl_mail">Mail Address</string>
+    <string name="tmpl_password">Password</string>
+    <string name="tmpl_title">Title</string>
+    <string name="tmpl_url">URL</string>
+    <string name="tmpl_update">Update</string>
+    <string name="tmpl_loading">Loading</string>
+    <string name="tmpl_guest">ゲスト</string>
+
+    <!-- 動作 -->
+    <string name="tmpl_ok">OK</string>
+    <string name="tmpl_submit">Submit</string>
+    <string name="tmpl_cancel">Cancel</string>
+    <string name="tmpl_next">Next</string>
+    <string name="tmpl_yes">Yes</string>
+    <string name="tmpl_no">No</string>
+    <string name="tmpl_move">Move</string>
+    <string name="tmpl_edit">Edit</string>
+    <string name="tmpl_add">Add</string>
+    <string name="tmpl_delete">Delete</string>
+    <string name="tmpl_deleteAll">Delete all</string>
+    <string name="tmpl_copy">Copy</string>
+    <string name="tmpl_retry">Retry</string>
+    <string name="tmpl_open">Open</string>
+    <string name="tmpl_register">Register</string>
+    <string name="tmpl_modify">Modify</string>
+    <string name="tmpl_send">Send</string>
+    <string name="tmpl_complete">Complete</string>
+    <string name="tmpl_incomplete">Incomplete</string>
+    <string name="tmpl_expired">Expired</string>
+    <string name="tmpl_share">Share</string>
+    <string name="tmpl_history">History</string>
+    <string name="tmpl_login">Login</string>
+    <string name="tmpl_logout">ログアウト</string>
+    <string name="tmpl_download">Download</string>
+    <string name="tmpl_get_started">Get started</string>
+    
+    <string name="tmpl_back">Back</string>
+    <string name="tmpl_agree">Agree</string>
+    <string name="tmpl_close">Close</string>
+    <string name="tmpl_do_later">Do later</string>
+    <string name="tmpl_copy_to_clipboard">Copy to clipboard</string>
+
+    <!-- message -->
+    <string name="tmpl_msg_sent">Sent</string>
+	<string name="tmpl_msg_copied_to_clipboard">Copied to clipboad.</string>
+	<string name="tmpl_msg_list_empty">Item is not yet</string>
+	
+    <!-- word -->
+    <string name="tmpl_morning">Morning</string>
+    <string name="tmpl_midday">Midday</string>
+    <string name="tmpl_evening">Evening</string>
+    <string name="tmpl_license">ライセンス</string>
+    <string name="tmpl_version">バージョン</string>
+    <string name="tmpl_google">Google</string>
+    <string name="tmpl_facebook">Facebook</string>
+
+	<!-- array -->
+	<array name="tmpl_week_day">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </array>
+
+</resources>
