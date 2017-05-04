@@ -27,7 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
-import net.snow69it.listeningworkout.article.ArticlePair;
+import net.snow69it.listeningworkout.model.entity.ArticlePair;
 import net.snow69it.listeningworkout.util.Navigation;
 
 public class ListeningActivity extends AppCompatActivity {

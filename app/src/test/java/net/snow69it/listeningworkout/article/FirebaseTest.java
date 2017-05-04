@@ -8,7 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import net.snow69it.listeningworkout.common.FirebaseUtil;
+import net.snow69it.listeningworkout.util.FirebaseUtil;
 
 import org.junit.Test;
 

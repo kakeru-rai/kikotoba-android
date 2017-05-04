@@ -1,4 +1,4 @@
-package net.snow69it.listeningworkout.audio;
+package net.snow69it.listeningworkout.model.audio;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,9 +9,9 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 
-import net.snow69it.listeningworkout.article.Article;
-import net.snow69it.listeningworkout.common.FirebaseUtil;
-import net.snow69it.listeningworkout.common.WorkingDirectory;
+import net.snow69it.listeningworkout.model.entity.Article;
+import net.snow69it.listeningworkout.util.FirebaseUtil;
+import net.snow69it.listeningworkout.model.WorkingDirectory;
 
 import org.apache.commons.io.FileUtils;
 

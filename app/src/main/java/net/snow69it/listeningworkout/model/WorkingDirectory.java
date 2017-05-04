@@ -1,9 +1,9 @@
-package net.snow69it.listeningworkout.common;
+package net.snow69it.listeningworkout.model;
 
 import android.content.Context;
 import android.util.Log;
 
-import net.snow69it.listeningworkout.article.Article;
+import net.snow69it.listeningworkout.model.entity.Article;
 import net.snow69it.listeningworkout.util.D;
 import net.snow69it.listeningworkout.util.FileUtil;
 import net.snow69it.listeningworkout.util.IOUtil;

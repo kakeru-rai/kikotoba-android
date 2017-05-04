@@ -1,4 +1,4 @@
-package net.snow69it.listeningworkout.article;
+package net.snow69it.listeningworkout.model.entity;
 
 import java.util.List;
 

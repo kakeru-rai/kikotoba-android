@@ -17,15 +17,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 
-import net.snow69it.listeningworkout.article.Article;
-import net.snow69it.listeningworkout.article.ArticlePair;
-import net.snow69it.listeningworkout.article.Sentence;
-import net.snow69it.listeningworkout.entity.UserLogByArticle;
+import net.snow69it.listeningworkout.model.entity.Article;
+import net.snow69it.listeningworkout.model.entity.ArticlePair;
+import net.snow69it.listeningworkout.model.entity.Sentence;
+import net.snow69it.listeningworkout.model.entity.UserLogByArticle;
 import net.snow69it.listeningworkout.repository.ArticleRepository;
 import net.snow69it.listeningworkout.repository.BaseRepository;
 import net.snow69it.listeningworkout.repository.UserLogRepository;
-import net.snow69it.listeningworkout.speaking.JudgeSpeech;
-import net.snow69it.listeningworkout.speaking.WebAppInterface;
+import net.snow69it.listeningworkout.model.speaking.JudgeSpeech;
+import net.snow69it.listeningworkout.model.speaking.WebAppInterface;
 import net.snow69it.listeningworkout.util.WebViewDefault;
 
 import butterknife.BindView;

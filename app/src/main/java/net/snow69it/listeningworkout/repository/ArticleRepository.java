@@ -5,9 +5,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import net.snow69it.listeningworkout.article.Article;
-import net.snow69it.listeningworkout.article.ArticlePair;
-import net.snow69it.listeningworkout.common.LanguagePair;
+import net.snow69it.listeningworkout.model.entity.Article;
+import net.snow69it.listeningworkout.model.entity.ArticlePair;
+import net.snow69it.listeningworkout.model.LanguagePair;
 
 import java.util.ArrayList;
 import java.util.List;

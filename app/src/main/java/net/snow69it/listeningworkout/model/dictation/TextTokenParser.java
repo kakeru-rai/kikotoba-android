@@ -1,6 +1,6 @@
-package net.snow69it.listeningworkout.dictation;
+package net.snow69it.listeningworkout.model.dictation;
 
-import net.snow69it.listeningworkout.dictation.TextToken.CHAR_TYPE;
+import net.snow69it.listeningworkout.model.dictation.TextToken.CHAR_TYPE;
 
 import java.util.ArrayList;
 import java.util.List;

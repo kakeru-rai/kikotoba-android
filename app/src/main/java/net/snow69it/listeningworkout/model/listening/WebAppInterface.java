@@ -1,13 +1,12 @@
-package net.snow69it.listeningworkout.listening;
+package net.snow69it.listeningworkout.model.listening;
 
 import android.content.Context;
 import android.os.Handler;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-import net.snow69it.listeningworkout.article.Article;
-import net.snow69it.listeningworkout.article.Sentence;
-import net.snow69it.listeningworkout.audio.AudioController;
+import net.snow69it.listeningworkout.model.entity.Article;
+import net.snow69it.listeningworkout.model.entity.Sentence;
 import net.snow69it.listeningworkout.util.IOUtil;
 
 import java.io.File;

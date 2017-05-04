@@ -12,7 +12,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import net.snow69it.listeningworkout.WaitUtil;
-import net.snow69it.listeningworkout.article.Article;
+import net.snow69it.listeningworkout.model.entity.Article;
 import net.snow69it.listeningworkout.util.FileUtil;
 
 import org.apache.commons.io.FileUtils;

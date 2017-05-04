@@ -5,9 +5,9 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.firebase.database.DatabaseError;
 
 import net.snow69it.listeningworkout.WaitUtil;
-import net.snow69it.listeningworkout.article.Article;
-import net.snow69it.listeningworkout.article.ArticlePair;
-import net.snow69it.listeningworkout.article.Sentence;
+import net.snow69it.listeningworkout.model.entity.Article;
+import net.snow69it.listeningworkout.model.entity.ArticlePair;
+import net.snow69it.listeningworkout.model.entity.Sentence;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

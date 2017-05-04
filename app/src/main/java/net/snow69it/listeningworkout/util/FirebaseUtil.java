@@ -1,11 +1,11 @@
-package net.snow69it.listeningworkout.common;
+package net.snow69it.listeningworkout.util;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import net.snow69it.listeningworkout.article.Article;
+import net.snow69it.listeningworkout.model.entity.Article;
 
 /**
  * Created by raix on 2017/03/12.

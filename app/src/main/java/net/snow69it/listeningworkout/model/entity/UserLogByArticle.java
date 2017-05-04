@@ -1,4 +1,4 @@
-package net.snow69it.listeningworkout.entity;
+package net.snow69it.listeningworkout.model.entity;
 
 import android.support.annotation.NonNull;
 

@@ -1,4 +1,4 @@
-package net.snow69it.listeningworkout.listening;
+package net.snow69it.listeningworkout.model.listening;
 
 import android.content.Context;
 import android.graphics.Bitmap;

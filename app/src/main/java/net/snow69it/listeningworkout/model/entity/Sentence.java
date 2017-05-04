@@ -1,4 +1,4 @@
-package net.snow69it.listeningworkout.article;
+package net.snow69it.listeningworkout.model.entity;
 
 /**
  * Created by raix on 2017/01/24.

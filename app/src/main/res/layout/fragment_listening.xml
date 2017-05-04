@@ -8,14 +8,14 @@
     <view xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/webview"
-        class="net.snow69it.listeningworkout.listening.ViewerWebView"
+        class="net.snow69it.listeningworkout.model.listening.ViewerWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#CCF" />
 
     <view
         android:id="@+id/mediaController"
-        class="net.snow69it.listeningworkout.audio.AudioController"
+        class="net.snow69it.listeningworkout.model.listening.AudioController"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

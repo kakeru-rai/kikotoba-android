@@ -1,4 +1,4 @@
-package net.snow69it.listeningworkout.common;
+package net.snow69it.listeningworkout.model;
 
 /**
  * Created by raix on 2017/03/25.

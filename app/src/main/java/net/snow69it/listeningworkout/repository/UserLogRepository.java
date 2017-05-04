@@ -6,8 +6,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import net.snow69it.listeningworkout.common.FirebaseUtil;
-import net.snow69it.listeningworkout.entity.UserLogByArticle;
+import net.snow69it.listeningworkout.util.FirebaseUtil;
+import net.snow69it.listeningworkout.model.entity.UserLogByArticle;
 
 /**
  * Created by raix on 2017/03/26.

@@ -1,4 +1,4 @@
-package net.snow69it.listeningworkout.audio;
+package net.snow69it.listeningworkout.model.listening;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,8 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import net.snow69it.listeningworkout.R;
-
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

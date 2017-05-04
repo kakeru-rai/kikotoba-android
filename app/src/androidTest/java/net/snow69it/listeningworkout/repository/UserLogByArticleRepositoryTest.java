@@ -8,7 +8,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
 
 import net.snow69it.listeningworkout.WaitUtil;
-import net.snow69it.listeningworkout.entity.UserLogByArticle;
+import net.snow69it.listeningworkout.model.entity.UserLogByArticle;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package net.snow69it.listeningworkout.dictation;
+package net.snow69it.listeningworkout.model.dictation;
 
 import org.junit.Test;
 

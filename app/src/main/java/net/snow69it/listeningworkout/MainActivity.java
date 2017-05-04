@@ -19,7 +19,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import net.snow69it.listeningworkout.common.WorkingDirectory;
+import net.snow69it.listeningworkout.model.WorkingDirectory;
 import net.snow69it.listeningworkout.util.IOUtil;
 
 import java.io.File;

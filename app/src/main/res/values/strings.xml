@@ -23,7 +23,7 @@
     <string-array name="main_tab_names">
         <item>ストーリー</item>
         <item>アプリについて</item>
-<!--        <item>プロフィール</item> -->
+        <item>プロフィール</item>
     </string-array>
     <string-array name="article_function_names">
         <item>リスニング</item>

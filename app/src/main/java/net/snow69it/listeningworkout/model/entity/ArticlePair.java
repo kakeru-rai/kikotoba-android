@@ -1,10 +1,9 @@
-package net.snow69it.listeningworkout.article;
+package net.snow69it.listeningworkout.model.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import net.snow69it.listeningworkout.common.LanguagePair;
-import net.snow69it.listeningworkout.entity.UserLogByArticle;
+import net.snow69it.listeningworkout.model.LanguagePair;
 
 /**
  * 記事の言語ペア

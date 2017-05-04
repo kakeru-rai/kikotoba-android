@@ -1,4 +1,4 @@
-package net.snow69it.listeningworkout.speaking;
+package net.snow69it.listeningworkout.model.speaking;
 
 /**
  * 音声読み取りと元の文章が一致しているか判定を行う

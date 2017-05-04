@@ -14,9 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import net.snow69it.listeningworkout.article.Article;
-import net.snow69it.listeningworkout.article.ArticlePair;
-import net.snow69it.listeningworkout.article.Sentence;
+import net.snow69it.listeningworkout.model.entity.Article;
+import net.snow69it.listeningworkout.model.entity.ArticlePair;
+import net.snow69it.listeningworkout.model.entity.Sentence;
 
 import java.util.List;
 

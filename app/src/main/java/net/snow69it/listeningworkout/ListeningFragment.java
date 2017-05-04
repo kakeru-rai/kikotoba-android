@@ -8,15 +8,15 @@ import android.view.ViewGroup;
 
 import com.google.firebase.database.DatabaseError;
 
-import net.snow69it.listeningworkout.article.Article;
-import net.snow69it.listeningworkout.article.ArticlePair;
-import net.snow69it.listeningworkout.audio.AudioController;
-import net.snow69it.listeningworkout.entity.UserLogByArticle;
+import net.snow69it.listeningworkout.model.entity.Article;
+import net.snow69it.listeningworkout.model.entity.ArticlePair;
+import net.snow69it.listeningworkout.model.listening.AudioController;
+import net.snow69it.listeningworkout.model.entity.UserLogByArticle;
 import net.snow69it.listeningworkout.repository.BaseRepository;
 import net.snow69it.listeningworkout.repository.UserLogRepository;
 import net.snow69it.listeningworkout.util.Pref;
-import net.snow69it.listeningworkout.listening.ViewerWebView;
-import net.snow69it.listeningworkout.listening.WebAppInterface;
+import net.snow69it.listeningworkout.model.listening.ViewerWebView;
+import net.snow69it.listeningworkout.model.listening.WebAppInterface;
 
 /**
  * A placeholder fragment containing a simple view.

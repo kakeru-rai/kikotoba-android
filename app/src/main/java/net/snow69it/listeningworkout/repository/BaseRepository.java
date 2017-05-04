@@ -3,7 +3,7 @@ package net.snow69it.listeningworkout.repository;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
-import net.snow69it.listeningworkout.common.FirebaseUtil;
+import net.snow69it.listeningworkout.util.FirebaseUtil;
 
 import java.util.List;
 
