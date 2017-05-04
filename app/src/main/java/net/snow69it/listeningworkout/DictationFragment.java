@@ -18,20 +18,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 
-import net.snow69it.listeningworkout.model.entity.Article;
-import net.snow69it.listeningworkout.model.entity.ArticlePair;
-import net.snow69it.listeningworkout.model.entity.Sentence;
 import net.snow69it.listeningworkout.model.dictation.BlankTokenPicker;
 import net.snow69it.listeningworkout.model.dictation.DictationWebInterface;
 import net.snow69it.listeningworkout.model.dictation.TextToken;
 import net.snow69it.listeningworkout.model.dictation.TextTokenParser;
+import net.snow69it.listeningworkout.model.entity.Article;
+import net.snow69it.listeningworkout.model.entity.ArticlePair;
+import net.snow69it.listeningworkout.model.entity.Sentence;
 import net.snow69it.listeningworkout.model.entity.UserLogByArticle;
 import net.snow69it.listeningworkout.repository.ArticleRepository;
 import net.snow69it.listeningworkout.repository.BaseRepository;
 import net.snow69it.listeningworkout.repository.UserLogRepository;
 import net.snow69it.listeningworkout.util.WebViewDefault;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -138,12 +137,9 @@ public class DictationFragment extends Fragment {
         mArticle = entity.getTarget();
         Sentence sentence = mArticle.getSentences().get(getTrack());
 
-
         // 虫食いviewを生成
-
         buttonSubmit.setOnClickListener(mSubmitOnClickListener);
         buttonPlay.setOnClickListener(mPlayOnClickListener);
-
 
         try {
             textTokenList = createTextToken(sentence.getText());
@@ -153,7 +149,6 @@ public class DictationFragment extends Fragment {
 
         mDictationWebInterface = createDictationWebInterface(webView);
         mDictationWebInterface.load(getActivity());
-
     }
 
     /**
@@ -163,8 +158,6 @@ public class DictationFragment extends Fragment {
      * @throws Exception
      */
     private List<TextToken> createTextToken(String text) throws Exception {
-        List<View> views = new ArrayList<>();
-
         TextTokenParser parser = new TextTokenParser();
         List<TextToken> tokenList = parser.parse(text);
         BlankTokenPicker picker = new BlankTokenPicker();

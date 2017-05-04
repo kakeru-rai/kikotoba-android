@@ -7,9 +7,6 @@ if (!window.Android) {
     window.Android = Android;
 }
 
-for (var p in Android) {
-    console.log([p, Android[p]]);
-}
 var web = {};
 $(function() {
     var AppInterface = function() {
@@ -29,14 +26,9 @@ $(function() {
     // ############ オーディオ
     AppInterface.prototype.play = function play() {
         var sentence = this.article.getCurrentSentence();
-        console.log([sentence.fromSec, sentence.toSec]);
         this.audioPlayer.playDuration(sentence.fromSec, sentence.toSec);
         this.article.scrollUpToSentence();
     };
-//    AppInterface.prototype.play = function play() {
-//        this.audioPlayer.play();
-//        this.article.scrollUpToSentence();
-//    };
 
     AppInterface.prototype.pause = function pause() {
         this.audioPlayer.pause();
@@ -67,11 +59,6 @@ $(function() {
         this.audioPlayer.setAudioSrc(src);
     };
 
-//    AppInterface.prototype.setAudioSrcAndPlay = function setAudioSrc(src) {
-//        this.audioPlayer.setAudioSrc(src);
-//        this.audioPlayer.play();
-//    };
-
     // ############ 記事
     /**
      * @param {string} text
@@ -79,9 +66,6 @@ $(function() {
     AppInterface.prototype.addSentence = function addSentence(sentence, fromSec, toSec) {
         this.article.addSentence(sentence, fromSec, toSec);
     };
-//    AppInterface.prototype.addSentence = function addSentence(sentence, trackIndex) {
-//        this.article.addSentence(sentence, trackIndex);
-//    };
 
     AppInterface.prototype.flushParagraph = function flushParagraph() {
         this.article.flushParagraph();
@@ -106,13 +90,6 @@ $(function() {
     AppInterface.prototype.popup = function popup(text) {
         this.article.popup(text);
     };
-//    AppInterface.prototype.next = function next() {
-//        this.article.next();
-//    };
-//
-//    AppInterface.prototype.prev = function prev() {
-//        this.article.prev();
-//    };
 
 $('audio').on('abort', function(){console.log('abort')});
 $('audio').on('canplay', function(){console.log('canplay')});

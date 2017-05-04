@@ -28,12 +28,6 @@ $(function() {
     AppInterface.prototype.setAudioSrc = function setAudioSrc(src) {
         this.audioPlayer.setAudioSrc(src);
     };
-//    /**
-//     * @param {string} src
-//     */
-//    AppInterface.prototype.setAudioSrc = function(articleId, trackIndex) {
-//        this.audioPlayer.setSrc(articleId, trackIndex);
-//    };
 
     /**
      * @param {string} text

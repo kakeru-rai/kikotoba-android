@@ -109,12 +109,8 @@ $(function() {
                 _this.pause();
                 _this.onTrackEndedListener();
             }
-//            _this.onTimeupdateListener.call(_this, toSec);
         }));
     };
-
-//    AudioPlayer.prototype.onTimeupdateListener = function onTimeupdateListener(toSec) {
-//    };
 
     AudioPlayer.prototype.pause = function pause() {
         this.audio.pause();

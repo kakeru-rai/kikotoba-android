@@ -140,12 +140,12 @@ public class SpeakingFragment extends Fragment {
         mPlayButton.setOnClickListener(mPlayOnClickListener);
         mSpeechButton.setOnClickListener(mSpeechOnClickListener);
 
-        mWebAppInterface = createDictationWebInterface(webView, mArticle, getTrack());
+        mWebAppInterface = createDictationWebInterface(webView);
         mWebAppInterface.load(getActivity());
     }
 
-    private WebAppInterface createDictationWebInterface(WebView webView, Article article, int sentenceIndex){
-        return new WebAppInterface(webView, article, sentenceIndex) {
+    private WebAppInterface createDictationWebInterface(WebView webView) {
+        return new WebAppInterface(webView) {
             @JavascriptInterface
             @Override
             public void onReady() {

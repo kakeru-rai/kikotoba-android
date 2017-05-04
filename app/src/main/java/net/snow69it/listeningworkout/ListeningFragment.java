@@ -1,7 +1,6 @@
 package net.snow69it.listeningworkout;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +9,13 @@ import com.google.firebase.database.DatabaseError;
 
 import net.snow69it.listeningworkout.model.entity.Article;
 import net.snow69it.listeningworkout.model.entity.ArticlePair;
-import net.snow69it.listeningworkout.model.listening.AudioController;
 import net.snow69it.listeningworkout.model.entity.UserLogByArticle;
+import net.snow69it.listeningworkout.model.listening.AudioController;
+import net.snow69it.listeningworkout.model.listening.ViewerWebView;
+import net.snow69it.listeningworkout.model.listening.WebAppInterface;
 import net.snow69it.listeningworkout.repository.BaseRepository;
 import net.snow69it.listeningworkout.repository.UserLogRepository;
 import net.snow69it.listeningworkout.util.Pref;
-import net.snow69it.listeningworkout.model.listening.ViewerWebView;
-import net.snow69it.listeningworkout.model.listening.WebAppInterface;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -48,8 +47,6 @@ public class ListeningFragment extends BaseFragment {
     private WebAppInterface mWebAppInterface;
     private Article mTargetArticle;
     private Article mTranscriptArticle;
-
-    private Handler handler = new Handler();
 
     private View mRootView;
 

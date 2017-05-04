@@ -4,7 +4,6 @@ import android.content.Context;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-import net.snow69it.listeningworkout.model.entity.Article;
 import net.snow69it.listeningworkout.util.IOUtil;
 
 import java.io.File;
@@ -18,13 +17,9 @@ public abstract class WebAppInterface {
     public static String INTERFACE_NAME = "Android";
 
     private WebView mWebView;
-    private Article mTargetArticle;
-    private int mSentenceIndex;
 
-    public WebAppInterface(WebView webView, Article targetArticle, int sentenceIndex) {
+    public WebAppInterface(WebView webView) {
         mWebView = webView;
-        mTargetArticle = targetArticle;
-        mSentenceIndex = sentenceIndex;
         mWebView.addJavascriptInterface(this, INTERFACE_NAME);
     }
 
@@ -45,10 +40,6 @@ public abstract class WebAppInterface {
         mWebView.loadUrl("javascript: web.pause();");
     }
 
-//    public void setAudioSrc(String articleId, int trackIndex) {
-//        mWebView.loadUrl(String.format("javascript: web.setAudioSrc('%s', %d);", articleId, trackIndex));
-//    }
-
     public void setAudioSrc(String audioUrl) {
         jsSetAudioSrc(audioUrl);
     }
@@ -61,7 +52,6 @@ public abstract class WebAppInterface {
             e.printStackTrace();
         }
     }
-
 
     public void setText(String text) {
         String escaped = text.replace("'", "\\'");

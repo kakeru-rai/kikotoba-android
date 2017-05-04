@@ -202,25 +202,24 @@ public class WebAppInterface implements AudioController.Player {
         }
         jsSetTitle(mTargetArticle.getTitle());
 
-        Sentence previouseTargetSentence = null;
+        Sentence previousTargetSentence = null;
         for (int i = 0; i < targetSentences.size(); i++) {
             Sentence targetSentence = targetSentences.get(i);
-            int trackIndex = i + 1;
 
             // 段落
-            if (previouseTargetSentence != null && previouseTargetSentence.getParagraph() != targetSentence.getParagraph()) {
+            if (previousTargetSentence != null && previousTargetSentence.getParagraph() != targetSentence.getParagraph()) {
                 jsFlushParagraph();
             }
 
             // 文を結合
             jsAddSentence(targetSentence.getText(), targetSentence.getFromSec(), targetSentence.getToSec());
 
-            if (previouseTargetSentence == null) {
-                previouseTargetSentence = targetSentence;
+            if (previousTargetSentence == null) {
+                previousTargetSentence = targetSentence;
                 continue;
             }
 
-            previouseTargetSentence = targetSentence;
+            previousTargetSentence = targetSentence;
         }
         jsFlushParagraph();
         setAudioSrc(this.mTargetArticle.getAudio());

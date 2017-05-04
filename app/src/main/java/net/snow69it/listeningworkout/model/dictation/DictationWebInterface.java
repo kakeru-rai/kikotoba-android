@@ -26,9 +26,6 @@ public abstract class DictationWebInterface {
     /**
      * dictation画面をロードする
      */
-//    public void load() {
-//        mWebView.loadUrl("file:///android_asset/html/");
-//    }
     public void load(Context context) {
         File sd = IOUtil.getPrivateExternalDir(context, "");
         String url = "file://" + sd.getPath() + "/html/dictation/index.html";
@@ -51,9 +48,6 @@ public abstract class DictationWebInterface {
     /**
      *
      */
-//    public void play() {
-//        mWebView.loadUrl("javascript: web.play();");
-//    }
     public void play(float fromSec, float toSec) {
         mWebView.loadUrl(String.format("javascript: web.play(%f, %f);", fromSec, toSec));
     }
@@ -61,10 +55,6 @@ public abstract class DictationWebInterface {
     public void pause() {
         mWebView.loadUrl("javascript: web.pause();");
     }
-
-//    public void setAudioSrc(String articleId, int trackIndex) {
-//        mWebView.loadUrl(String.format("javascript: web.setAudioSrc('%s', %d);", articleId, trackIndex));
-//    }
 
     public void setAudioSrc(String audioUrl) {
         jsSetAudioSrc(audioUrl);
