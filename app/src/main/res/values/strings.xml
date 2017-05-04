@@ -31,6 +31,9 @@
         <item>ディクテーション</item>
     </string-array>
 
+    <string name="audio_download_message">音声データをダウンロードします</string>
+    <string name="audio_download_failed">ダウンロードに失敗しました</string>
+
     <!-- 共通 -->
     <string name="start_with_account">アカウントでログイン</string>
     <string name="start_without_register">登録せずに始める</string>

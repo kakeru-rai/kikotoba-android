@@ -90,9 +90,13 @@ $(function() {
         }
 
         // 開始
+        console.log(this.audio.paused);
         this.setCurrentTimeSec(fromSec);
+        console.log(this.audio.paused);
         this.play();
+        console.log(this.audio.paused);
         this.stopTo(toSec);
+        console.log(this.audio.paused);
     };
 
     AudioPlayer.prototype.stopTo = function stopTo(toSec) {

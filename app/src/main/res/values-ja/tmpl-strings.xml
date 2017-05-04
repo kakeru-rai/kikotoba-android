@@ -36,7 +36,7 @@
     <string name="tmpl_history">History</string>
     <string name="tmpl_login">Login</string>
     <string name="tmpl_logout">ログアウト</string>
-    <string name="tmpl_download">Download</string>
+    <string name="tmpl_download">ダウンロード</string>
     <string name="tmpl_get_started">Get started</string>
     
     <string name="tmpl_back">Back</string>

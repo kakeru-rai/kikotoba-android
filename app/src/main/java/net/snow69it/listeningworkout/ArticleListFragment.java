@@ -16,9 +16,9 @@
 
 package net.snow69it.listeningworkout;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -39,6 +39,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 
 import net.snow69it.listeningworkout.article.ArticlePair;
+import net.snow69it.listeningworkout.audio.AudioDownloadTask;
+import net.snow69it.listeningworkout.common.WorkingDirectory;
 import net.snow69it.listeningworkout.entity.UserLogByArticle;
 import net.snow69it.listeningworkout.repository.ArticleRepository;
 import net.snow69it.listeningworkout.repository.BaseRepository;
@@ -105,6 +107,7 @@ public class ArticleListFragment extends Fragment {
     public static class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
 
+        private Context mContext;
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private List<ArticlePair> mValues;
@@ -113,10 +116,12 @@ public class ArticleListFragment extends Fragment {
 
             public String mArticleId;
             public ArticlePair mArticlePair;
+            private boolean isAudioDownloaded;
             public final View mView;
             public final CardView mCardView;
             public final ImageView mImageView;
             public final TextView mTextView;
+            public final ImageView mImageViewDownload;
             public final TextView mTextViewDictationScore;
             public final ImageView mImageViewDictationIcon;
             public final TextView mTextViewSpeakingScore;
@@ -131,6 +136,7 @@ public class ArticleListFragment extends Fragment {
                 mCardView = (CardView) view.findViewById(R.id.cardView);
                 mImageView = (ImageView) view.findViewById(R.id.avatar);
                 mTextView = (TextView) view.findViewById(android.R.id.text1);
+                mImageViewDownload = (ImageView) view.findViewById(R.id.audioDownload);
                 mImageViewDictationIcon = (ImageView) view.findViewById(R.id.dictationIcon);
                 mTextViewDictationScore = (TextView) view.findViewById(R.id.dictationScore);
                 mImageViewSpeakingIcon = (ImageView) view.findViewById(R.id.speakingIcon);
@@ -143,6 +149,15 @@ public class ArticleListFragment extends Fragment {
             public String toString() {
                 return super.toString() + " '" + mTextView.getText();
             }
+
+            public void setAudioDownloaded(boolean downloaded) {
+                isAudioDownloaded = downloaded;
+                if (downloaded) {
+                    mImageViewDownload.setImageResource(R.drawable.ic_cloud_done_black_24dp);
+                } else {
+                    mImageViewDownload.setImageResource(R.drawable.ic_cloud_download_black_24dp);
+                }
+            }
         }
 
         public String getValueAt(int position) {
@@ -151,6 +166,7 @@ public class ArticleListFragment extends Fragment {
 
         public SimpleStringRecyclerViewAdapter(Context context, List<ArticlePair> items) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
+            mContext = context;
             mBackground = mTypedValue.resourceId;
             mValues = items;
         }
@@ -168,6 +184,9 @@ public class ArticleListFragment extends Fragment {
             ArticlePair articlePair = mValues.get(position);
             holder.mArticlePair = articlePair;
             holder.mArticleId = articlePair.getId();
+
+            holder.setAudioDownloaded(WorkingDirectory.getInstance().hasAudioDownloaded(mContext, holder.mArticlePair.getTarget()));
+
 //            holder.mArticleId = articlePair.getTranslated().getId();
             holder.mTextView.setText(articlePair.getTranslated().getTitle());
 
@@ -190,56 +209,12 @@ public class ArticleListFragment extends Fragment {
             holder.mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    final Context context = v.getContext();
-
-                    final String[] items = context.getResources().getStringArray(R.array.article_function_names);
-                    new AlertDialog.Builder(context)
-                            .setItems(items, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent;
-                                    switch (which) {
-                                        case 0:
-                                            context.startActivity(
-                                                    ListeningActivity.newIntent(
-                                                            context,
-                                                            holder.mArticleId,
-                                                            holder.mTextView.getText().toString(),
-                                                            holder.mArticlePair
-                                                    )
-                                            );
-//                                            intent = new Intent(context, ListeningActivity.class);
-//                                            intent.putExtra(ListeningActivity.ARTICLE_ID, holder.mArticleId);
-//                                            intent.putExtra(ListeningActivity.ARTICLE_TITLE, holder.mTextView.getText().toString());
-//                                            intent.putExtra(ListeningActivity.ARTICLE_PAIR, articlePair.toJson());
-//                                            context.startActivity(intent);
-                                            break;
-                                        case 1:
-                                            context.startActivity(
-                                                    SpeakingActivity.newIntent(
-                                                            context,
-                                                            holder.mArticleId,
-                                                            holder.mTextView.getText().toString(),
-                                                            holder.mArticlePair
-                                                            )
-                                            );
-                                            break;
-                                        case 2:
-                                            context.startActivity(
-                                                    DictationActivity.newIntent(
-                                                            context,
-                                                            holder.mArticleId,
-                                                            holder.mTextView.getText().toString(),
-                                                            holder.mArticlePair
-                                                            )
-                                            );
-                                            break;
-                                    }
-                                }
-                            })
-                            .show();
-
+                    // 音声データをダウンロードしてから各機能画面への導線を表示する
+                    if (holder.isAudioDownloaded) {
+                        showMenuDialog(mContext, holder);
+                    } else {
+                        showStartDownloadDialog(mContext, holder);
+                    }
                 }
             });
 
@@ -247,6 +222,103 @@ public class ArticleListFragment extends Fragment {
                     .load(articlePair.getImage())
                     .fitCenter()
                     .into(holder.mImageView);
+        }
+
+        private void showMenuDialog(final Context context, final ViewHolder holder) {
+            final String[] items = context.getResources().getStringArray(R.array.article_function_names);
+            new AlertDialog.Builder(context)
+                    .setTitle(holder.mArticlePair.getTranslated().getTitle())
+                    .setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    context.startActivity(
+                                            ListeningActivity.newIntent(
+                                                    context,
+                                                    holder.mArticleId,
+                                                    holder.mTextView.getText().toString(),
+                                                    holder.mArticlePair
+                                            )
+                                    );
+                                    break;
+                                case 1:
+                                    context.startActivity(
+                                            SpeakingActivity.newIntent(
+                                                    context,
+                                                    holder.mArticleId,
+                                                    holder.mTextView.getText().toString(),
+                                                    holder.mArticlePair
+                                            )
+                                    );
+                                    break;
+                                case 2:
+                                    context.startActivity(
+                                            DictationActivity.newIntent(
+                                                    context,
+                                                    holder.mArticleId,
+                                                    holder.mTextView.getText().toString(),
+                                                    holder.mArticlePair
+                                            )
+                                    );
+                                    break;
+                            }
+                        }
+                    })
+                    .show();
+        }
+
+        private void showStartDownloadDialog(final Context context, final ViewHolder holder) {
+            new AlertDialog.Builder(context)
+                    .setTitle(holder.mArticlePair.getTranslated().getTitle())
+                    .setMessage(R.string.audio_download_message)
+                    .setPositiveButton(R.string.tmpl_download, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            final ProgressDialog progressDialog = createDownloadProgressDialog(context, holder.mArticlePair.getTranslated().getTitle());
+                            progressDialog.show();
+                            AudioDownloadTask task = new AudioDownloadTask(
+                                    context,
+                                    holder.mArticlePair.getTarget(),
+                                    new AudioDownloadTask.AudioDownloadTaskListener() {
+                                        @Override
+                                        public void onSuccess() {
+                                            progressDialog.dismiss();
+                                            holder.setAudioDownloaded(true);
+                                            showMenuDialog(context, holder);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Exception exception) {
+                                            progressDialog.dismiss();
+                                        }
+
+                                        @Override
+                                        public void onProgress(long max, long progress) {
+                                            progressDialog.setProgress((int) (100 * progress / max));
+                                        }
+                                    });
+                            task.exec();
+                        }
+                    })
+                    .setCancelable(true)
+                    .setNegativeButton(R.string.tmpl_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    })
+                .show();
+        }
+
+        private ProgressDialog createDownloadProgressDialog(Context context, String title) {
+            ProgressDialog progressDialog =  new ProgressDialog(context);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setCancelable(false);
+            progressDialog.setTitle(title);
+            progressDialog.setMax(100);
+            progressDialog.setProgress(0);
+            return progressDialog;
         }
 
         @Override

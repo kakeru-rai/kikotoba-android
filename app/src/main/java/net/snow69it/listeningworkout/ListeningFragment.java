@@ -2,36 +2,22 @@ package net.snow69it.listeningworkout;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 
 import net.snow69it.listeningworkout.article.Article;
 import net.snow69it.listeningworkout.article.ArticlePair;
 import net.snow69it.listeningworkout.audio.AudioController;
-import net.snow69it.listeningworkout.common.FirebaseUtil;
-import net.snow69it.listeningworkout.common.WorkingDirectory;
 import net.snow69it.listeningworkout.entity.UserLogByArticle;
 import net.snow69it.listeningworkout.repository.BaseRepository;
 import net.snow69it.listeningworkout.repository.UserLogRepository;
 import net.snow69it.listeningworkout.util.Pref;
 import net.snow69it.listeningworkout.viewer.ViewerWebView;
 import net.snow69it.listeningworkout.viewer.WebAppInterface;
-
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -81,18 +67,20 @@ public class ListeningFragment extends BaseFragment {
         mTargetArticle = entity.getTarget();
         mTranscriptArticle = entity.getTranslated();
 
-        try {
-            WorkingDirectory wd = new WorkingDirectory();
-            final File toFile = wd.createAudioDestinationFile(getActivity(), mTargetArticle);
-            if (toFile.exists()) {
-                init(mRootView);
-            } else {
-                downloadAudio(mTargetArticle, mRootView);
-            }
+        init(mRootView);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            WorkingDirectory wd = new WorkingDirectory();
+//            final File toFile = wd.createAudioDestinationFile(getActivity(), mTargetArticle);
+//            if (toFile.exists()) {
+//                init(mRootView);
+//            } else {
+//                downloadAudio(mTargetArticle, mRootView);
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
 //
@@ -140,77 +128,77 @@ public class ListeningFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//
+//        // If there was a download in progress, get its reference and create a new StorageReference
+//        if (savedInstanceState == null) {
+//            return;
+//        }
+//        final String stringRef = savedInstanceState.getString("reference");
+//        if (stringRef == null) {
+//            return;
+//        }
+//        mAudioReference = FirebaseStorage.getInstance().getReferenceFromUrl(stringRef);
+//
+//        // Find all DownloadTasks under this StorageReference (in this example, there should be one)
+//        List<FileDownloadTask> tasks = mAudioReference.getActiveDownloadTasks();
+//        if (tasks.size() > 0) {
+//            // Get the task monitoring the download
+//            FileDownloadTask task = tasks.get(0);
+//            try {
+//                downloadAudio(task);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
-        // If there was a download in progress, get its reference and create a new StorageReference
-        if (savedInstanceState == null) {
-            return;
-        }
-        final String stringRef = savedInstanceState.getString("reference");
-        if (stringRef == null) {
-            return;
-        }
-        mAudioReference = FirebaseStorage.getInstance().getReferenceFromUrl(stringRef);
-
-        // Find all DownloadTasks under this StorageReference (in this example, there should be one)
-        List<FileDownloadTask> tasks = mAudioReference.getActiveDownloadTasks();
-        if (tasks.size() > 0) {
-            // Get the task monitoring the download
-            FileDownloadTask task = tasks.get(0);
-            try {
-                downloadAudio(task);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void downloadAudio(Article mTargetArticle, final View rootView) throws IOException {
-        WorkingDirectory wd = new WorkingDirectory();
-        final File cacheFile = wd.createAudioCache();
-        final File toFile = wd.createAudioDestinationFile(getActivity(), mTargetArticle);
-
-
-        mAudioReference = FirebaseUtil.getStorageReference(mTargetArticle);
-        FileDownloadTask task = null;
-        List<FileDownloadTask> tasks = mAudioReference.getActiveDownloadTasks();
-        if (tasks.size() > 0) {
-            task = tasks.get(0);
-        } else {
-            task = mAudioReference.getFile(cacheFile);
-        }
-        downloadAudio(task);
-    }
-
-    private void downloadAudio(FileDownloadTask task) throws IOException {
-        WorkingDirectory wd = new WorkingDirectory();
-        final File cacheFile = wd.createAudioCache();
-        final File toFile = wd.createAudioDestinationFile(getActivity(), mTargetArticle);
-
-        task.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                try {
-                    FileUtils.copyFile(cacheFile, toFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                init(mRootView);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                exception.printStackTrace();
-            }
-        }).addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-            }
-        });
-    }
+//    private void downloadAudio(Article mTargetArticle, final View rootView) throws IOException {
+//        WorkingDirectory wd = new WorkingDirectory();
+//        final File cacheFile = wd.createAudioCache();
+//        final File toFile = wd.createAudioDestinationFile(getActivity(), mTargetArticle);
+//
+//
+//        mAudioReference = FirebaseUtil.getStorageReference(mTargetArticle);
+//        FileDownloadTask task = null;
+//        List<FileDownloadTask> tasks = mAudioReference.getActiveDownloadTasks();
+//        if (tasks.size() > 0) {
+//            task = tasks.get(0);
+//        } else {
+//            task = mAudioReference.getFile(cacheFile);
+//        }
+//        downloadAudio(task);
+//    }
+//
+//    private void downloadAudio(FileDownloadTask task) throws IOException {
+//        WorkingDirectory wd = new WorkingDirectory();
+//        final File cacheFile = wd.createAudioCache();
+//        final File toFile = wd.createAudioDestinationFile(getActivity(), mTargetArticle);
+//
+//        task.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//                try {
+//                    FileUtils.copyFile(cacheFile, toFile);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                init(mRootView);
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                exception.printStackTrace();
+//            }
+//        }).addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
+//            @Override
+//            public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//
+//            }
+//        });
+//    }
 
     private void init(View rootView) {
 //        File sd = IOUtil.getPrivateExternalDir(getActivity(), "");

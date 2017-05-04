@@ -36,6 +36,7 @@ $(function() {
      * @param {string} src
      */
     AppInterface.prototype.setAudioSrc = function setAudioSrc(src) {
+        console.log(src);
         this.audioPlayer.setAudioSrc(src);
     };
 //    /**
@@ -124,7 +125,10 @@ $('audio').on('durationchange', function(){console.log('durationchange:' + this.
 $('audio').on('emptied', function(){console.log('emptied')});
 $('audio').on('encrypted ', function(){console.log('encrypted ')});
 $('audio').on('ended', function(){console.log('ended')});
-$('audio').on('error', function(){console.log('error')});
+$('audio').on('error', function(event){
+    var el = event.target;
+    console.log('error:' + el.error.code + ":" + el.error.message);
+});
 $('audio').on('interruptbegin', function(){console.log('interruptbegin')});
 $('audio').on('interruptend', function(){console.log('interruptend')});
 $('audio').on('loadeddata', function(){console.log('loadeddata')});
