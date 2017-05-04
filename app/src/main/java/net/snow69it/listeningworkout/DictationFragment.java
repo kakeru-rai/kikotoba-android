@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,8 +135,6 @@ public class DictationFragment extends Fragment {
     }
 
     private void init(ArticlePair entity) {
-//        mArticle = ArticleApi.getArticleEn(getActivity());
-
         mArticle = entity.getTarget();
         Sentence sentence = mArticle.getSentences().get(getTrack());
 
@@ -150,19 +147,12 @@ public class DictationFragment extends Fragment {
 
         try {
             textTokenList = createTextToken(sentence.getText());
-//            for (View view : blankTextViewList) {
-//                blankTextContainer.addViewNewLine(view);
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         mDictationWebInterface = createDictationWebInterface(webView);
         mDictationWebInterface.load(getActivity());
-
-//        File sd = IOUtil.getPrivateExternalDir(getActivity(), "");
-//        String url = "file://" + sd.getPath() + "/html/dictation/index.html";
-//        webView.loadUrl(url);
 
     }
 
@@ -204,7 +194,6 @@ public class DictationFragment extends Fragment {
                 mHandler.post(new Runnable() {
                     public void run() {
                         mDictationWebInterface.setAudioSrc(mArticle.getAudio());
-//                        mDictationWebInterface.setAudioSrc(mArticle.getId(), getTrack());
                         // 穴埋めテキストを初期化
                         for (TextToken token : textTokenList) {
                             if (token.isBlank) {
@@ -236,8 +225,6 @@ public class DictationFragment extends Fragment {
                         if (task.getException() != null) {
                             task.getException().printStackTrace();
                         }
-//                        Log.v(TAG, "" + task.getResult());
-                        Log.v(TAG, task.toString());
                     }
                 });
             }

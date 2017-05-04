@@ -1,4 +1,4 @@
-package net.snow69it.listeningworkout.viewer;
+package net.snow69it.listeningworkout.listening;
 
 import android.content.Context;
 import android.os.Handler;

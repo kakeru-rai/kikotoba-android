@@ -26,9 +26,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 
 import net.snow69it.listeningworkout.article.ArticlePair;
 import net.snow69it.listeningworkout.util.Navigation;
@@ -68,11 +65,6 @@ public class ListeningActivity extends AppCompatActivity {
         ListeningFragment fragment = ListeningFragment.newInstance(ArticlePair.fromJson(getIntent().getStringExtra(ARTICLE_PAIR)));
         fragmentTransaction.add(R.id.fragmentContainer, fragment);
         fragmentTransaction.commit();
-    }
-
-    private void loadBackdrop() {
-        final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
-        Glide.with(this).load(Cheeses.getRandomCheeseDrawable()).centerCrop().into(imageView);
     }
 
     @Override

@@ -21,9 +21,9 @@
 
     <!-- メイン -->
     <string-array name="main_tab_names">
-        <item>学習</item>
-        <item>プロフィール</item>
+        <item>ストーリー</item>
         <item>アプリについて</item>
+<!--        <item>プロフィール</item> -->
     </string-array>
     <string-array name="article_function_names">
         <item>リスニング</item>

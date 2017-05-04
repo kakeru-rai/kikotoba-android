@@ -16,6 +16,7 @@
         <!--android:singleLine="true"-->
         <!--android:title="@string/pref_title_display_name" />-->
 
+    <!--
     <ListPreference
         android:defaultValue="1.0"
 
@@ -34,6 +35,8 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_shadowing_gap_title" />
+
+        -->
 
     <PreferenceScreen
         android:key="license"

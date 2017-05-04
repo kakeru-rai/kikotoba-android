@@ -159,15 +159,11 @@ public class MainActivity extends BaseActivity {
                     fragment = new ArticleListFragment();
                     break;
                 case 1:
-                    fragment = ProfileFragment.newInstance();
-                    break;
-                case 2:
                     File sd = IOUtil.getPrivateExternalDir(MainActivity.this, "");
                     fragment = WebViewFragment.newInstance("file://" + sd.getPath() + "/html/description.html");
-//                    fragment = WebViewFragment.newInstance("https://firebasestorage.googleapis.com/v0/b/listeningworkout.appspot.com/o/article%2Fgutenberg_001%2Fgutenberg_001.mp3?alt=media&token=94f99faa-9832-4e62-a0b6-75224077571b");
-//                    fragment = WebViewFragment.newInstance("http://ia800802.us.archive.org/33/items/kids_shortworks_15_1202_librivox/childrensshortworks015_09_peterrabbit_nj.mp3");
-
-
+                    break;
+                case 2:
+                    fragment = ProfileFragment.newInstance();
                     break;
                 default:
                     fragment = new ArticleListFragment();

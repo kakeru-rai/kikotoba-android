@@ -169,15 +169,17 @@ public class SettingsActivity extends AppCompatActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_general_speech_speed_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_shadowing_gap_key)));
+
+            // 読み上げスピードとギャップ
+//            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_general_speech_speed_key)));
+//            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_shadowing_gap_key)));
 
             // ライセンス
             Preference license = findPreference("license");
             license.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     WebViewActivity.move(getActivity(),
-                            Util.getSdPath(getActivity(), "/html/lisences.html"),
+                            Util.getSdPath(getActivity(), "/html/licences.html"),
                             getString(R.string.tmpl_license));
                     return true;
                 }

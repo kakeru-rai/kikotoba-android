@@ -121,10 +121,6 @@ public class ArticleListFragment extends Fragment {
 
     }
 
-    private void setView() {
-
-    }
-
     private void setupRecyclerView(RecyclerView recyclerView) {
         adapter = new SimpleStringRecyclerViewAdapter(
                 getActivity(),
@@ -217,7 +213,6 @@ public class ArticleListFragment extends Fragment {
 
             holder.setAudioDownloaded(WorkingDirectory.getInstance().hasAudioDownloaded(mContext, holder.mArticlePair.getTarget()));
 
-//            holder.mArticleId = articlePair.getTranslated().getId();
             holder.mTextView.setText(articlePair.getTranslated().getTitle());
 
             int sentenceSize = articlePair.getTarget().getSentences().size();

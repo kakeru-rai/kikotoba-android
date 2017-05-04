@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import net.snow69it.listeningworkout.viewer.ViewerWebView;
+import net.snow69it.listeningworkout.listening.ViewerWebView;
 
 
 /**

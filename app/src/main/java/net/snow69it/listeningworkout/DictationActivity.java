@@ -59,45 +59,13 @@ public class DictationActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
 
-
-//        final String title = getIntent().getStringExtra(ARTICLE_TITLE);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getArticleTitle());
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         String json = getIntent().getStringExtra(DictationActivity.ARTICLE_PAIR);
         init(ArticlePair.fromJson(json));
-
-//        if (true) return;
-//
-//        String articleId = getIntent().getStringExtra(SpeakingActivity.ARTICLE_ID);
-//        ArticleRepository repo = new ArticleRepository();
-//        repo.queryArticle(articleId, new BaseRepository.EntityEventListener<ArticlePair>() {
-//            @Override
-//            public void onSuccess(ArticlePair entity) {
-//                Article mTargetArticle = entity.getTarget();
-//                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mTargetArticle.getSentences());
-//
-//                // Set up the ViewPager with the sections adapter.
-//                mViewPager = (ViewPager) findViewById(R.id.container);
-//                mViewPager.setAdapter(mSectionsPagerAdapter);
-//
-//                TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-//                tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-//                tabLayout.setupWithViewPager(mViewPager);
-//            }
-//
-//            @Override
-//            public void onError(DatabaseError error) {
-//                // TODO: エラーハンドラ
-//                error.toException().printStackTrace();
-//            }
-//        });
-
-
     }
 
     private void init(ArticlePair entity) {

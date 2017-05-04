@@ -13,7 +13,6 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
@@ -143,9 +142,6 @@ public class SpeakingFragment extends Fragment {
 
         mWebAppInterface = createDictationWebInterface(webView, mArticle, getTrack());
         mWebAppInterface.load(getActivity());
-//        File sd = IOUtil.getPrivateExternalDir(getActivity(), "");
-//        String url = "file://" + sd.getPath() + "/html/speaking/index.html";
-//        webView.loadUrl(url);
     }
 
     private WebAppInterface createDictationWebInterface(WebView webView, Article article, int sentenceIndex){
@@ -234,7 +230,6 @@ public class SpeakingFragment extends Fragment {
                     entity = new UserLogByArticle();
                 }
                 entity.setSpeakingCorrectByIndex(getTrack());
-                Task task = repo.setUserLogByArticle(user.getUid(), getArticleId(), entity);
             }
 
             @Override
@@ -245,8 +240,6 @@ public class SpeakingFragment extends Fragment {
     }
 
     private void refreshView() {
-//        tvCleared.setVisibility(isCleared ? View.VISIBLE : View.GONE);
-
         if (!hasSpeechResult) {
             correct.setVisibility(View.GONE);
             incorrect.setVisibility(View.GONE);
