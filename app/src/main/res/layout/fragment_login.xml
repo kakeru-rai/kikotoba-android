@@ -22,18 +22,43 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
-            android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:text="@string/start_with_account"
+
+            <Button
+                android:id="@+id/loginStartButton"
+                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:layout_marginTop="16dp"
+                android:text="@string/login_start"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/login_form_"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/email_login_form_"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/start_with_account" />
 
             <Button
                 android:id="@+id/buttonGoogleLogin"
@@ -43,6 +68,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/tmpl_google"
                 android:textStyle="bold" />
+
             <Button
                 android:id="@+id/buttonFacebookLogin"
                 style="?android:textAppearanceSmall"
@@ -51,12 +77,12 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/tmpl_facebook"
                 android:textStyle="bold" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_margin="8dp"
-                android:background="#444"
-                />
+                android:background="#444" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -68,8 +94,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -99,23 +124,24 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_margin="8dp"
-                android:background="#444"
-                />
+                android:background="#444" />
 
             <TextView
-                android:text="@string/start_without_register"
+                android:id="@+id/textViewRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textViewRegister" />
+                android:text="@string/start_without_register" />
+
             <TextView
-                android:text="@string/start_without_register"
+                android:id="@+id/textViewStartWithoutRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textViewStartWithoutRegister" />
+                android:text="@string/start_without_register" />
         </LinearLayout>
 
     </ScrollView>

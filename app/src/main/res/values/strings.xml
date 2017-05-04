@@ -31,6 +31,8 @@
         <item>ディクテーション</item>
     </string-array>
 
+    <string name="login_start">はじめる</string>
+    <string name="login_start_failed">通信に失敗しました。ネットワークをご確認下さい。</string>
     <string name="audio_download_message">音声データをダウンロードします</string>
     <string name="audio_download_failed">ダウンロードに失敗しました</string>
 

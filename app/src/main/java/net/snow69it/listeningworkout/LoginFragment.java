@@ -48,6 +48,7 @@ public class LoginFragment extends Fragment {
     @BindView(R.id.password) EditText mPasswordView;
     @BindView(R.id.email_sign_in_button) Button buttonLoginEmail;
     @BindView(R.id.textViewStartWithoutRegister) TextView textViewStartWithoutRegister;
+    @BindView(R.id.loginStartButton) Button loginStartButton;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
@@ -139,8 +140,11 @@ public class LoginFragment extends Fragment {
                                 startActivity(new Intent(getActivity(), MainActivity.class));
                             } else {
                                 Log.w(TAG, "signInAnonymously", task.getException());
-                                Toast.makeText(getActivity(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                Toast.makeText(
+                                        getActivity(),
+                                        R.string.login_start_failed,
+                                        Toast.LENGTH_SHORT)
+                                    .show();
                             }
                         }
                     });
@@ -158,7 +162,13 @@ public class LoginFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, rootView);
 
+        loginStartButton.setOnClickListener(anonymouseLoginListener);
         mAuth = FirebaseAuth.getInstance();
+
+        if (true) {
+            return rootView;
+        }
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -183,19 +193,19 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        mAuth.addAuthStateListener(mAuthListener);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        if (mAuthListener != null) {
+//            mAuth.removeAuthStateListener(mAuthListener);
+//        }
+//    }
 
     private boolean validateEmail() {
         // Reset errors.
@@ -256,22 +266,27 @@ public class LoginFragment extends Fragment {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+            mLoginFormView
+                    .animate()
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 0 : 1)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                        }
+                    });
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
+            mProgressView
+                    .animate()
+                    .setDuration(shortAnimTime).alpha(show ? 1 : 0)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                        }
+                    });
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.

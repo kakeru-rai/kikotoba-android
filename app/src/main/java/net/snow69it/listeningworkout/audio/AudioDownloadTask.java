@@ -13,6 +13,8 @@ import net.snow69it.listeningworkout.article.Article;
 import net.snow69it.listeningworkout.common.FirebaseUtil;
 import net.snow69it.listeningworkout.common.WorkingDirectory;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -55,7 +57,7 @@ public class AudioDownloadTask {
         final File cacheFile = wd.createAudioCache();
         final File toFile = wd.createAudioDestinationFile(mContext, mArticle);
 
-        boolean mkdir = toFile.getParentFile().mkdir();
+        FileUtils.forceMkdirParent(toFile);
 
         FileDownloadTask task = mAudioReference.getFile(toFile);
         startTask(task);
