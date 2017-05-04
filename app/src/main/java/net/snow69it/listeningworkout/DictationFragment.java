@@ -98,7 +98,7 @@ public class DictationFragment extends Fragment {
 
         // テキストロード
         ArticleRepository repo = new ArticleRepository();
-        repo.getArticle(getArticleId(), new BaseRepository.EntityEventListener<ArticlePair>() {
+        repo.queryArticle(getArticleId(), new BaseRepository.EntityEventListener<ArticlePair>() {
             @Override
             public void onSuccess(ArticlePair entity) {
                 init(entity);

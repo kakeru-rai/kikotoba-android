@@ -33,7 +33,7 @@ public class ArticleRepositoryTest {
         final WaitUtil waitUtil = new WaitUtil();
 
         ArticleRepository repo = new ArticleRepository();
-        repo.getArticles(new BaseRepository.EntityListEventListener<ArticlePair>() {
+        repo.queryArticles(new BaseRepository.EntityListEventListener<ArticlePair>() {
             @Override
             public void onSuccess(List<ArticlePair> articlePairs) {
                 target = articlePairs.get(0).getTarget();

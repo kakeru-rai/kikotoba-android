@@ -24,7 +24,7 @@ public class ArticleRepository extends BaseRepository {
     private static final String KEY_IMAGE = "image";
     private static final String KEY_LANGUAGE = "language";
 
-    public void getArticle(String id, final EntityEventListener<ArticlePair> listener) {
+    public void queryArticle(String id, final EntityEventListener<ArticlePair> listener) {
         DatabaseReference ref = firebaseDatabase.getReference(PATH + "/" + id);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -47,7 +47,7 @@ public class ArticleRepository extends BaseRepository {
         });
     }
 
-    public void getArticles(final EntityListEventListener<ArticlePair> listener) {
+    public void queryArticles(final EntityListEventListener<ArticlePair> listener) {
         DatabaseReference ref = firebaseDatabase.getReference(PATH);
         ref.keepSynced(true);
 

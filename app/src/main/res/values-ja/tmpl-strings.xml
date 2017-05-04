@@ -24,7 +24,7 @@
     <string name="tmpl_delete">Delete</string>
     <string name="tmpl_deleteAll">Delete all</string>
     <string name="tmpl_copy">Copy</string>
-    <string name="tmpl_retry">Retry</string>
+    <string name="tmpl_retry">再試行</string>
     <string name="tmpl_open">Open</string>
     <string name="tmpl_register">Register</string>
     <string name="tmpl_modify">Modify</string>

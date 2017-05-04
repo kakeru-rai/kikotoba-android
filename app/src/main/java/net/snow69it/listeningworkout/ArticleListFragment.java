@@ -30,7 +30,9 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -49,7 +51,14 @@ import net.snow69it.listeningworkout.repository.UserLogRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ArticleListFragment extends Fragment {
+
+    @BindView(R.id.recyclerview) RecyclerView mRecyclerView;
+    @BindView(R.id.retryButton) Button mRetryButton;
+    @BindView(R.id.progressBar) ProgressBar mProgressBar;
 
     private List<ArticlePair> articlePairs = new ArrayList();
 
@@ -58,13 +67,29 @@ public class ArticleListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final RecyclerView rv = (RecyclerView) inflater.inflate(
-                R.layout.fragment_article_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_article_list, container, false);
+        ButterKnife.bind(this, rootView);
 
-        ArticleRepository repo = new ArticleRepository();
+        mRetryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                queryArticle();
+            }
+        });
+
+        queryArticle();
+        return rootView;
+    }
+
+    private void queryArticle() {
+        mRetryButton.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+
         final UserLogRepository userLogRepo = new UserLogRepository();
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        repo.getArticles(new BaseRepository.EntityListEventListener<ArticlePair>() {
+
+        ArticleRepository repo = new ArticleRepository();
+        repo.queryArticles(new BaseRepository.EntityListEventListener<ArticlePair>() {
             @Override
             public void onSuccess(List<ArticlePair> entities) {
                 articlePairs = entities;
@@ -79,20 +104,25 @@ public class ArticleListFragment extends Fragment {
 
                         @Override
                         public void onError(DatabaseError error) {
-
                         }
                     });
                 }
 
-                setupRecyclerView(rv);
+                setupRecyclerView(mRecyclerView);
             }
 
             @Override
             public void onError(DatabaseError error) {
                 error.toException().printStackTrace();
+                mRetryButton.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
             }
         });
-        return rv;
+
+    }
+
+    private void setView() {
+
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {

@@ -140,7 +140,7 @@ public class SpeakingActivity extends AppCompatActivity {
 
 //        String articleId = getIntent().getStringExtra(SpeakingActivity.ARTICLE_ID);
 //        ArticleRepository repo = new ArticleRepository();
-//        repo.getArticle(articleId, new BaseRepository.EntityEventListener<ArticlePair>() {
+//        repo.queryArticle(articleId, new BaseRepository.EntityEventListener<ArticlePair>() {
 //            @Override
 //            public void onSuccess(ArticlePair entity) {
 //                Article mTargetArticle = entity.getTarget();

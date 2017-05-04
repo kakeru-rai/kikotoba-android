@@ -85,7 +85,7 @@ public class ListeningFragment extends BaseFragment {
 
 //
 //        ArticleRepository repo = new ArticleRepository();
-//        repo.getArticle(articleId, new BaseRepository.EntityEventListener<ArticlePair>() {
+//        repo.queryArticle(articleId, new BaseRepository.EntityEventListener<ArticlePair>() {
 //            @Override
 //            public void onSuccess(ArticlePair entity) {
 //                mTargetArticle = entity.getTarget();
