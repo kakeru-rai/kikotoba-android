@@ -39,5 +39,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <view
+        android:id="@+id/audioWebview"
+        class="net.snow69it.listeningworkout.util.WebViewDefault"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        />
 
 </LinearLayout>

@@ -13,18 +13,18 @@ $(function() {
         });
     }
 
-    /**
-     * @param {string} articleId
-     * @param {int} trackIndex
-     */
-    AudioPlayer.prototype.setSrc = function setSrc(articleId, trackIndex) {
-        this.$audio.off('timeupdate.AudioPlayer');
-
-        trackIndex++;
-        var fileName = ('000' + trackIndex).slice(-3);
-        var src = '../../audio/en/' + articleId + '/' + fileName + '.mp3';
-        this.audio.src = src;
-    };
+//    /**
+//     * @param {string} articleId
+//     * @param {int} trackIndex
+//     */
+//    AudioPlayer.prototype.setSrc = function setSrc(articleId, trackIndex) {
+//        this.$audio.off('timeupdate.AudioPlayer');
+//
+//        trackIndex++;
+//        var fileName = ('000' + trackIndex).slice(-3);
+//        var src = '../../audio/en/' + articleId + '/' + fileName + '.mp3';
+//        this.audio.src = src;
+//    };
 
     AudioPlayer.prototype.setAudioSrc = function setAudioSrc(src) {
         this.$audio.off('timeupdate.AudioPlayer');
@@ -90,13 +90,9 @@ $(function() {
         }
 
         // 開始
-        console.log(this.audio.paused);
         this.setCurrentTimeSec(fromSec);
-        console.log(this.audio.paused);
         this.play();
-        console.log(this.audio.paused);
         this.stopTo(toSec);
-        console.log(this.audio.paused);
     };
 
     AudioPlayer.prototype.stopTo = function stopTo(toSec) {
@@ -127,6 +123,37 @@ $(function() {
     AudioPlayer.prototype.setOnTrackEndedListener = function setOnTrackEndedListener(onTrackEndedListener) {
         this.onTrackEndedListener = onTrackEndedListener;
     };
+
+$('audio').on('error', function(event){
+    var el = event.target;
+    console.log('error:' + el.error.code + ":" + el.error.message);
+});
+//$('audio').on('abort', function(){console.log('abort')});
+//$('audio').on('canplay', function(){console.log('canplay')});
+//$('audio').on('canplaythrough', function(){console.log('canplaythrough')});
+//$('audio').on('durationchange', function(){console.log('durationchange:' + this.duration)});
+//$('audio').on('emptied', function(){console.log('emptied')});
+//$('audio').on('encrypted ', function(){console.log('encrypted ')});
+//$('audio').on('ended', function(){console.log('ended')});
+//$('audio').on('interruptbegin', function(){console.log('interruptbegin')});
+//$('audio').on('interruptend', function(){console.log('interruptend')});
+//$('audio').on('loadeddata', function(){console.log('loadeddata')});
+//$('audio').on('loadedmetadata', function(){console.log('loadedmetadata')});
+//$('audio').on('loadstart', function(){console.log('loadstart')});
+//$('audio').on('mozaudioavailable', function(){console.log('mozaudioavailable')});
+//$('audio').on('pause', function(){console.log('pause')});
+//$('audio').on('play', function(){console.log('play')});
+//$('audio').on('playing', function(){console.log('playing')});
+//$('audio').on('progress', function(){console.log('progress')});
+//$('audio').on('ratechange', function(){console.log('ratechange')});
+//$('audio').on('seeked', function(){console.log('seeked:' + this.currentTime)});
+//$('audio').on('seeking', function(){console.log('seeking:' + this.currentTime)});
+//$('audio').on('stalled', function(){console.log('stalled')});
+//$('audio').on('suspend', function(){console.log('suspend')});
+//$('audio').on('timeupdate', function(){console.log('timeupdate:' + this.currentTime)});
+//$('audio').on('volumechange', function(){console.log('volumechange')});
+//$('audio').on('waiting', function(){console.log('waiting')});
+
 
     window.sri = window.sri || {};
     window.sri.AudioPlayer = AudioPlayer;

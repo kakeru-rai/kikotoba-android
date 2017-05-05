@@ -75,9 +75,7 @@ public class DictationFragment extends Fragment {
     private View.OnClickListener mPlayOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mDictationWebInterface.play();
-            Sentence s = mArticle.getSentences().get(getTrack());
-            mDictationWebInterface.play(s.getFromSec(), s.getToSec());
+            ((DictationActivity) getActivity()).play(getTrack());
         }
     };
 
@@ -127,12 +125,6 @@ public class DictationFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mDictationWebInterface.pause();
-    }
-
     private void init(ArticlePair entity) {
         mArticle = entity.getTarget();
         Sentence sentence = mArticle.getSentences().get(getTrack());
@@ -148,7 +140,6 @@ public class DictationFragment extends Fragment {
         }
 
         mDictationWebInterface = createDictationWebInterface(webView);
-        mDictationWebInterface.load(getActivity());
     }
 
     /**
@@ -186,7 +177,6 @@ public class DictationFragment extends Fragment {
             public void onReady() {
                 mHandler.post(new Runnable() {
                     public void run() {
-                        mDictationWebInterface.setAudioSrc(mArticle.getAudio());
                         // 穴埋めテキストを初期化
                         for (TextToken token : textTokenList) {
                             if (token.isBlank) {
@@ -237,7 +227,7 @@ public class DictationFragment extends Fragment {
         return getArguments().getString(ARG_ARTICLE_ID, "");
     }
 
-    public void submit() {
+    private void submit() {
         mDictationWebInterface.submit();
     }
 }

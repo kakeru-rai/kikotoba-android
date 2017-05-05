@@ -3,6 +3,7 @@ package net.snow69it.listeningworkout;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,12 +14,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
 
+import net.snow69it.listeningworkout.model.audio.AudioWebInterface;
 import net.snow69it.listeningworkout.model.entity.Article;
 import net.snow69it.listeningworkout.model.entity.ArticlePair;
 import net.snow69it.listeningworkout.model.entity.Sentence;
+import net.snow69it.listeningworkout.util.WebViewDefault;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class DictationActivity extends AppCompatActivity {
     private static final String TAG = "SpeakingActivity";
@@ -45,17 +53,21 @@ public class DictationActivity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private static final int REQUEST_CODE = 1;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private Handler mHandler = new Handler();
+    private AudioWebInterface mAudioWebInterface;
+    private Article mArticle;
+    @BindView(R.id.audioWebview) WebViewDefault webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictation);
+
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,15 +76,15 @@ public class DictationActivity extends AppCompatActivity {
         actionBar.setTitle(getArticleTitle());
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String json = getIntent().getStringExtra(DictationActivity.ARTICLE_PAIR);
-        init(ArticlePair.fromJson(json));
+        init();
     }
 
-    private void init(ArticlePair entity) {
-        Article mTargetArticle = entity.getTarget();
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mTargetArticle.getSentences());
+    private void init() {
+        String json = getIntent().getStringExtra(DictationActivity.ARTICLE_PAIR);
+        ArticlePair entity = ArticlePair.fromJson(json);
+        mArticle = entity.getTarget();
 
-        // Set up the ViewPager with the sections adapter.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mArticle.getSentences());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -80,6 +92,7 @@ public class DictationActivity extends AppCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
 
+        mAudioWebInterface = createDictationWebInterface(webView);
     }
 
     private String getArticleId() {
@@ -113,6 +126,12 @@ public class DictationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAudioWebInterface.pause();
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -140,5 +159,24 @@ public class DictationActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return String.format("#%d", position);
         }
+    }
+
+    public void play(int index) {
+        Sentence sentence = mArticle.getSentences().get(index);
+        mAudioWebInterface.play(sentence.getFromSec(), sentence.getToSec());
+    }
+
+    private AudioWebInterface createDictationWebInterface(WebView webView){
+        return new AudioWebInterface(webView) {
+            @JavascriptInterface
+            @Override
+            public void onReady() {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        mAudioWebInterface.setAudioSrc(mArticle.getAudio());
+                    }
+                });
+            }
+        };
     }
 }

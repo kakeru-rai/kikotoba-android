@@ -91,37 +91,5 @@ $(function() {
         this.article.popup(text);
     };
 
-$('audio').on('abort', function(){console.log('abort')});
-$('audio').on('canplay', function(){console.log('canplay')});
-$('audio').on('canplaythrough', function(){console.log('canplaythrough')});
-$('audio').on('durationchange', function(){console.log('durationchange:' + this.duration)});
-$('audio').on('emptied', function(){console.log('emptied')});
-$('audio').on('encrypted ', function(){console.log('encrypted ')});
-$('audio').on('ended', function(){console.log('ended')});
-$('audio').on('error', function(){console.log('error')});
-$('audio').on('interruptbegin', function(){console.log('interruptbegin')});
-$('audio').on('interruptend', function(){console.log('interruptend')});
-$('audio').on('loadeddata', function(){console.log('loadeddata')});
-$('audio').on('loadedmetadata', function(){console.log('loadedmetadata')});
-$('audio').on('loadstart', function(){console.log('loadstart')});
-$('audio').on('mozaudioavailable', function(){console.log('mozaudioavailable')});
-$('audio').on('pause', function(){console.log('pause')});
-$('audio').on('play', function(){console.log('play')});
-$('audio').on('playing', function(){console.log('playing')});
-$('audio').on('progress', function(){console.log('progress')});
-$('audio').on('ratechange', function(){console.log('ratechange')});
-$('audio').on('seeked', function(){console.log('seeked:' + this.currentTime)});
-$('audio').on('seeking', function(){console.log('seeking:' + this.currentTime)});
-$('audio').on('stalled', function(){console.log('stalled')});
-$('audio').on('suspend', function(){console.log('suspend')});
-$('audio').on('timeupdate', function(){console.log('timeupdate:' + this.currentTime)});
-$('audio').on('volumechange', function(){console.log('volumechange')});
-$('audio').on('waiting', function(){console.log('waiting')});
-
-try {
-    window.web = new AppInterface();
-    } catch (e) {
-        console.log(e);
-    }
     Android.onReady();
 });

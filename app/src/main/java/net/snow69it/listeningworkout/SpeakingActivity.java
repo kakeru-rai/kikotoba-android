@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -19,13 +20,20 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
 
+import net.snow69it.listeningworkout.model.audio.AudioWebInterface;
 import net.snow69it.listeningworkout.model.entity.Article;
 import net.snow69it.listeningworkout.model.entity.ArticlePair;
 import net.snow69it.listeningworkout.model.entity.Sentence;
+import net.snow69it.listeningworkout.util.WebViewDefault;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class SpeakingActivity extends AppCompatActivity {
     private static final String TAG = "SpeakingActivity";
@@ -62,6 +70,10 @@ public class SpeakingActivity extends AppCompatActivity {
     private boolean isSpeechWorking = false;
 
     private SpeechRecognizer mRecognizer;
+    @BindView(R.id.audioWebview) WebViewDefault webView;
+    private AudioWebInterface mAudioWebInterface;
+    private Article mArticle;
+    private Handler mHandler = new Handler();
 
     private RecognitionListener mRecognitionListener = new RecognitionListener() {
         @Override
@@ -123,6 +135,7 @@ public class SpeakingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speaking);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -134,24 +147,50 @@ public class SpeakingActivity extends AppCompatActivity {
         actionBar.setTitle(getArticleTitle());
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String json = getIntent().getStringExtra(SpeakingActivity.ARTICLE_PAIR);
-        init(ArticlePair.fromJson(json));
-
+        init();
     }
 
-    private void init(ArticlePair entity) {
-        Article mTargetArticle = entity.getTarget();
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mTargetArticle.getSentences());
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAudioWebInterface.pause();
+    }
 
-        // Set up the ViewPager with the sections adapter.
+    public void play(int index) {
+        Sentence sentence = mArticle.getSentences().get(index);
+        mAudioWebInterface.play(sentence.getFromSec(), sentence.getToSec());
+    }
+
+    private void init() {
+        String json = getIntent().getStringExtra(SpeakingActivity.ARTICLE_PAIR);
+        ArticlePair entity = ArticlePair.fromJson(json);
+        mArticle = entity.getTarget();
+
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mArticle.getSentences());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
+
+        mAudioWebInterface = createDictationWebInterface(webView);
     }
 
+    private AudioWebInterface createDictationWebInterface(WebView webView){
+        return new AudioWebInterface(webView) {
+            @JavascriptInterface
+            @Override
+            public void onReady() {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        mAudioWebInterface.setAudioSrc(mArticle.getAudio());
+                    }
+                });
+            }
+        };
+    }
+    
     private String getArticleId() {
         return getIntent().getStringExtra(ARTICLE_ID);
     }

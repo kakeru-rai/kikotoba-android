@@ -74,8 +74,7 @@ public class SpeakingFragment extends Fragment {
     private View.OnClickListener mPlayOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Sentence s = mArticle.getSentences().get(getTrack());
-            mWebAppInterface.play(s.getFromSec(), s.getToSec());
+            ((SpeakingActivity) getActivity()).play(getTrack());
         }
     };
 
@@ -124,12 +123,6 @@ public class SpeakingFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mWebAppInterface.pause();
-    }
-
     private void init(ArticlePair entity) {
         mArticle = entity.getTarget();
         Sentence sentence = mArticle.getSentences().get(getTrack());
@@ -141,7 +134,6 @@ public class SpeakingFragment extends Fragment {
         mSpeechButton.setOnClickListener(mSpeechOnClickListener);
 
         mWebAppInterface = createDictationWebInterface(webView);
-        mWebAppInterface.load(getActivity());
     }
 
     private WebAppInterface createDictationWebInterface(WebView webView) {
@@ -151,7 +143,6 @@ public class SpeakingFragment extends Fragment {
             public void onReady() {
                 mHandler.post(new Runnable() {
                     public void run() {
-                        mWebAppInterface.setAudioSrc(mArticle.getAudio());
                         mWebAppInterface.setText(sentenceText);
                     }
                 });

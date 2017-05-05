@@ -21,6 +21,7 @@
 
     <TextView
         android:id="@+id/speech_status"
+        android:visibility="gone"
         android:text="@string/speaking_speech_ready"
         android:textSize="20dp"
         android:textColor="#000"
@@ -36,6 +37,7 @@
 
         <TextView
             android:id="@+id/speaking_correct"
+            android:visibility="gone"
             android:text="◯"
             android:textSize="30dp"
             android:textColor="#000"
@@ -45,6 +47,7 @@
 
         <TextView
             android:id="@+id/speaking_incorrect"
+            android:visibility="gone"
             android:text="×"
             android:textSize="30dp"
             android:textColor="#000"
@@ -54,6 +57,7 @@
 
         <TextView
             android:id="@+id/speech_result"
+            android:visibility="gone"
             android:textSize="20dp"
             android:textColor="#000"
             android:layout_width="match_parent"
