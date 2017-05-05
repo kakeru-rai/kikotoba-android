@@ -90,6 +90,7 @@ $(function() {
     AppInterface.prototype.popup = function popup(text) {
         this.article.popup(text);
     };
+    window.web = new AppInterface();
 
     Android.onReady();
 });

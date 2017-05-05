@@ -167,9 +167,6 @@ public class LoginFragment extends Fragment {
         loginStartButton.setOnClickListener(anonymouseLoginListener);
         mAuth = FirebaseAuth.getInstance();
 
-        WorkingDirectory wd = new WorkingDirectory();
-        wd.createWorkingDirectory(getActivity());
-
         if (true) {
             return rootView;
         }

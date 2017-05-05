@@ -47,6 +47,9 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        WorkingDirectory wd = new WorkingDirectory();
+        wd.createWorkingDirectory(this);
+
         init();
 
         // デバッグ

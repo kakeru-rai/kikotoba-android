@@ -101,6 +101,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         .getString(preference.getKey(), ""));
     }
 
+    private int mLogoutClickCount = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -187,8 +188,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
     }
-
-    private int mLogoutClickCount = 0;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
