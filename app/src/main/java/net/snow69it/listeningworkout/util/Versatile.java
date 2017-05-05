@@ -307,6 +307,10 @@ public class Versatile {
 		return android.os.Build.VERSION.SDK_INT;
 	}
 
+	public static String getDeviceName() {
+		return android.os.Build.MODEL;
+	}
+
 	public static int getVersionCode(Context con) {
 		int versionCode = -1;
 

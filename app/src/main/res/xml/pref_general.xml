@@ -39,6 +39,12 @@
         -->
 
     <PreferenceScreen
+        android:key="bugReport"
+        android:title="@string/settings_bug_report_title"></PreferenceScreen>
+    <PreferenceScreen
+        android:key="opinion"
+        android:title="@string/settings_opinion_title"></PreferenceScreen>
+    <PreferenceScreen
         android:key="license"
         android:title="@string/tmpl_license"></PreferenceScreen>
     <PreferenceScreen

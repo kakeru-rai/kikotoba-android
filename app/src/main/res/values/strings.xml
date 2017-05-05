@@ -23,7 +23,7 @@
     <string-array name="main_tab_names">
         <item>ストーリー</item>
         <item>アプリについて</item>
-        <item>プロフィール</item>
+        <!--<item>プロフィール</item>-->
     </string-array>
     <string-array name="article_function_names">
         <item>リスニング</item>
@@ -59,6 +59,11 @@
 
     <!-- 設定 -->
     <string name="title_activity_settings">設定</string>
+    <string name="settings_opinion_title">ご意見・ご感想</string>
+    <string name="settings_opinion_email_subject">ご意見・ご感想：%1$s(%2$s)</string>
+    <string name="settings_bug_report_title">バグレポート</string>
+    <string name="settings_bug_report_email_subject">バグレポート：%1$s(%2$s)</string>
+    <string name="settings_bug_report_email_body">・内容\n\n・環境\nsdk:%1$d\ndevice:%2$s</string>
 
     <!-- Strings related to Settings -->
 
@@ -168,5 +173,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- システム -->
+    <string name="settings_email">raix5867@gmial.com</string>
+
+
 
 </resources>

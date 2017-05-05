@@ -13,9 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -50,36 +47,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            createAnonymouseUserIfNotExist();
-        } else {
-            init();
-        }
-
-        WorkingDirectory wd = new WorkingDirectory();
-        wd.createWorkingDirectory(this);
+        init();
 
         // デバッグ
 //        D.pref(this);
-
-    }
-
-    private void createAnonymouseUserIfNotExist() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            return;
-        }
-
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
-                        init();
-                    }
-                });
 
     }
 
@@ -159,11 +130,12 @@ public class MainActivity extends BaseActivity {
                     fragment = new ArticleListFragment();
                     break;
                 case 1:
-                    File sd = IOUtil.getPrivateExternalDir(MainActivity.this, "");
-                    fragment = WebViewFragment.newInstance("file://" + sd.getPath() + "/html/description.html");
+                    fragment = new SettingsFragment();
+//                    fragment = ProfileFragment.newInstance();
                     break;
                 case 2:
-                    fragment = ProfileFragment.newInstance();
+                    File sd = IOUtil.getPrivateExternalDir(MainActivity.this, "");
+                    fragment = WebViewFragment.newInstance("file://" + sd.getPath() + "/html/description.html");
                     break;
                 default:
                     fragment = new ArticleListFragment();

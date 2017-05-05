@@ -190,7 +190,7 @@ public class SpeakingActivity extends AppCompatActivity {
             }
         };
     }
-    
+
     private String getArticleId() {
         return getIntent().getStringExtra(ARTICLE_ID);
     }

@@ -30,6 +30,8 @@ import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
+import net.snow69it.listeningworkout.model.WorkingDirectory;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -164,6 +166,9 @@ public class LoginFragment extends Fragment {
 
         loginStartButton.setOnClickListener(anonymouseLoginListener);
         mAuth = FirebaseAuth.getInstance();
+
+        WorkingDirectory wd = new WorkingDirectory();
+        wd.createWorkingDirectory(getActivity());
 
         if (true) {
             return rootView;
