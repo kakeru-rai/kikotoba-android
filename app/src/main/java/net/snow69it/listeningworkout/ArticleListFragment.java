@@ -82,8 +82,7 @@ public class ArticleListFragment extends Fragment {
     }
 
     private void queryArticle() {
-        mRetryButton.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        moveListLoadStateProgreess();
 
         final UserLogRepository userLogRepo = new UserLogRepository();
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -92,6 +91,8 @@ public class ArticleListFragment extends Fragment {
         repo.queryArticles(new BaseRepository.EntityListEventListener<ArticlePair>() {
             @Override
             public void onSuccess(List<ArticlePair> entities) {
+                moveListLoadStateComplete();
+
                 articlePairs = entities;
 
                 for (final ArticlePair articlePair : articlePairs) {
@@ -114,11 +115,24 @@ public class ArticleListFragment extends Fragment {
             @Override
             public void onError(DatabaseError error) {
                 error.toException().printStackTrace();
-                mRetryButton.setVisibility(View.VISIBLE);
-                mProgressBar.setVisibility(View.GONE);
+                moveListLoadStateRetry();
             }
         });
+    }
 
+    private void moveListLoadStateRetry() {
+        mRetryButton.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    private void moveListLoadStateProgreess() {
+        mRetryButton.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void moveListLoadStateComplete() {
+        mRetryButton.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {

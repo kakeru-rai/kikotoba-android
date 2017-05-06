@@ -22,15 +22,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
 import net.snow69it.listeningworkout.model.entity.ArticlePair;
 import net.snow69it.listeningworkout.util.Navigation;
 
-public class ListeningActivity extends AppCompatActivity {
+public class ListeningActivity extends BaseActivity {
 
     public static final String ARTICLE_ID = "article_id";
     public static final String ARTICLE_TITLE = "article_title";
@@ -65,18 +63,6 @@ public class ListeningActivity extends AppCompatActivity {
         ListeningFragment fragment = ListeningFragment.newInstance(ArticlePair.fromJson(getIntent().getStringExtra(ARTICLE_PAIR)));
         fragmentTransaction.add(R.id.fragmentContainer, fragment);
         fragmentTransaction.commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-//        getMenuInflater().inflate(R.menu.sample_actions, menu);
-//        MenuItem item = menu.findItem(R.id.action_shadowing);
-//        SubMenu subMenu = item.getSubMenu();
-//        subMenu.getItem(2).setChecked(true);
-
-        return true;
     }
 
     @Override

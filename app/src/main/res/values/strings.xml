@@ -1,13 +1,5 @@
 <resources>
     <string name="action_settings">設定</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-
-  <string name="cheese_ipsum">Jarlsberg lancashire edam. Dolcelatte hard cheese brie st. agur blue
-    cheese caerphilly bavarian bergkase cheese and biscuits mascarpone. Cheeseburger swiss bavarian
-    bergkase cream cheese fromage frais cheesy feet port-salut airedale. St. agur blue cheese rubber
-    cheese caerphilly cheddar cheesecake cream cheese manchego lancashire. Roquefort squirty cheese
-    the big cheese.</string>
-    <string name="checkin">Checkin</string>
 
     <string name="menu_shadowing">Shadowing(Gap between tracks)</string>
     <string name="menu_shadowing_none">None</string>
@@ -40,6 +32,8 @@
     </string-array>
 
     <string name="login_start">はじめる</string>
+    <string name="login_message">Listening Work Out</string>
+    <string name="login_message_sub">聞いて鍛えるリスニング</string>
     <string name="login_start_failed">通信に失敗しました。ネットワークをご確認下さい。</string>
     <string name="audio_download_message">音声データをダウンロードします</string>
     <string name="audio_download_failed">ダウンロードに失敗しました</string>
@@ -179,12 +173,7 @@
         completions."
     </string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <!-- システム -->
     <string name="settings_email">raix5867@gmial.com</string>
-
-
 
 </resources>
