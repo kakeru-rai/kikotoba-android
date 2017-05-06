@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">d:Listening Work Out</string>
+    <string name="firebase_storage_base_url">gs://listeningworkout-debug.appspot.com/</string>
+</resources>

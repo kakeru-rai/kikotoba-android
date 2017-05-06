@@ -9,9 +9,10 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 
+import net.snow69it.listeningworkout.R;
+import net.snow69it.listeningworkout.model.WorkingDirectory;
 import net.snow69it.listeningworkout.model.entity.Article;
 import net.snow69it.listeningworkout.util.FirebaseUtil;
-import net.snow69it.listeningworkout.model.WorkingDirectory;
 
 import org.apache.commons.io.FileUtils;
 
@@ -31,7 +32,7 @@ public class AudioDownloadTask {
     private AudioDownloadTaskListener mListener;
 
     public AudioDownloadTask(Context context, Article article, AudioDownloadTaskListener listener) {
-        mAudioReference = FirebaseUtil.getStorageReference(article);
+        mAudioReference = FirebaseUtil.getStorageReference(article, context.getString(R.string.firebase_storage_base_url));
         mArticle = article;
         mContext = context;
         mListener = listener;

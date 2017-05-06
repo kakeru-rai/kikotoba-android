@@ -26,9 +26,9 @@ public class FirebaseUtil {
         return FirebaseDatabase.getInstance().getReference();
     }
 
-    public static StorageReference getStorageReference(Article article) {
+    public static StorageReference getStorageReference(Article article, String baseUrl) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://listeningworkout.appspot.com/");
+        StorageReference storageRef = storage.getReferenceFromUrl(baseUrl);
         StorageReference pathReference = storageRef.child(getAudioPath(article));
         return pathReference;
     }

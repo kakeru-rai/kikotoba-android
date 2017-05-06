@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "625437851285",
+    "firebase_url": "https://listeningworkout-debug.firebaseio.com",
+    "project_id": "listeningworkout-debug",
+    "storage_bucket": "listeningworkout-debug.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625437851285:android:d95303b82b635944",
+        "android_client_info": {
+          "package_name": "net.snow69it.listeningworkout.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "625437851285-8t2ca4emtcdra0tnb7p9e11s3l2g8o37.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.snow69it.listeningworkout.debug",
+            "certificate_hash": "2b036a0c55825da27779c3addcc2b436d112b011"
+          }
+        },
+        {
+          "client_id": "625437851285-8a9sfpn5q3i84pjmalcqq6kie0urd420.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDP-Qk4LQwLo2rNQvzXGrJbSt_Ww6NcANI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "625437851285-8a9sfpn5q3i84pjmalcqq6kie0urd420.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

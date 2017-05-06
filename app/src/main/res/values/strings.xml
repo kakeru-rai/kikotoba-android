@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Listening Work Out</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">設定</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
   <string name="cheese_ipsum">Jarlsberg lancashire edam. Dolcelatte hard cheese brie st. agur blue
@@ -15,9 +14,18 @@
     <string name="menu_shadowing_short">Short</string>
     <string name="menu_shadowing_mid">Mid</string>
     <string name="menu_shadowing_long">Long</string>
-
     <string name="title_sentence_list">Sentences</string>
     <string name="title_sentence_detail">Sentence Detail</string>
+<!--
+
+    <string name="menu_shadowing">読み上げ間隔（シャドーイング）</string>
+    <string name="menu_shadowing_none">なし</string>
+    <string name="menu_shadowing_short">短い</string>
+    <string name="menu_shadowing_mid">中間</string>
+    <string name="menu_shadowing_long">長い</string>
+    <string name="title_sentence_list">Sentences</string>
+    <string name="title_sentence_detail">Sentence Detail</string>
+-->
 
     <!-- メイン -->
     <string-array name="main_tab_names">
