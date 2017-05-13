@@ -8,6 +8,7 @@ import com.google.firebase.database.ValueEventListener;
 import net.snow69it.listeningworkout.model.entity.Article;
 import net.snow69it.listeningworkout.model.entity.ArticlePair;
 import net.snow69it.listeningworkout.model.LanguagePair;
+import net.snow69it.listeningworkout.model.entity.ArticlePairDummy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,35 +77,41 @@ public class ArticleRepository extends BaseRepository {
 
     private ArticlePair map(DataSnapshot articlePairSnapshot) {
         String id = articlePairSnapshot.getKey();
-        Map<String, String> children = (Map<String,String>) articlePairSnapshot.getValue();
-        String origin = children.get(KEY_ORIGIN);
-        String image = children.get(KEY_IMAGE);
-        DataSnapshot languageSnapthot = articlePairSnapshot.child(KEY_LANGUAGE);
+        try {
+            Map<String, String> children = (Map<String, String>) articlePairSnapshot.getValue();
+            String origin = children.get(KEY_ORIGIN);
+            String image = children.get(KEY_IMAGE);
+            DataSnapshot languageSnapthot = articlePairSnapshot.child(KEY_LANGUAGE);
 
-        // 言語ごとのテキスト抽出
-        Article target = null;
-        Article translated = null;
-        for (DataSnapshot articleSnapshot: languageSnapthot.getChildren()) {
-            // 言語リスト
-            if (articleSnapshot.getKey().equals(LanguagePair.getInstance().getTarget())) {
-                target = articleSnapshot.getValue(Article.class);
-                target.setId(id);
-                target.setOrigin(origin);
-                target.setImage(image);
-                target.setLanguage(LanguagePair.getInstance().getTarget());
-            } else if (articleSnapshot.getKey().equals(LanguagePair.getInstance().getMother())) {
-                translated = articleSnapshot.getValue(Article.class);
-                translated.setId(id);
-                translated.setOrigin(origin);
-                translated.setImage(image);
-                translated.setLanguage(LanguagePair.getInstance().getMother());
+            // 言語ごとのテキスト抽出
+            Article target = null;
+            Article translated = null;
+            for (DataSnapshot articleSnapshot : languageSnapthot.getChildren()) {
+                // 言語リスト
+                if (articleSnapshot.getKey().equals(LanguagePair.getInstance().getTarget())) {
+                    target = articleSnapshot.getValue(Article.class);
+                    target.setId(id);
+                    target.setOrigin(origin);
+                    target.setImage(image);
+                    target.setLanguage(LanguagePair.getInstance().getTarget());
+                } else if (articleSnapshot.getKey().equals(LanguagePair.getInstance().getMother())) {
+                    translated = articleSnapshot.getValue(Article.class);
+                    translated.setId(id);
+                    translated.setOrigin(origin);
+                    translated.setImage(image);
+                    translated.setLanguage(LanguagePair.getInstance().getMother());
+                }
             }
-        }
 
-        ArticlePair articlePair = new ArticlePair(target, translated);
-        articlePair.setImage(image);
-        articlePair.setOrigin(origin);
-        articlePair.setId(id);
-        return articlePair;
+            ArticlePair articlePair = new ArticlePair(target, translated);
+            articlePair.setImage(image);
+            articlePair.setOrigin(origin);
+            articlePair.setId(id);
+            return articlePair;
+        } catch (Exception e) {
+            ArticlePairDummy articlePairDummy = new ArticlePairDummy();
+            articlePairDummy.setId(id);
+            return articlePairDummy;
+        }
     }
 }

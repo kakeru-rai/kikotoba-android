@@ -19,6 +19,12 @@
     <string name="title_sentence_detail">Sentence Detail</string>
 -->
 
+    <!-- ログイン -->
+    <string name="login_start">はじめる</string>
+    <string name="login_message">Listening Work Out</string>
+    <string name="login_message_sub">聞いて鍛えるリスニング</string>
+    <string name="login_start_failed">通信に失敗しました。ネットワークをご確認下さい。</string>
+
     <!-- メイン -->
     <string-array name="main_tab_names">
         <item>ストーリー</item>
@@ -30,13 +36,9 @@
         <item>スピーキング</item>
         <item>ディクテーション</item>
     </string-array>
-
-    <string name="login_start">はじめる</string>
-    <string name="login_message">Listening Work Out</string>
-    <string name="login_message_sub">聞いて鍛えるリスニング</string>
-    <string name="login_start_failed">通信に失敗しました。ネットワークをご確認下さい。</string>
     <string name="audio_download_message">音声データをダウンロードします</string>
     <string name="audio_download_failed">ダウンロードに失敗しました</string>
+    <string name="article_under_construction">準備中です\nもうしばらくお待ち下さい。</string>
 
     <!-- 共通 -->
     <string name="start_with_account">アカウントでログイン</string>

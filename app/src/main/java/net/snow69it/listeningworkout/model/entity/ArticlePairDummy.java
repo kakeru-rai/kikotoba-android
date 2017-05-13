@@ -3,12 +3,11 @@ package net.snow69it.listeningworkout.model.entity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import net.snow69it.listeningworkout.model.LanguagePair;
-
 /**
- * 記事の言語ペア
+ * ArticlePairのNullオブジェクト
+ * 公開予定の記事などダミー記事としての利用など
  */
-public class ArticlePair {
+public class ArticlePairDummy extends ArticlePair {
 
     private Article target;
     private Article translated;
@@ -17,21 +16,8 @@ public class ArticlePair {
     private String id;
     private UserLogByArticle userLogByArticle;
 
-    protected ArticlePair() {
-    }
-
-    public ArticlePair(Article target, Article tranlated) throws IllegalArgumentException {
-        if (target == null) {
-            throw new IllegalArgumentException("言語ペアがそろいませんでした。target:" + LanguagePair.getInstance().getTarget());
-        }
-        if (tranlated == null) {
-            throw new IllegalArgumentException("言語ペアがそろいませんでした。translated:" + LanguagePair.getInstance().getMother());
-        }
-        if (target.getSentences().size() != tranlated.getSentences().size()) {
-            throw new IllegalArgumentException("文の数が合っていません。id:" + target.getId());
-        }
-        this.target = target;
-        this.translated = tranlated;
+    public ArticlePairDummy() {
+        super();
     }
 
     public Article getTarget() {
@@ -84,12 +70,7 @@ public class ArticlePair {
 
     public String toJson() {
         Gson gson = new Gson();
-        return gson.toJson(this, new TypeToken<ArticlePair>() {}.getType());
-    }
-
-    public static ArticlePair fromJson(String json) {
-        Gson gson = new Gson();
-        return gson.fromJson(json, new TypeToken<ArticlePair>() {}.getType());
+        return gson.toJson(this, new TypeToken<ArticlePairDummy>() {}.getType());
     }
 
 }

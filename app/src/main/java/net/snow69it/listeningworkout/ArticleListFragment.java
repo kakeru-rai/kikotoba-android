@@ -40,9 +40,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 
-import net.snow69it.listeningworkout.model.entity.ArticlePair;
-import net.snow69it.listeningworkout.model.audio.AudioDownloadTask;
 import net.snow69it.listeningworkout.model.WorkingDirectory;
+import net.snow69it.listeningworkout.model.audio.AudioDownloadTask;
+import net.snow69it.listeningworkout.model.entity.ArticlePair;
+import net.snow69it.listeningworkout.model.entity.ArticlePairDummy;
 import net.snow69it.listeningworkout.model.entity.UserLogByArticle;
 import net.snow69it.listeningworkout.repository.ArticleRepository;
 import net.snow69it.listeningworkout.repository.BaseRepository;
@@ -53,6 +54,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static net.snow69it.listeningworkout.ArticleListFragment.SimpleStringRecyclerViewAdapter.ViewHolder.ArticleStatus.UNDER_CONSTRUCTION;
 
 public class ArticleListFragment extends Fragment {
 
@@ -154,11 +157,20 @@ public class ArticleListFragment extends Fragment {
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
 
-            public String mArticleId;
+            enum ArticleStatus {
+                READY,
+                AUDIO_NOT_DOWNLOADED,
+                UNDER_CONSTRUCTION,
+            }
+
+            // data
             public ArticlePair mArticlePair;
-            private boolean isAudioDownloaded;
+            private ArticleStatus mArticleStatus;
+
+            // view
             public final View mView;
             public final CardView mCardView;
+            public final View mDummyLayout;
             public final ImageView mImageView;
             public final TextView mTextView;
             public final ImageView mImageViewDownload;
@@ -173,6 +185,7 @@ public class ArticleListFragment extends Fragment {
                 super(view);
                 mView = view;
 
+                mDummyLayout = view.findViewById(R.id.dummyLayout);
                 mCardView = (CardView) view.findViewById(R.id.cardView);
                 mImageView = (ImageView) view.findViewById(R.id.avatar);
                 mTextView = (TextView) view.findViewById(android.R.id.text1);
@@ -190,14 +203,14 @@ public class ArticleListFragment extends Fragment {
                 return super.toString() + " '" + mTextView.getText();
             }
 
-            public void setAudioDownloaded(boolean downloaded) {
-                isAudioDownloaded = downloaded;
-                if (downloaded) {
-                    mImageViewDownload.setImageResource(R.drawable.ic_cloud_done_black_24dp);
-                } else {
-                    mImageViewDownload.setImageResource(R.drawable.ic_cloud_download_black_24dp);
-                }
-            }
+//            public void setAudioDownloaded(boolean downloaded) {
+//                isAudioDownloaded = downloaded;
+//                if (downloaded) {
+//                    mImageViewDownload.setImageResource(R.drawable.ic_cloud_done_black_24dp);
+//                } else {
+//                    mImageViewDownload.setImageResource(R.drawable.ic_cloud_download_black_24dp);
+//                }
+//            }
         }
 
         public String getValueAt(int position) {
@@ -223,19 +236,59 @@ public class ArticleListFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             ArticlePair articlePair = mValues.get(position);
             holder.mArticlePair = articlePair;
-            holder.mArticleId = articlePair.getId();
+            holder.mArticleStatus = getStatus(articlePair);
 
-            holder.setAudioDownloaded(WorkingDirectory.getInstance().hasAudioDownloaded(mContext, holder.mArticlePair.getTarget()));
+            view(holder);
+        }
 
-            holder.mTextView.setText(articlePair.getTranslated().getTitle());
+        private void view(final ViewHolder holder) {
+            switch (holder.mArticleStatus) {
+                case READY:
+                    holder.mDummyLayout.setVisibility(View.GONE);
+                    holder.mImageViewDownload.setImageResource(R.drawable.ic_cloud_done_black_24dp);
+                    holder.mCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showMenuDialog(mContext, holder);
+                        }
+                    });
+                    break;
+                case AUDIO_NOT_DOWNLOADED:
+                    holder.mDummyLayout.setVisibility(View.GONE);
+                    holder.mImageViewDownload.setImageResource(R.drawable.ic_cloud_download_black_24dp);
+                    holder.mCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showStartDownloadDialog(mContext, holder);
+                        }
+                    });
+                    break;
+                case UNDER_CONSTRUCTION:
+                    holder.mDummyLayout.setVisibility(View.VISIBLE);
+                    holder.mCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showUnderConstructionDialog(mContext, holder);
+                        }
+                    });
+                    break;
+            }
 
-            int sentenceSize = articlePair.getTarget().getSentences().size();
-            if (articlePair.getUserLogByArticle() == null) {
+            if (holder.mArticleStatus == ViewHolder.ArticleStatus.UNDER_CONSTRUCTION) {
+                return;
+            }
+
+            holder.mTextView.setText(holder.mArticlePair.getTranslated().getTitle());
+
+            int sentenceSize = holder.mArticlePair.getTarget().getSentences().size();
+
+            // 利用ログの有無
+            if (holder.mArticlePair.getUserLogByArticle() == null) {
                 holder.mTextViewDictationScore.setText(String.format("--/%d", sentenceSize));
                 holder.mTextViewSpeakingScore.setText(String.format("--/%d", sentenceSize));
                 holder.mTextViewPlaybackTime.setText(String.format("--:--:--", sentenceSize));
             } else {
-                UserLogByArticle log = articlePair.getUserLogByArticle();
+                UserLogByArticle log = holder.mArticlePair.getUserLogByArticle();
                 holder.mTextViewSpeakingScore.setText(String.format("%d/%d",
                         log.calcSpeakingTotal(),
                         sentenceSize));
@@ -245,22 +298,20 @@ public class ArticleListFragment extends Fragment {
                 holder.mTextViewPlaybackTime.setText(log.calcListeningPlaybackTime());
             }
 
-            holder.mCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 音声データをダウンロードしてから各機能画面への導線を表示する
-                    if (holder.isAudioDownloaded) {
-                        showMenuDialog(mContext, holder);
-                    } else {
-                        showStartDownloadDialog(mContext, holder);
-                    }
-                }
-            });
-
             Glide.with(holder.mImageView.getContext())
-                    .load(articlePair.getImage())
+                    .load(holder.mArticlePair.getImage())
                     .fitCenter()
                     .into(holder.mImageView);
+        }
+
+        private ViewHolder.ArticleStatus getStatus(ArticlePair articlePair) {
+            if (articlePair instanceof ArticlePairDummy) {
+                return UNDER_CONSTRUCTION;
+            } else if (WorkingDirectory.getInstance().hasAudioDownloaded(mContext, articlePair.getTarget())) {
+                return ViewHolder.ArticleStatus.READY;
+            } else {
+                return ViewHolder.ArticleStatus.AUDIO_NOT_DOWNLOADED;
+            }
         }
 
         private void showMenuDialog(final Context context, final ViewHolder holder) {
@@ -275,7 +326,7 @@ public class ArticleListFragment extends Fragment {
                                     context.startActivity(
                                             ListeningActivity.newIntent(
                                                     context,
-                                                    holder.mArticleId,
+                                                    holder.mArticlePair.getId(),
                                                     holder.mTextView.getText().toString(),
                                                     holder.mArticlePair
                                             )
@@ -285,7 +336,7 @@ public class ArticleListFragment extends Fragment {
                                     context.startActivity(
                                             SpeakingActivity.newIntent(
                                                     context,
-                                                    holder.mArticleId,
+                                                    holder.mArticlePair.getId(),
                                                     holder.mTextView.getText().toString(),
                                                     holder.mArticlePair
                                             )
@@ -295,7 +346,7 @@ public class ArticleListFragment extends Fragment {
                                     context.startActivity(
                                             DictationActivity.newIntent(
                                                     context,
-                                                    holder.mArticleId,
+                                                    holder.mArticlePair.getId(),
                                                     holder.mTextView.getText().toString(),
                                                     holder.mArticlePair
                                             )
@@ -323,7 +374,8 @@ public class ArticleListFragment extends Fragment {
                                         @Override
                                         public void onSuccess() {
                                             progressDialog.dismiss();
-                                            holder.setAudioDownloaded(true);
+                                            holder.mArticleStatus = ViewHolder.ArticleStatus.READY;
+                                            view(holder);
                                             showMenuDialog(context, holder);
                                         }
 
@@ -347,7 +399,20 @@ public class ArticleListFragment extends Fragment {
                             dialogInterface.cancel();
                         }
                     })
-                .show();
+                    .show();
+        }
+
+        private void showUnderConstructionDialog(final Context context, final ViewHolder holder) {
+            new AlertDialog.Builder(context)
+                    .setMessage(R.string.article_under_construction)
+                    .setPositiveButton(R.string.tmpl_close, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    })
+                    .setCancelable(true)
+                    .show();
         }
 
         private ProgressDialog createDownloadProgressDialog(Context context, String title) {
