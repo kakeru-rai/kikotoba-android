@@ -25,7 +25,7 @@
 }
 
 .current-playing {
-    background: #AFB;
+    background: #CAEDEA;
 }
 
 .transcript {
@@ -41,13 +41,13 @@ body {
 	font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, Georgia,serif,sans-serif;
 	font-size: 1.1em;
 	line-height: 1.6em;
-	color: #1a1a1a;
+	color: #3a3434;
 	-webkit-text-size-adjust: 100%;
 	
     margin: 0 auto;
     margin-bottom: 320px;
     padding: 0;
-    background-color: #EEEEEE;
+    background-color: #F8F1EB;
 }
 img {
     width: 100%

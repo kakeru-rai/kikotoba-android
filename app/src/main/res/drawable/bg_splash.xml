@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
-    <item android:drawable="@color/primaryLight"/>
+    <item android:drawable="@color/colorBackgroundLight"/>
     <item android:gravity="center">
         <bitmap
             android:gravity="center"

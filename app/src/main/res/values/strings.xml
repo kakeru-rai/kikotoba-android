@@ -33,7 +33,7 @@
     </string-array>
     <string-array name="article_function_names">
         <item>リスニング</item>
-        <item>スピーキング</item>
+        <!--<item>スピーキング</item>-->
         <item>ディクテーション</item>
     </string-array>
     <string name="audio_download_message">音声データをダウンロードします</string>

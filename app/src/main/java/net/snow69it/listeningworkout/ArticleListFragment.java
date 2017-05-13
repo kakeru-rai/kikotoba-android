@@ -332,17 +332,18 @@ public class ArticleListFragment extends Fragment {
                                             )
                                     );
                                     break;
-                                case 1:
-                                    context.startActivity(
-                                            SpeakingActivity.newIntent(
-                                                    context,
-                                                    holder.mArticlePair.getId(),
-                                                    holder.mTextView.getText().toString(),
-                                                    holder.mArticlePair
-                                            )
-                                    );
-                                    break;
-                                case 2:
+//                                case 1: // スピーキング
+//                                    context.startActivity(
+//                                            SpeakingActivity.newIntent(
+//                                                    context,
+//                                                    holder.mArticlePair.getId(),
+//                                                    holder.mTextView.getText().toString(),
+//                                                    holder.mArticlePair
+//                                            )
+//                                    );
+//                                    break;
+//                                case 2:
+                                case 1: // ディクテーション
                                     context.startActivity(
                                             DictationActivity.newIntent(
                                                     context,
