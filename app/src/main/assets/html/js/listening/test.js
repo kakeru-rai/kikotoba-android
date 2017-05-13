@@ -29,18 +29,18 @@ $(function() {
         web.setCurrentSentenceIndex(0);
     };
 
-    ListeningTest.prototype.testAudio = function testAudio() {
-        web.setAudioSrc('../../audio/gutenberg_001/en.mp3');
-//        web.setAudioSrc('https://firebasestorage.googleapis.com/v0/b/listeningworkout.appspot.com/o/article%2Fgutenberg_001%2Fen.mp3?alt=media&token=3e872452-a002-46bd-ba3a-8dbcffab9190');
+    ListeningTest.prototype.testAudio = function testAudio(src) {
+        web.setAudioSrc(src);
         web.setVolume(0.1);
         web.setSpeed(0.8);
         web.play();
     };
 
-    ListeningTest.prototype.buildControls = function() {
+    ListeningTest.prototype.buildControls = function(src) {
         var audio = $('audio').get(0);
         audio.volume = 0.8;
         audio.playbackRate = 0.8;
+        audio.src = src;
 
         var $audio = $('audio');
         $audio.css('width', '100%')
@@ -55,8 +55,15 @@ $(function() {
                 audio.currentTime = audio.currentTime - 0.3;
                 audio.pause();
             });
+        var $toSeconds = $('<input type="text"></div>');
+        var $jamp = $('<button>ジャンプ</button>').on('click', function(){
+                audio.currentTime = $toSeconds.val();
+            });
         var $seconds = $('<input type="text"></div>');
-        $audio.after($play)
+        $audio
+            .after($toSeconds)
+            .after($jamp)
+            .after($play)
             .after($back)
             .after($pause)
             .after($seconds)

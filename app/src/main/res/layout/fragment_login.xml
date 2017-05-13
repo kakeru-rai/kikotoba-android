@@ -12,41 +12,44 @@
     <ProgressBar
         android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="24dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="24dp">
 
         <Space
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <TextView
-            android:text="@string/login_message"
-            android:gravity="center"
+            android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="32dp"
             android:layout_marginBottom="38dp"
-            android:id="@+id/textView1" />
+            android:gravity="center"
+            android:text="@string/login_message"
+            android:textSize="32dp" />
 
         <TextView
-            android:text="@string/login_message_sub"
-            android:gravity="center"
-            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:id="@+id/textView2" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/login_message_sub" />
+
         <Space
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
 
         <Button

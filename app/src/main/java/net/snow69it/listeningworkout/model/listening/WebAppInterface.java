@@ -34,7 +34,7 @@ public class WebAppInterface implements AudioController.Player {
     private float mSpeed = 1.0f;
 
     private Calendar playStartCalender;
-    private int playTimeSec = 0;
+    private long playTimeSec = 0;
 
     public WebAppInterface(WebView webView,
                            AudioController mediaController,
@@ -81,7 +81,7 @@ public class WebAppInterface implements AudioController.Player {
                     }
                     next();
                 } else {
-                    setIsPlaying(false);
+                    pause();
                 }
             }
         });
@@ -112,7 +112,9 @@ public class WebAppInterface implements AudioController.Player {
      */
     @Override
     public void play() {
-        playStartCalender = Calendar.getInstance();
+        if (playStartCalender == null) {
+            playStartCalender = Calendar.getInstance();
+        }
 
         jsSetSpeed(mSpeed);
         jsRefreshUI();
@@ -125,8 +127,7 @@ public class WebAppInterface implements AudioController.Player {
      */
     @Override
     public void pause() {
-        playTimeSec += diffCalender(playStartCalender, Calendar.getInstance());
-        playStartCalender = null;
+        playTimeSec = flushPlayTimeSec();
 
         jsPause();
         setIsPlaying(false);
@@ -171,10 +172,7 @@ public class WebAppInterface implements AudioController.Player {
     }
 
     public long clearPlaybackTimeSec() {
-        long total = playTimeSec + diffCalender(playStartCalender, Calendar.getInstance());
-        playStartCalender = null;
-        playTimeSec = 0;
-        return total;
+        return flushPlayTimeSec();
     }
 
     private long diffCalender(Calendar cal1, Calendar cal2) {
@@ -184,6 +182,13 @@ public class WebAppInterface implements AudioController.Player {
         return Math.abs(
                 TimeUnit.MILLISECONDS.toSeconds(
                         cal1.getTime().getTime() - cal2.getTime().getTime()));
+    }
+
+    private long flushPlayTimeSec() {
+        long total = playTimeSec + diffCalender(playStartCalender, Calendar.getInstance());
+        playStartCalender = null;
+        playTimeSec = 0;
+        return total;
     }
 
     private void setAudioSrc(String audioUrl) {
