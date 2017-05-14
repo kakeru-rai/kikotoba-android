@@ -167,8 +167,28 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         findPreference("license").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 WebViewActivity.move(getActivity(),
-                        Util.getSdPath(getActivity(), "/html/licences.html"),
+                        Util.getSdPath(getActivity(), "/html/licenses.html"),
                         getString(R.string.tmpl_license));
+                return true;
+            }
+        });
+
+        // 利用規約
+        findPreference("term").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                WebViewActivity.move(getActivity(),
+                        Util.getSdPath(getActivity(), "/html/term.html"),
+                        getString(R.string.tmpl_term));
+                return true;
+            }
+        });
+
+        // プライバシーポリシー
+        findPreference("privacy").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                WebViewActivity.move(getActivity(),
+                        Util.getSdPath(getActivity(), "/html/privacyPolicy.html"),
+                        getString(R.string.tmpl_privacy_policy));
                 return true;
             }
         });

@@ -174,7 +174,7 @@ public class SettingsActivity extends AppCompatActivity {
             license.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     WebViewActivity.move(getActivity(),
-                            Util.getSdPath(getActivity(), "/html/licences.html"),
+                            Util.getSdPath(getActivity(), "/html/licenses.html"),
                             getString(R.string.tmpl_license));
                     return true;
                 }

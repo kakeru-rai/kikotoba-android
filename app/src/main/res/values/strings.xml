@@ -24,6 +24,9 @@
     <string name="login_message">Listening Work Out</string>
     <string name="login_message_sub">聞いて鍛えるリスニング</string>
     <string name="login_start_failed">通信に失敗しました。ネットワークをご確認下さい。</string>
+    <string name="start_with_account">アカウントでログイン</string>
+    <string name="start_without_register">登録せずに始める</string>
+    <string name="term_message">「はじめる」をタップすると利用規約とプライバシーポリシーに同意したものとみなされます。</string>
 
     <!-- メイン -->
     <string-array name="main_tab_names">
@@ -41,8 +44,6 @@
     <string name="article_under_construction">準備中です\nもうしばらくお待ち下さい。</string>
 
     <!-- 共通 -->
-    <string name="start_with_account">アカウントでログイン</string>
-    <string name="start_without_register">登録せずに始める</string>
     <string name="target_language">en</string>
     <string name="is_cleared">クリアー</string>
     <string name="is_not_cleared">未正解</string>

@@ -56,6 +56,8 @@
     <string name="tmpl_evening">Evening</string>
     <string name="tmpl_license">License</string>
     <string name="tmpl_version">Version</string>
+    <string name="tmpl_term">Terms of service</string>
+    <string name="tmpl_privacy_policy">プライバシーポリシー</string>
     <string name="tmpl_google">Google</string>
     <string name="tmpl_facebook">Facebook</string>
 

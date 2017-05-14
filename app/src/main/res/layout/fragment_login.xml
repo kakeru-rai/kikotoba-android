@@ -37,7 +37,8 @@
             android:layout_marginBottom="38dp"
             android:gravity="center"
             android:text="@string/login_message"
-            android:textSize="32dp" />
+            android:textSize="32dp"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/textView2"
@@ -57,9 +58,42 @@
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="32dp"
             android:text="@string/login_start"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewTermMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#AAA"
+            android:textSize="12dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="4dp"
+            android:text="@string/term_message" />
+
+        <TextView
+            android:id="@+id/textViewTerm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tmpl_term"
+            android:textColor="#AAA"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="4dp"
+            android:textSize="12dp"
+            />
+
+        <TextView
+            android:id="@+id/textViewPrivacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tmpl_privacy_policy"
+            android:textColor="#AAA"
+            android:layout_gravity="center_horizontal"
+            android:textSize="12dp"
+            />
+
 
     </LinearLayout>
 

@@ -30,7 +30,7 @@ import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
-import net.snow69it.listeningworkout.model.WorkingDirectory;
+import net.snow69it.listeningworkout.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +45,8 @@ public class LoginFragment extends Fragment {
 
     @BindView(R.id.login_form) View mLoginFormView;
     @BindView(R.id.login_progress) View mProgressView;
+    @BindView(R.id.textViewTerm) TextView textViewTerm;
+    @BindView(R.id.textViewPrivacy) TextView textViewPrivacy;
 
     @BindView(R.id.email) EditText mEmailView;
     @BindView(R.id.password) EditText mPasswordView;
@@ -54,6 +56,24 @@ public class LoginFragment extends Fragment {
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
+
+    private View.OnClickListener termListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            WebViewActivity.move(getActivity(),
+                    Util.getSdPath(getActivity(), "/html/term.html"),
+                    getString(R.string.tmpl_term));
+        }
+    };
+
+    private View.OnClickListener privacyPolicyListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            WebViewActivity.move(getActivity(),
+                    Util.getSdPath(getActivity(), "/html/privacyPolicy.html"),
+                    getString(R.string.tmpl_privacy_policy));
+        }
+    };
 
     private View.OnClickListener googleLoginListener = new View.OnClickListener() {
         @Override
@@ -165,9 +185,13 @@ public class LoginFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         loginStartButton.setOnClickListener(anonymouseLoginListener);
+        textViewTerm.setOnClickListener(termListener);
+        textViewPrivacy.setOnClickListener(privacyPolicyListener);
         mAuth = FirebaseAuth.getInstance();
 
+
         if (true) {
+            // アカウント管理機能ができるまで
             return rootView;
         }
 

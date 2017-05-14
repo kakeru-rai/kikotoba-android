@@ -48,6 +48,12 @@
         android:key="license"
         android:title="@string/tmpl_license"></PreferenceScreen>
     <PreferenceScreen
+        android:key="term"
+        android:title="@string/tmpl_term"></PreferenceScreen>
+    <PreferenceScreen
+        android:key="privacy"
+        android:title="@string/tmpl_privacy_policy"></PreferenceScreen>
+    <PreferenceScreen
         android:key="version"
         android:title="@string/tmpl_version"></PreferenceScreen>
 </PreferenceScreen>
