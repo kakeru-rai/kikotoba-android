@@ -148,7 +148,7 @@ public class WebAppInterface implements AudioController.Player {
 
     @Override
     public void rew() {
-        jsSetCurrentTimeSec(0);
+        playIfPlaying();
     }
 
     @Override
@@ -227,6 +227,7 @@ public class WebAppInterface implements AudioController.Player {
             previousTargetSentence = targetSentence;
         }
         jsFlushParagraph();
+        jsRefreshUI();
         setAudioSrc(this.mTargetArticle.getAudio());
         jsSetSpeed(mSpeed);
     }

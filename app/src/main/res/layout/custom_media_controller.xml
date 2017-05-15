@@ -32,7 +32,6 @@
 
         <ImageButton android:id="@+id/prev" style="@android:style/MediaButton.Previous" />
         <ImageButton android:id="@+id/rew"
-            android:visibility="gone"
             style="@android:style/MediaButton.Rew" />
         <ImageButton android:id="@+id/play" style="@android:style/MediaButton.Play" />
         <ImageButton android:id="@+id/pause" style="@android:style/MediaButton.Pause" />
