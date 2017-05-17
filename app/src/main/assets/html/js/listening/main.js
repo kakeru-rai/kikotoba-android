@@ -27,7 +27,6 @@ $(function() {
     AppInterface.prototype.play = function play() {
         var sentence = this.article.getCurrentSentence();
         this.audioPlayer.playDuration(sentence.fromSec, sentence.toSec);
-        this.article.scrollUpToSentence();
     };
 
     AppInterface.prototype.pause = function pause() {
@@ -81,6 +80,10 @@ $(function() {
 
     AppInterface.prototype.refreshUI = function refreshUI() {
         this.article.refreshUI();
+    };
+
+    AppInterface.prototype.scrollUpToSentence = function() {
+        this.article.scrollUpToSentence();
     };
 
     AppInterface.prototype.setCurrentSentenceIndex = function setCurrentSentenceIndex(currentSentenceIndex) {

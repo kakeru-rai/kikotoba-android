@@ -125,6 +125,7 @@ public class WebAppInterface implements AudioController.Player {
         jsSetSpeed(mSpeed);
         jsRefreshUI();
         jsPlay();
+        jsScrollUpToSentence();
         setIsPlaying(true);
     }
 
@@ -235,7 +236,10 @@ public class WebAppInterface implements AudioController.Player {
         jsFlushParagraph();
         jsSetCurrentSentenceIndex(mCurrentSenetenceIndex);
         jsRefreshUI();
-        
+        if (0 < mCurrentSenetenceIndex && mCurrentSenetenceIndex < mTargetArticle.getSentences().size() - 1) {
+            jsScrollUpToSentence();
+        }
+
         setAudioSrc(this.mTargetArticle.getAudio());
         jsSetSpeed(mSpeed);
     }
@@ -289,6 +293,10 @@ public class WebAppInterface implements AudioController.Player {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    private void jsScrollUpToSentence() {
+        mWebView.loadUrl("javascript: web.scrollUpToSentence();");
     }
 
     private void jsSetCurrentTimeSec(double currentTimeSec) {

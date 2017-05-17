@@ -111,7 +111,7 @@ public class ListeningFragment extends BaseFragment {
                 repo.setCurrentReadingIndex(
                         getUser().getUid(),
                         mTargetArticle.getId(),
-                        mWebAppInterface.getCurrentIndex());
+                        mTargetArticle.getSentences().size() - 1 > mWebAppInterface.getCurrentIndex() ? mWebAppInterface.getCurrentIndex() : 0);
             }
 
             @Override
