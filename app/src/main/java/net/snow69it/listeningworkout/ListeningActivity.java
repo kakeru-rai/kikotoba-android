@@ -33,12 +33,14 @@ public class ListeningActivity extends BaseActivity {
     public static final String ARTICLE_ID = "article_id";
     public static final String ARTICLE_TITLE = "article_title";
     public static final String ARTICLE_PAIR = "article_pair";
+    public static final String CURRENT_READING_INDEX = "current_reading_index";
 
-    public static Intent newIntent(Context context, String articleId, String title, ArticlePair articlePair) {
+    public static Intent newIntent(Context context, String articleId, String title, ArticlePair articlePair, int currentReadingIndex) {
         Intent intent = new Intent(context, ListeningActivity.class);
         intent.putExtra(ListeningActivity.ARTICLE_ID, articleId);
         intent.putExtra(ListeningActivity.ARTICLE_TITLE, title);
         intent.putExtra(ListeningActivity.ARTICLE_PAIR, articlePair.toJson());
+        intent.putExtra(ListeningActivity.CURRENT_READING_INDEX, currentReadingIndex);
         return intent;
     }
 
@@ -60,7 +62,10 @@ public class ListeningActivity extends BaseActivity {
     private void addFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ListeningFragment fragment = ListeningFragment.newInstance(ArticlePair.fromJson(getIntent().getStringExtra(ARTICLE_PAIR)));
+        ListeningFragment fragment = ListeningFragment.newInstance(
+                ArticlePair.fromJson(getIntent().getStringExtra(ARTICLE_PAIR)),
+                getIntent().getIntExtra(CURRENT_READING_INDEX, 0)
+        );
         fragmentTransaction.add(R.id.fragmentContainer, fragment);
         fragmentTransaction.commit();
     }

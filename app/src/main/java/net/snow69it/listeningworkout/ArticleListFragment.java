@@ -328,7 +328,8 @@ public class ArticleListFragment extends Fragment {
                                                     context,
                                                     holder.mArticlePair.getId(),
                                                     holder.mTextView.getText().toString(),
-                                                    holder.mArticlePair
+                                                    holder.mArticlePair,
+                                                    holder.mArticlePair.getUserLogByArticle().getCurrentReadingIndex()
                                             )
                                     );
                                     break;

@@ -29,15 +29,17 @@ public class ListeningFragment extends BaseFragment {
      * fragment.
      */
     private static final String ARG_ARTICLE_PAIR = "article_pair";
+    private static final String ARG_CURRENT_READING_INDEX = "current_index";
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static ListeningFragment newInstance(ArticlePair articlePair) {
+    public static ListeningFragment newInstance(ArticlePair articlePair, int currentIndex) {
         ListeningFragment fragment = new ListeningFragment();
         Bundle args = new Bundle();
         args.putString(ARG_ARTICLE_PAIR, articlePair.toJson());
+        args.putInt(ARG_CURRENT_READING_INDEX, currentIndex);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,10 +72,14 @@ public class ListeningFragment extends BaseFragment {
     private void init(View rootView) {
         webView = (ViewerWebView) rootView.findViewById(R.id.webview);
 
-        mWebAppInterface = new WebAppInterface(webView, mMediaController, mTargetArticle, mTranscriptArticle);
+        mWebAppInterface = new WebAppInterface(webView, mMediaController, mTargetArticle, mTranscriptArticle, getCurrentReadingIndex());
         Pref pref = new Pref(getActivity());
         mWebAppInterface.setSpeed(pref.getSpeechSpeed());
         mWebAppInterface.load(getActivity());
+    }
+
+    private int getCurrentReadingIndex() {
+        return getArguments().getInt(ARG_CURRENT_READING_INDEX, 0);
     }
 
     public void onResume() {
@@ -102,7 +108,10 @@ public class ListeningFragment extends BaseFragment {
                         getUser().getUid(),
                         mTargetArticle.getId(),
                         mWebAppInterface.clearPlaybackTimeSec() + entity.getListeningPlaybackTime());
-
+                repo.setCurrentReadingIndex(
+                        getUser().getUid(),
+                        mTargetArticle.getId(),
+                        mWebAppInterface.getCurrentIndex());
             }
 
             @Override

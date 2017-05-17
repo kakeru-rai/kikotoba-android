@@ -17,11 +17,18 @@ public class UserLogRepository extends BaseRepository {
 
     private static final String PATH = "/user_log/%s/by_article/%s";
     private static final String KEY_LISTENING_PLAYBACK_TIME = "listeningPlaybackTime";
+    private static final String KEY_CURRENT_READING_INDEX = "currentReadingIndex";
 
     public void setListeningPlaybackTime(String uid, String articleId, long playbackTimeSec) {
         DatabaseReference ref = firebaseDatabase.getReference(String.format(PATH, uid, articleId));
-        DatabaseReference refListeningPlaybackTime = ref.child(KEY_LISTENING_PLAYBACK_TIME);
-        refListeningPlaybackTime.setValue(playbackTimeSec);
+        DatabaseReference refChild = ref.child(KEY_LISTENING_PLAYBACK_TIME);
+        refChild.setValue(playbackTimeSec);
+    }
+
+    public void setCurrentReadingIndex(String uid, String articleId, int index) {
+        DatabaseReference ref = firebaseDatabase.getReference(String.format(PATH, uid, articleId));
+        DatabaseReference refChild = ref.child(KEY_CURRENT_READING_INDEX);
+        refChild.setValue(index);
     }
 
     public void bindUserLogByArticle(String uid, String articleId, final EntityEventListener<UserLogByArticle> listener) {

@@ -39,7 +39,8 @@ public class WebAppInterface implements AudioController.Player {
     public WebAppInterface(WebView webView,
                            AudioController mediaController,
                            Article targetArticle,
-                           Article transcriptArticle
+                           Article transcriptArticle,
+                           int currentIndex
     ) {
         mMediaController = mediaController;
         mediaController.setPlayer(this);
@@ -47,6 +48,7 @@ public class WebAppInterface implements AudioController.Player {
         mTranscriptArticle = transcriptArticle;
         mWebView = webView;
         mWebView.addJavascriptInterface(this, INTERFACE_NAME);
+        mCurrentSenetenceIndex = currentIndex;
     }
 
     public void load(Context context) {
@@ -58,6 +60,10 @@ public class WebAppInterface implements AudioController.Player {
     public void setSpeed(float speed) {
         mSpeed = speed;
         jsSetSpeed(speed);
+    }
+
+    public int getCurrentIndex() {
+        return mCurrentSenetenceIndex;
     }
 
     @JavascriptInterface
@@ -227,7 +233,9 @@ public class WebAppInterface implements AudioController.Player {
             previousTargetSentence = targetSentence;
         }
         jsFlushParagraph();
+        jsSetCurrentSentenceIndex(mCurrentSenetenceIndex);
         jsRefreshUI();
+        
         setAudioSrc(this.mTargetArticle.getAudio());
         jsSetSpeed(mSpeed);
     }

@@ -17,6 +17,7 @@ import java.util.TimeZone;
 public class UserLogByArticle {
 
     private int listeningPlaybackTime = 0;
+    private int currentReadingIndex = 0;
     private Map<String, Boolean> speakingCorrect = new HashMap();
     private Map<String, Boolean> dictationCorrect = new HashMap();
 
@@ -56,6 +57,14 @@ public class UserLogByArticle {
         speakingCorrect.put(String.valueOf(index) + "_", true);
     }
 
+    public int getCurrentReadingIndex() {
+        return currentReadingIndex;
+    }
+
+    public void setCurrentReadingIndex(int currentReadingIndex) {
+        this.currentReadingIndex = currentReadingIndex;
+    }
+
     public boolean isSpeakingCorrect(int index) {
 //        return true;
         return getSpeakingCorrect().containsKey(String.valueOf(index) + "_");
@@ -76,4 +85,5 @@ public class UserLogByArticle {
         df.setTimeZone(cal.getTimeZone());
         return df.format(cal.getTime());
     }
+
 }
