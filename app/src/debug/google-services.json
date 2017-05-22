@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "625437851285",
-    "firebase_url": "https://listeningworkout-debug.firebaseio.com",
-    "project_id": "listeningworkout-debug",
-    "storage_bucket": "listeningworkout-debug.appspot.com"
+    "project_number": "764096491638",
+    "firebase_url": "https://kikotoba-debug.firebaseio.com",
+    "project_id": "kikotoba-debug",
+    "storage_bucket": "kikotoba-debug.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:625437851285:android:d95303b82b635944",
+        "mobilesdk_app_id": "1:764096491638:android:d4e1fc4e47a0d1fb",
         "android_client_info": {
-          "package_name": "net.snow69it.listeningworkout.debug"
+          "package_name": "com.kikotoba.android.debug"
         }
       },
       "oauth_client": [
         {
-          "client_id": "625437851285-8t2ca4emtcdra0tnb7p9e11s3l2g8o37.apps.googleusercontent.com",
+          "client_id": "764096491638-to2a13u0shkt9fc5d1i4u5bo6nejaggu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "net.snow69it.listeningworkout.debug",
+            "package_name": "com.kikotoba.android.debug",
             "certificate_hash": "2b036a0c55825da27779c3addcc2b436d112b011"
           }
         },
         {
-          "client_id": "625437851285-8a9sfpn5q3i84pjmalcqq6kie0urd420.apps.googleusercontent.com",
+          "client_id": "764096491638-ev31mktfc6fc7llcietd56ch43v5j397.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDP-Qk4LQwLo2rNQvzXGrJbSt_Ww6NcANI"
+          "current_key": "AIzaSyAl8FPVZz4KPp52FXNhcCe3s9EfANbYGpQ"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "625437851285-8a9sfpn5q3i84pjmalcqq6kie0urd420.apps.googleusercontent.com",
+              "client_id": "764096491638-ev31mktfc6fc7llcietd56ch43v5j397.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

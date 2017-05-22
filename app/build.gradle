@@ -12,7 +12,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "net.snow69it.listeningworkout"
+        applicationId "com.kikotoba.android"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 100000

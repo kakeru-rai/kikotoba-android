@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "311356780748",
-    "firebase_url": "https://listeningworkout.firebaseio.com",
-    "project_id": "listeningworkout",
-    "storage_bucket": "listeningworkout.appspot.com"
+    "project_number": "953891170242",
+    "firebase_url": "https://kikotoba-d6654.firebaseio.com",
+    "project_id": "kikotoba-d6654",
+    "storage_bucket": "kikotoba-d6654.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:311356780748:android:95ebcaf03a929101",
+        "mobilesdk_app_id": "1:953891170242:android:5b006c5e37853114",
         "android_client_info": {
-          "package_name": "net.snow69it.listeningworkout"
+          "package_name": "com.kikotoba.android"
         }
       },
       "oauth_client": [
         {
-          "client_id": "311356780748-ibgmt1p5562fltd6vb311tcap3b0odd0.apps.googleusercontent.com",
+          "client_id": "953891170242-u8u7v6r169q38qia545ro92oeuvlk1bt.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "net.snow69it.listeningworkout",
+            "package_name": "com.kikotoba.android",
             "certificate_hash": "2b036a0c55825da27779c3addcc2b436d112b011"
           }
         },
         {
-          "client_id": "311356780748-6u1ffdjkt9n0chd7ah9qapsnv60is1t3.apps.googleusercontent.com",
+          "client_id": "953891170242-htj4h3rvs0apr877cl1rgs71k7jskvsd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCJqYiSfsoL5selFQMfY_Y3R9IAlBE3qi4"
+          "current_key": "AIzaSyDxp7FaUsUuEhithQdz-FWXPIbPoJShvYg"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "311356780748-6u1ffdjkt9n0chd7ah9qapsnv60is1t3.apps.googleusercontent.com",
+              "client_id": "953891170242-htj4h3rvs0apr877cl1rgs71k7jskvsd.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

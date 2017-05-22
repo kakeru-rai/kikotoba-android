@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.snow69it.listeningworkout.WebViewFragment">
+    tools:context="com.kikotoba.android.WebViewFragment">
     <view
         android:id="@+id/webview"
-        class="net.snow69it.listeningworkout.model.listening.ViewerWebView"
+        class="com.kikotoba.android.model.listening.ViewerWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.snow69it.listeningworkout">
+    package="com.kikotoba.android">
 
     <!-- リスニング中のスリープ防止 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashActivity"
+            android:name="com.kikotoba.android.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash">
@@ -37,47 +37,47 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name="com.kikotoba.android.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.kikotoba.android.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".SpeakingActivity"
-            android:parentActivityName=".MainActivity"
+            android:name="com.kikotoba.android.SpeakingActivity"
+            android:parentActivityName="com.kikotoba.android.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.snow69it.listeningworkout.MainActivity" />
+                android:value="com.kikotoba.android.MainActivity" />
         </activity>
         <activity
-            android:name=".DictationActivity"
-            android:parentActivityName=".MainActivity"
+            android:name="com.kikotoba.android.DictationActivity"
+            android:parentActivityName="com.kikotoba.android.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.snow69it.listeningworkout.MainActivity" />
+                android:value="com.kikotoba.android.MainActivity" />
         </activity>
         <activity
-            android:name=".ListeningActivity"
-            android:parentActivityName=".MainActivity"
+            android:name="com.kikotoba.android.ListeningActivity"
+            android:parentActivityName="com.kikotoba.android.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.snow69it.listeningworkout.MainActivity" />
+                android:value="com.kikotoba.android.MainActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.kikotoba.android.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".WebViewActivity"
+            android:name="com.kikotoba.android.WebViewActivity"
             android:screenOrientation="portrait" />
     </application>
 

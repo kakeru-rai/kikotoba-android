@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="net.snow69it.listeningworkout.SpeakingFragment"
+    tools:context="com.kikotoba.android.SpeakingFragment"
     android:orientation="vertical">
     <TextView
         android:id="@+id/is_cleared"
@@ -14,7 +14,7 @@
         android:layout_gravity="right" />
     <view
         android:id="@+id/webview"
-        class="net.snow69it.listeningworkout.util.WebViewDefault"
+        class="com.kikotoba.android.util.WebViewDefault"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />

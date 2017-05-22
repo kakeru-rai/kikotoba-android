@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="net.snow69it.listeningworkout.LoginActivity">
+    tools:context="com.kikotoba.android.LoginActivity">
 
     <!-- Login progress -->
 
@@ -36,8 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="38dp"
             android:gravity="center"
-            android:text="@string/login_message"
-            android:textSize="32dp"
+            android:text="@string/app_name"
+            android:textSize="52dp"
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView

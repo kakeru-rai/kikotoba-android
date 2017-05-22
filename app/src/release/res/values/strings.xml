@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Kikotoba</string>
-    <string name="firebase_storage_base_url">gs://listeningworkout.appspot.com/</string>
+    <string name="firebase_storage_base_url">gs://kikotoba.appspot.com/</string>
 </resources>

@@ -8,13 +8,13 @@
     <view xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/webview"
-        class="net.snow69it.listeningworkout.model.listening.ViewerWebView"
+        class="com.kikotoba.android.model.listening.ViewerWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <view
         android:id="@+id/mediaController"
-        class="net.snow69it.listeningworkout.model.listening.AudioController"
+        class="com.kikotoba.android.model.listening.AudioController"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
