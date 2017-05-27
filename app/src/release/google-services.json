@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "953891170242",
-    "firebase_url": "https://kikotoba-d6654.firebaseio.com",
-    "project_id": "kikotoba-d6654",
-    "storage_bucket": "kikotoba-d6654.appspot.com"
+    "project_number": "973554192924",
+    "firebase_url": "https://kikotoba-prod.firebaseio.com",
+    "project_id": "kikotoba-prod",
+    "storage_bucket": "kikotoba-prod.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:953891170242:android:5b006c5e37853114",
+        "mobilesdk_app_id": "1:973554192924:android:5b006c5e37853114",
         "android_client_info": {
           "package_name": "com.kikotoba.android"
         }
       },
       "oauth_client": [
         {
-          "client_id": "953891170242-u8u7v6r169q38qia545ro92oeuvlk1bt.apps.googleusercontent.com",
+          "client_id": "973554192924-rv3o2umev25e8ab04hgfc2ifm7k02l7p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.kikotoba.android",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "953891170242-htj4h3rvs0apr877cl1rgs71k7jskvsd.apps.googleusercontent.com",
+          "client_id": "973554192924-klk24ggmt9b2iqf9qhmqp7mbh7fhegrv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDxp7FaUsUuEhithQdz-FWXPIbPoJShvYg"
+          "current_key": "AIzaSyBtEfqbfuSzaHP0KaqSVzy4vQkutP9QSww"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "953891170242-htj4h3rvs0apr877cl1rgs71k7jskvsd.apps.googleusercontent.com",
+              "client_id": "973554192924-klk24ggmt9b2iqf9qhmqp7mbh7fhegrv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
