@@ -15,7 +15,7 @@ import com.kikotoba.android.model.entity.UserLogByArticle;
 
 public class UserLogRepository extends BaseRepository {
 
-    private static final String PATH = "/user_log/%s/by_article/%s";
+    private static final String PATH = "/user/log/%s/by_article/%s";
     private static final String KEY_LISTENING_PLAYBACK_TIME = "listeningPlaybackTime";
     private static final String KEY_CURRENT_READING_INDEX = "currentReadingIndex";
 

@@ -17,25 +17,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_shadowing"
+        android:id="@+id/action_speech_gap"
         android:title="@string/menu_shadowing"
         app:showAsAction="never">
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/action_shadowing_none"
-                    android:title="@string/menu_shadowing_none"
-                    android:checked="true"
+                    android:id="@+id/action_speech_gap_normal"
+                    android:title="@string/menu_speech_gap_normal"
                     />
                 <item
-                    android:id="@+id/action_shadowing_short"
-                    android:title="@string/menu_shadowing_short" />
+                    android:id="@+id/action_speech_gap_repetition"
+                    android:title="@string/menu_speech_gap_repetition" />
                 <item
-                    android:id="@+id/action_shadowing_mid"
-                    android:title="@string/menu_shadowing_mid" />
-                <item
-                    android:id="@+id/action_shadowing_long"
-                    android:title="@string/menu_shadowing_long" />
+                    android:id="@+id/action_speech_gap_shadowing"
+                    android:title="@string/menu_speech_gap_shadowing" />
             </group>
         </menu>
     </item>

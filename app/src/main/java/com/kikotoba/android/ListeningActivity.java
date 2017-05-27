@@ -22,11 +22,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.kikotoba.android.model.entity.ArticlePair;
-import com.kikotoba.android.util.Navigation;
 
 public class ListeningActivity extends BaseActivity {
 
@@ -68,26 +66,6 @@ public class ListeningActivity extends BaseActivity {
         );
         fragmentTransaction.add(R.id.fragmentContainer, fragment);
         fragmentTransaction.commit();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id){
-            case R.id.action_settings:
-                Navigation.goSettings(this);
-                return true;
-            case R.id.action_shadowing:
-                return true;
-            case R.id.action_shadowing_none:
-            case R.id.action_shadowing_short:
-            case R.id.action_shadowing_mid:
-            case R.id.action_shadowing_long:
-                item.setChecked(!item.isChecked());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
 }

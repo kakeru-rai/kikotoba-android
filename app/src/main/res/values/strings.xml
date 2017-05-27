@@ -1,23 +1,10 @@
 <resources>
     <string name="action_settings">設定</string>
 
-    <string name="menu_shadowing">Shadowing(Gap between tracks)</string>
-    <string name="menu_shadowing_none">None</string>
-    <string name="menu_shadowing_short">Short</string>
-    <string name="menu_shadowing_mid">Mid</string>
-    <string name="menu_shadowing_long">Long</string>
-    <string name="title_sentence_list">Sentences</string>
-    <string name="title_sentence_detail">Sentence Detail</string>
-<!--
-
     <string name="menu_shadowing">読み上げ間隔（シャドーイング）</string>
-    <string name="menu_shadowing_none">なし</string>
-    <string name="menu_shadowing_short">短い</string>
-    <string name="menu_shadowing_mid">中間</string>
-    <string name="menu_shadowing_long">長い</string>
-    <string name="title_sentence_list">Sentences</string>
-    <string name="title_sentence_detail">Sentence Detail</string>
--->
+    <string name="menu_speech_gap_normal">通常</string>
+    <string name="menu_speech_gap_repetition">リピテーション</string>
+    <string name="menu_speech_gap_shadowing">シャドーイング</string>
 
     <!-- ログイン -->
     <string name="login_start">はじめる</string>
@@ -82,37 +69,38 @@
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
 
-    <string name="pref_shadowing_gap_title">シャドーイング（読み上げ間隔）</string>
-    <string name="pref_shadowing_gap_key">shadowing_gap</string>
+    <string name="pref_speech_gap_title">読み上げ間隔（シャドーイング）</string>
+    <string name="pref_speech_gap_key">speech_gap</string>
+    <string name="pref_speech_gap_val_normal">normal</string>
+    <string name="pref_speech_gap_val_repetition">repetition</string>
+    <string name="pref_speech_gap_val_shadowing">shadowing</string>
     <string-array name="pref_shadowing_gap_titles">
-        <item>@string/menu_shadowing_none</item>
-        <item>@string/menu_shadowing_short</item>
-        <item>@string/menu_shadowing_mid</item>
-        <item>@string/menu_shadowing_long</item>
+        <item>@string/menu_speech_gap_normal</item>
+        <item>@string/menu_speech_gap_repetition</item>
+        <item>@string/menu_speech_gap_shadowing</item>
     </string-array>
-    <string-array name="pref_shadowing_gap_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+    <string-array name="pref_speech_gap_values">
+        <item>@string/pref_speech_gap_val_normal</item>
+        <item>@string/pref_speech_gap_val_repetition</item>
+        <item>@string/pref_speech_gap_val_shadowing</item>
     </string-array>
 
-    <string name="pref_general_speech_speed_title">読み上げ速度</string>
-    <string name="pref_general_speech_speed_key">speech_speed</string>
-    <string-array name="pref_general_speech_speed_titles">
-        <item>遅い</item>
-        <item>やや遅い</item>
-        <item>普通</item>
-        <item>やや速い</item>
-        <item>速い</item>
-    </string-array>
-    <string-array name="pref_general_speech_speed_values">
-        <item>0.6</item>
-        <item>0.8</item>
-        <item>1</item>
-        <item>1.25</item>
-        <item>1.5</item>
-    </string-array>
+    <!--<string name="pref_general_speech_speed_title">読み上げ速度</string>-->
+    <!--<string name="pref_general_speech_speed_key">speech_speed</string>-->
+    <!--<string-array name="pref_general_speech_speed_titles">-->
+        <!--<item>遅い</item>-->
+        <!--<item>やや遅い</item>-->
+        <!--<item>普通</item>-->
+        <!--<item>やや速い</item>-->
+        <!--<item>速い</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="pref_general_speech_speed_values">-->
+        <!--<item>0.6</item>-->
+        <!--<item>0.8</item>-->
+        <!--<item>1</item>-->
+        <!--<item>1.25</item>-->
+        <!--<item>1.5</item>-->
+    <!--</string-array>-->
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>

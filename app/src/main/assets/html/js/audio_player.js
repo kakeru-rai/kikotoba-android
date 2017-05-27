@@ -97,9 +97,7 @@ $(function() {
 
     AudioPlayer.prototype.stopTo = function stopTo(toSec) {
         var _this = this;
-            console.log([_this.audio.currentTime, toSec]);
         this.$audio.on('timeupdate.AudioPlayer', $.throttle(50, function() {
-            console.log([_this.audio.currentTime, toSec]);
             if (_this.audio.currentTime >= toSec) {
                 $(this).off('timeupdate.AudioPlayer');
                 _this.pause();

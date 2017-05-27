@@ -23,7 +23,7 @@ abstract public class BaseActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Navigation.goSettings(this);
                 return true;
-            case R.id.action_shadowing:
+            case R.id.action_speech_gap:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -19,4 +19,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:minHeight="52dp" />
+
+    <TextView
+        android:id="@+id/nowShadowingPopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:gravity="center"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/bg_kadomaru"
+        android:padding="6dp"
+        android:text="@string/menu_speech_gap_repetition"
+        android:textColor="#FFF" />
 </FrameLayout>

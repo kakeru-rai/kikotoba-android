@@ -2,11 +2,14 @@ package com.kikotoba.android;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseError;
-
 import com.kikotoba.android.model.entity.Article;
 import com.kikotoba.android.model.entity.ArticlePair;
 import com.kikotoba.android.model.entity.UserLogByArticle;
@@ -16,6 +19,9 @@ import com.kikotoba.android.model.listening.WebAppInterface;
 import com.kikotoba.android.repository.BaseRepository;
 import com.kikotoba.android.repository.UserLogRepository;
 import com.kikotoba.android.util.Pref;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -52,10 +58,14 @@ public class ListeningFragment extends BaseFragment {
 
     private View mRootView;
 
+    @BindView(R.id.nowShadowingPopup)
+    TextView mNowShadowingPopup;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflateRootView(R.layout.fragment_listening, container, inflater);
+        ButterKnife.bind(this, mRootView);
 
         mMediaController = (AudioController) mRootView.findViewById(R.id.mediaController);
 
@@ -63,18 +73,70 @@ public class ListeningFragment extends BaseFragment {
 
         mTargetArticle = entity.getTarget();
         mTranscriptArticle = entity.getTranslated();
-
+        setHasOptionsMenu(true);
         init(mRootView);
 
         return mRootView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.listening, menu);
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        Pref pref = new Pref(getActivity());
+        switch (pref.getSpeechGap()) {
+            case NORMAL:
+                menu.findItem(R.id.action_speech_gap_normal).setChecked(true);
+                break;
+            case REPETITION:
+                menu.findItem(R.id.action_speech_gap_repetition).setChecked(true);
+                break;
+            case SHADOWING:
+                menu.findItem(R.id.action_speech_gap_shadowing).setChecked(true);
+                break;
+            default:
+                menu.findItem(R.id.action_speech_gap_normal).setChecked(true);
+                break;
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.action_speech_gap_normal:
+            case R.id.action_speech_gap_repetition:
+            case R.id.action_speech_gap_shadowing:
+                item.setChecked(!item.isChecked());
+
+                onChangeSpeechGap(Pref.SpeechGap.of(id));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void onChangeSpeechGap(Pref.SpeechGap speechGap) {
+        Pref pref = new Pref(getActivity());
+        pref.putSpeechGap(speechGap);
+        mWebAppInterface.setSpeechGap(getActivity(), speechGap);
+    }
+
     private void init(View rootView) {
         webView = (ViewerWebView) rootView.findViewById(R.id.webview);
 
-        mWebAppInterface = new WebAppInterface(webView, mMediaController, mTargetArticle, mTranscriptArticle, getCurrentReadingIndex());
+        mWebAppInterface = new WebAppInterface(
+                webView,
+                mMediaController,
+                mTargetArticle,
+                mTranscriptArticle,
+                getCurrentReadingIndex(),
+                mNowShadowingPopup);
         Pref pref = new Pref(getActivity());
-        mWebAppInterface.setSpeed(pref.getSpeechSpeed());
+        mWebAppInterface.setSpeechGap(getActivity(), pref.getSpeechGap());
         mWebAppInterface.load(getActivity());
     }
 
@@ -82,11 +144,12 @@ public class ListeningFragment extends BaseFragment {
         return getArguments().getInt(ARG_CURRENT_READING_INDEX, 0);
     }
 
+    @Override
     public void onResume() {
         super.onResume();
         if (mWebAppInterface != null) {
             Pref pref = new Pref(getActivity());
-            mWebAppInterface.setSpeed(pref.getSpeechSpeed());
+            mWebAppInterface.setSpeechGap(getActivity(), pref.getSpeechGap());
         }
     }
 

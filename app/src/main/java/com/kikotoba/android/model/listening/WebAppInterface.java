@@ -2,12 +2,17 @@ package com.kikotoba.android.model.listening;
 
 import android.content.Context;
 import android.os.Handler;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.widget.TextView;
 
 import com.kikotoba.android.model.entity.Article;
 import com.kikotoba.android.model.entity.Sentence;
 import com.kikotoba.android.util.IOUtil;
+import com.kikotoba.android.util.Pref;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -23,24 +28,26 @@ import java.util.concurrent.TimeUnit;
 public class WebAppInterface implements AudioController.Player {
     public static String INTERFACE_NAME = "Android";
 
-    private long gapMilliSec = 0;
+    private Pref.SpeechGap mSpeechGap = Pref.SpeechGap.NORMAL;
     private WebView mWebView;
-    private int mCurrentSenetenceIndex = 0;
+    private int mCurrentSentenceIndex = 0;
     private Article mTargetArticle;
     private Article mTranscriptArticle;
     private boolean mIsPlaying = false;
     private Handler mHandler = new Handler();
     private AudioController mMediaController;
-    private float mSpeed = 1.0f;
+    private TextView mNowShadowing;
 
     private Calendar playStartCalender;
     private long playTimeSec = 0;
+    private AlphaAnimation mAnimation;
 
     public WebAppInterface(WebView webView,
                            AudioController mediaController,
                            Article targetArticle,
                            Article transcriptArticle,
-                           int currentIndex
+                           int currentIndex,
+                           TextView nowShadowing
     ) {
         mMediaController = mediaController;
         mediaController.setPlayer(this);
@@ -48,7 +55,19 @@ public class WebAppInterface implements AudioController.Player {
         mTranscriptArticle = transcriptArticle;
         mWebView = webView;
         mWebView.addJavascriptInterface(this, INTERFACE_NAME);
-        mCurrentSenetenceIndex = currentIndex;
+        mCurrentSentenceIndex = currentIndex;
+        mNowShadowing = nowShadowing;
+        mNowShadowing.setVisibility(View.GONE);
+        mAnimation = createAnimation();
+    }
+
+    private AlphaAnimation createAnimation() {
+        AlphaAnimation animation = new AlphaAnimation(0.6f, 1.0f);
+        animation.setDuration(300);
+        animation.setFillAfter(true);
+        animation.setRepeatMode(Animation.REVERSE);
+        animation.setRepeatCount(Animation.INFINITE);
+        return animation;
     }
 
     public void load(Context context) {
@@ -57,13 +76,13 @@ public class WebAppInterface implements AudioController.Player {
         mWebView.loadUrl(url);
     }
 
-    public void setSpeed(float speed) {
-        mSpeed = speed;
-        jsSetSpeed(speed);
+    public void setSpeechGap(Context context, Pref.SpeechGap speechGap) {
+        mSpeechGap = speechGap;
+        mNowShadowing.setText(speechGap.description(context));
     }
 
     public int getCurrentIndex() {
-        return mCurrentSenetenceIndex;
+        return mCurrentSentenceIndex;
     }
 
     @JavascriptInterface
@@ -77,18 +96,29 @@ public class WebAppInterface implements AudioController.Player {
 
     @JavascriptInterface
     public void onTrackEnded() {
+        if (mSpeechGap != Pref.SpeechGap.NORMAL) {
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mNowShadowing.setVisibility(View.VISIBLE);
+                    mNowShadowing.startAnimation(mAnimation);
+                }
+            });
+        }
+
+        try {
+            Thread.sleep(calcCurrentSentenceSpeechGapMsec());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         mHandler.post(new Runnable() {
             public void run() {
                 if (hasNext()) {
-                    try {
-                        Thread.sleep(gapMilliSec);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     next();
                 } else {
                     pause();
                 }
+                mNowShadowing.clearAnimation();
+                mNowShadowing.setVisibility(View.GONE);
             }
         });
     }
@@ -97,7 +127,7 @@ public class WebAppInterface implements AudioController.Player {
     public void onSentenceSelected(final int sentenceIndex) {
         mHandler.post(new Runnable() {
             public void run() {
-                mCurrentSenetenceIndex = sentenceIndex;
+                mCurrentSentenceIndex = sentenceIndex;
                 playIfPlaying();
             }
         });
@@ -122,7 +152,6 @@ public class WebAppInterface implements AudioController.Player {
             playStartCalender = Calendar.getInstance();
         }
 
-        jsSetSpeed(mSpeed);
         jsRefreshUI();
         jsPlay();
         jsScrollUpToSentence();
@@ -146,9 +175,9 @@ public class WebAppInterface implements AudioController.Player {
     @Override
     public void next() {
         if (hasNext()) {
-            mCurrentSenetenceIndex += 1;
+            mCurrentSentenceIndex += 1;
         }
-        jsSetCurrentSentenceIndex(mCurrentSenetenceIndex);
+        jsSetCurrentSentenceIndex(mCurrentSentenceIndex);
 
         playIfPlaying();
     }
@@ -160,7 +189,7 @@ public class WebAppInterface implements AudioController.Player {
 
     @Override
     public void popup() {
-        String transcript = mTranscriptArticle.getSentences().get(mCurrentSenetenceIndex).getText();
+        String transcript = mTranscriptArticle.getSentences().get(mCurrentSentenceIndex).getText();
         jsPopup(transcript);
     }
 
@@ -170,16 +199,38 @@ public class WebAppInterface implements AudioController.Player {
      */
     @Override
     public void prev() {
-        if (mCurrentSenetenceIndex > 0) {
-            mCurrentSenetenceIndex -= 1;
+        if (mCurrentSentenceIndex > 0) {
+            mCurrentSentenceIndex -= 1;
         }
-        jsSetCurrentSentenceIndex(mCurrentSenetenceIndex);
+        jsSetCurrentSentenceIndex(mCurrentSentenceIndex);
 
         playIfPlaying();
     }
 
     public long clearPlaybackTimeSec() {
         return flushPlayTimeSec();
+    }
+
+    private long calcCurrentSentenceSpeechGapMsec() {
+        Sentence sentence = mTargetArticle.getSentences().get(mCurrentSentenceIndex);
+        float speechDurationSec = sentence.getToSec() - sentence.getFromSec();
+
+        long speechGapMsec = 0;
+        switch (mSpeechGap) {
+            case NORMAL:
+                speechGapMsec = 10;
+                break;
+            case REPETITION:
+                speechGapMsec = (long) (speechDurationSec * 1.1 * 1000);
+                break;
+            case SHADOWING:
+                speechGapMsec = (long) (speechDurationSec * 0.5 * 1000);
+                break;
+            default:
+                // TODO: 検知
+                break;
+        }
+        return speechGapMsec;
     }
 
     private long diffCalender(Calendar cal1, Calendar cal2) {
@@ -203,7 +254,7 @@ public class WebAppInterface implements AudioController.Player {
     }
 
     private boolean hasNext() {
-        return mCurrentSenetenceIndex < mTargetArticle.getSentences().size() - 1;
+        return mCurrentSentenceIndex < mTargetArticle.getSentences().size() - 1;
     }
 
     private void setArticle() {
@@ -234,14 +285,13 @@ public class WebAppInterface implements AudioController.Player {
             previousTargetSentence = targetSentence;
         }
         jsFlushParagraph();
-        jsSetCurrentSentenceIndex(mCurrentSenetenceIndex);
+        jsSetCurrentSentenceIndex(mCurrentSentenceIndex);
         jsRefreshUI();
-        if (0 < mCurrentSenetenceIndex && mCurrentSenetenceIndex < mTargetArticle.getSentences().size() - 1) {
+        if (0 < mCurrentSentenceIndex && mCurrentSentenceIndex < mTargetArticle.getSentences().size() - 1) {
             jsScrollUpToSentence();
         }
 
         setAudioSrc(this.mTargetArticle.getAudio());
-        jsSetSpeed(mSpeed);
     }
 
     private void jsRefreshUI() {
