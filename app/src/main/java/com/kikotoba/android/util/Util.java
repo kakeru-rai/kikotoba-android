@@ -15,4 +15,16 @@ public class Util {
         return "file://" + sd.getPath() + path;
     }
 
+    /**
+     * urlからjavascriptに文字列を渡す際に必要なエスケープ処理
+     * String.format("javascript: alert('%s')", text)
+     * @param text
+     * @return エスケープされた文字
+     */
+    public static String escapeJsArgumentFromUrl(String text) {
+        return text
+                .replace("'", "\\'") // 'をエスケープ
+                .replace("\"", "\\\""); // "をエスケープ
+    }
+
 }

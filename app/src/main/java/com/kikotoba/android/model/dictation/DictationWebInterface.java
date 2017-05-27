@@ -5,6 +5,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import com.kikotoba.android.util.IOUtil;
+import com.kikotoba.android.util.Util;
 
 import java.io.File;
 
@@ -45,9 +46,10 @@ public abstract class DictationWebInterface {
     }
 
     public void addText(String text) {
-        mWebView.loadUrl(String.format("javascript: web.addText('%s');", text));
+        mWebView.loadUrl(String.format("javascript: web.addText('%s');", Util.escapeJsArgumentFromUrl(text)));
     }
+
     public void addInput(String text) {
-        mWebView.loadUrl(String.format("javascript: web.addInput('%s');", text));
+        mWebView.loadUrl(String.format("javascript: web.addInput('%s');", Util.escapeJsArgumentFromUrl(text)));
     }
 }

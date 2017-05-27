@@ -13,6 +13,7 @@ import com.kikotoba.android.model.entity.Article;
 import com.kikotoba.android.model.entity.Sentence;
 import com.kikotoba.android.util.IOUtil;
 import com.kikotoba.android.util.Pref;
+import com.kikotoba.android.util.Util;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -308,8 +309,11 @@ public class WebAppInterface implements AudioController.Player {
     }
 
     private void jsAddSentence(String sentence, float fromSec, float toSec) {
-        String escaped = sentence.replace("'", "\\'");
-        mWebView.loadUrl(String.format("javascript: web.addSentence('%s', %f, %f);", escaped, fromSec, toSec));
+        mWebView.loadUrl(String.format(
+                "javascript: web.addSentence('%s', %f, %f);",
+                Util.escapeJsArgumentFromUrl(sentence),
+                fromSec,
+                toSec));
     }
 
     private void jsFlushParagraph() {
@@ -321,7 +325,7 @@ public class WebAppInterface implements AudioController.Player {
     }
 
     private void jsPopup(String text) {
-        mWebView.loadUrl(String.format("javascript: web.popup('%s');", text));
+        mWebView.loadUrl(String.format("javascript: web.popup('%s');", Util.escapeJsArgumentFromUrl(text)));
     }
 
     private void jsPlay() {
@@ -339,7 +343,7 @@ public class WebAppInterface implements AudioController.Player {
     private void jsSetAudioSrc(String src) {
         try {
             String encoded = URLEncoder.encode(src, "UTF-8");
-            mWebView.loadUrl(String.format("javascript: web.setAudioSrc('%s');", encoded));
+            mWebView.loadUrl(String.format("javascript: web.setAudioSrc('%s');", Util.escapeJsArgumentFromUrl(src)));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

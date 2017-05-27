@@ -92,6 +92,7 @@ $(function() {
 
     AppInterface.prototype.popup = function popup(text) {
         this.article.popup(text);
+        this.article.scrollUpToSentence();
     };
     window.web = new AppInterface();
 

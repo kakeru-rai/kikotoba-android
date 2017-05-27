@@ -1,6 +1,7 @@
 package com.kikotoba.android;
 
 import com.kikotoba.android.util.JVersatile;
+import com.kikotoba.android.util.Util;
 
 import org.junit.Test;
 
@@ -18,6 +19,12 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class JVersatileTest {
+    @Test
+    public void escapeJsArgumentFromUrl() throws Exception {
+        assertEquals("\\'", Util.escapeJsArgumentFromUrl("'"));
+        assertEquals("\\\"", Util.escapeJsArgumentFromUrl("\""));
+    }
+
     @Test
     public void isPrimeNumber() throws Exception {
         assertEquals(false, JVersatile.isPrimeNumber(0));
