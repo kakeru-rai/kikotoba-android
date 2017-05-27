@@ -249,7 +249,20 @@ public class ArticleListFragment extends Fragment {
                     holder.mCardView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            showMenuDialog(mContext, holder);
+
+                            // v0.1.0 リスニングを表示
+                            mContext.startActivity(
+                                    ListeningActivity.newIntent(
+                                            mContext,
+                                            holder.mArticlePair.getId(),
+                                            holder.mTextView.getText().toString(),
+                                            holder.mArticlePair,
+                                            holder.mArticlePair.getUserLogByArticle() != null ? holder.mArticlePair.getUserLogByArticle().getCurrentReadingIndex() : 0
+                                    )
+                            );
+
+                            // 機能メニューは一旦非表示
+//                            showMenuDialog(mContext, holder);
                         }
                     });
                     break;
@@ -322,7 +335,7 @@ public class ArticleListFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
-                                case 0:
+                                case 0: // リスニング
                                     context.startActivity(
                                             ListeningActivity.newIntent(
                                                     context,
