@@ -170,7 +170,7 @@ public class WebViewDefault
 	public int computeVerticalScrollRange() {
 		return super.computeVerticalScrollRange();
 	}
-	
+
 	public boolean isRightEdge() {
 		return computeHorizontalScrollOffset() + getWidth() == computeHorizontalScrollRange();
 	}
