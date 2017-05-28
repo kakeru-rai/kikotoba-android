@@ -1,15 +1,10 @@
 package com.kikotoba.android.model.listening;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.http.SslError;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ActionMode;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.kikotoba.android.util.WebChromeClientDefault;
@@ -21,44 +16,7 @@ public class ViewerWebView
 		extends WebViewDefault {
     private String SP_USER_AGENT = "Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36";
 
-    private WebViewClient webViewClient = new WebViewClient() {
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            super.onPageStarted(view, url, favicon);
-        }
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-        }
-
-        @Override
-        public void onLoadResource(WebView webview, String url) {
-            super.onLoadResource(webview, url);
-        }
-
-        @Override
-        public void onReceivedSslError (WebView view, SslErrorHandler handler, SslError error) {
-            // sslエラーは処理しない
-            handler.cancel();
-        }
-
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return super.shouldOverrideUrlLoading(view, url);
-        }
-
-        @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            return super.shouldInterceptRequest(view, url);
-        }
-
-        @Override
-        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            super.onReceivedError(view, errorCode, description, failingUrl);
-        }
-
-    };
+    private WebViewClient webViewClient = new WebViewClient() {};
 
     public ViewerWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
