@@ -42,6 +42,7 @@ public class WebAppInterface implements AudioController.Player {
     private Calendar playStartCalender;
     private long playTimeSec = 0;
     private AlphaAnimation mAnimation;
+    private boolean mIsRepeateMode = false;
 
     public WebAppInterface(WebView webView,
                            AudioController mediaController,
@@ -82,6 +83,11 @@ public class WebAppInterface implements AudioController.Player {
         mNowShadowing.setText(speechGap.description(context));
     }
 
+    public boolean toggleRepeatMode() {
+        mIsRepeateMode = !mIsRepeateMode;
+        return mIsRepeateMode;
+    }
+
     public int getCurrentIndex() {
         return mCurrentSentenceIndex;
     }
@@ -113,7 +119,9 @@ public class WebAppInterface implements AudioController.Player {
         }
         mHandler.post(new Runnable() {
             public void run() {
-                if (hasNext()) {
+                if (mIsRepeateMode) {
+                    rew();
+                } else if (hasNext()) {
                     next();
                 } else {
                     pause();

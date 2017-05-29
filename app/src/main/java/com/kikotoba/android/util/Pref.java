@@ -81,8 +81,7 @@ public class Pref {
 
     public void putSpeechGap(SpeechGap value) {
         String key = mContext.getString(R.string.pref_speech_gap_key);
-        mPref
-                .edit()
+        mPref.edit()
                 .putString(key, value.valueOf(mContext))
                 .apply();
     }

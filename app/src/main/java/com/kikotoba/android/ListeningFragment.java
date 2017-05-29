@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseError;
@@ -58,8 +59,16 @@ public class ListeningFragment extends BaseFragment {
 
     private View mRootView;
 
-    @BindView(R.id.nowShadowingPopup)
-    TextView mNowShadowingPopup;
+    @BindView(R.id.nowShadowingPopup) TextView mNowShadowingPopup;
+    @BindView(R.id.btnRepeat) ImageView mBtnRepeat;
+
+    private View.OnClickListener repeatListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            boolean isRepeatMode = mWebAppInterface.toggleRepeatMode();
+            mBtnRepeat.setSelected(isRepeatMode);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -127,6 +136,8 @@ public class ListeningFragment extends BaseFragment {
 
     private void init(View rootView) {
         webView = (ViewerWebView) rootView.findViewById(R.id.webview);
+
+        mBtnRepeat.setOnClickListener(repeatListener);
 
         mWebAppInterface = new WebAppInterface(
                 webView,
