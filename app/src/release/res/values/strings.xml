@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">キコトバ</string>
     <string name="firebase_storage_base_url">gs://kikotoba-prod.appspot.com/</string>
+    <bool name="isDebug">false</bool>
 </resources>

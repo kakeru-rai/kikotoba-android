@@ -196,17 +196,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         // バージョン
         Preference version = findPreference("version");
         version.setSummary(Versatile.getVersionName(getActivity()));
-        version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                mLogoutClickCount += 1;
-                if (mLogoutClickCount == 10) {
-                    FirebaseAuth.getInstance().signOut();
-                    getActivity().finish();
-                    getActivity().startActivity(new Intent(getActivity(), SplashActivity.class));
+        if (getResources().getBoolean(R.bool.isDebug)) {
+            version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    mLogoutClickCount += 1;
+                    if (mLogoutClickCount == 10) {
+                        FirebaseAuth.getInstance().signOut();
+                        getActivity().finish();
+                        getActivity().startActivity(new Intent(getActivity(), SplashActivity.class));
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        }
     }
 
     @Override
