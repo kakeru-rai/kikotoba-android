@@ -28,6 +28,10 @@
     background: #AFB;
 }
 
+.current-playing.blind {
+    color: #AFB;
+}
+
 .transcript {
     display: none;
 }

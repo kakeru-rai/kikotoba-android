@@ -5,7 +5,6 @@ $(function() {
 
     // ############ オーディオ
     ListeningTest.prototype.execAll = function execAll() {
-        console.log(1);
         this.testBuildArticle();
         this.testAudio();
     };

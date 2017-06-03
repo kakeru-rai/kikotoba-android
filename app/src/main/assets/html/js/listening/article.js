@@ -9,6 +9,9 @@ $(function() {
         this.$popupCloseButton.on('click touchend', function() {
             _this.popup();
         });
+
+        this.isBlindMode = false;
+
         this.$sentenceArray = [];
         this.$sentenceBuffer = [];
         this.currentSentenceIndex = 0;
@@ -23,6 +26,7 @@ $(function() {
     Article.CLASS_SENTENCE = 'script';
     Article.CLASS_PARAGRAPH = 'paragraph';
     Article.CLASS_CURRENT_PLAYING = 'current-playing';
+    Article.CLASS_BLIND = 'blind';
 
     /**
      * @param {string} articleId
@@ -154,7 +158,15 @@ $(function() {
         if (this.$sentenceArray[this.currentSentenceIndex]) {
             this.$sentenceArray[this.currentSentenceIndex].addClass(Article.CLASS_CURRENT_PLAYING);
         }
+
         this.$popup.hide();
+
+        this.$container
+                .find('.' + Article.CLASS_BLIND)
+                .removeClass(Article.CLASS_BLIND);
+        if (this.isBlindMode && this.$sentenceArray[this.currentSentenceIndex]) {
+            this.$sentenceArray[this.currentSentenceIndex].addClass(Article.CLASS_BLIND);
+        }
     }
 
     /**

@@ -39,10 +39,13 @@ public class WebAppInterface implements AudioController.Player {
     private AudioController mMediaController;
     private TextView mNowShadowing;
 
+    private AlphaAnimation mAnimation;
+
+    // 状態変数
     private Calendar playStartCalender;
     private long playTimeSec = 0;
-    private AlphaAnimation mAnimation;
     private boolean mIsRepeateMode = false;
+    private boolean mIsBlindMode = false;
 
     public WebAppInterface(WebView webView,
                            AudioController mediaController,
@@ -86,6 +89,12 @@ public class WebAppInterface implements AudioController.Player {
     public boolean toggleRepeatMode() {
         mIsRepeateMode = !mIsRepeateMode;
         return mIsRepeateMode;
+    }
+
+    public boolean toggleBlindMode() {
+        mIsBlindMode = !mIsBlindMode;
+        jsIsBlindMode(mIsBlindMode);
+        return mIsBlindMode;
     }
 
     public int getCurrentIndex() {
@@ -359,6 +368,10 @@ public class WebAppInterface implements AudioController.Player {
 
     private void jsScrollUpToSentence() {
         mWebView.loadUrl("javascript: web.scrollUpToSentence();");
+    }
+
+    private void jsIsBlindMode(boolean isBlindMode) {
+        mWebView.loadUrl(String.format("javascript: web.isBlindMode(%b);", isBlindMode));
     }
 
     private void jsSetCurrentTimeSec(double currentTimeSec) {

@@ -94,6 +94,12 @@ $(function() {
         this.article.popup(text);
         this.article.scrollUpToSentence();
     };
+
+    AppInterface.prototype.isBlindMode = function(isBlindMode) {
+        this.article.isBlindMode = isBlindMode;
+        this.article.refreshUI();
+    };
+
     window.web = new AppInterface();
 
     Android.onReady();

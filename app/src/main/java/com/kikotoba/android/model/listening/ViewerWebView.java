@@ -7,7 +7,6 @@ import android.view.ActionMode;
 import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
 
-import com.kikotoba.android.util.WebChromeClientDefault;
 import com.kikotoba.android.util.WebViewDefault;
 
 import static android.content.ContentValues.TAG;
@@ -33,7 +32,6 @@ public class ViewerWebView
     }
 
     private void init() {
-        setWebChromeClient(new WebChromeClientDefault(this) {});
         setWebViewClient(webViewClient);
         setUserAgentString(SP_USER_AGENT);
         WebSettings webSettings = getSettings();

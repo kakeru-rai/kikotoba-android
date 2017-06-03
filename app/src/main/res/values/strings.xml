@@ -35,6 +35,8 @@
     <string name="is_not_cleared">未正解</string>
 
     <!-- リスニング -->
+    <string name="listening_repeat_mode">リピートモード</string>
+    <string name="listening_blind_mode">目隠しモード</string>
     <string name="listening_translate">翻訳</string>
 
     <!-- スピーキング -->

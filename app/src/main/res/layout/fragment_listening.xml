@@ -20,28 +20,56 @@
         android:layout_gravity="bottom"
         android:minHeight="52dp" />
 
-    <ImageView android:id="@+id/btnRepeat"
-        android:src="@drawable/ic_repeat_one_white_36dp"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_gravity="bottom|left"
-        android:gravity="center"
-        android:layout_marginBottom="60dp"
-        android:layout_marginLeft="12dp"
-        android:background="@drawable/btn_white_circle"
-        android:padding="6dp"
-        />
-
-    <TextView
-        android:id="@+id/nowShadowingPopup"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:gravity="center"
+        android:layout_gravity="bottom|left"
         android:layout_marginBottom="60dp"
         android:layout_marginRight="12dp"
-        android:background="@drawable/bg_kadomaru"
-        android:padding="6dp"
-        android:text="@string/menu_speech_gap_repetition"
-        android:textColor="#FFF" />
+        android:layout_marginLeft="12dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/btnRepeat"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/btn_white_circle"
+            android:gravity="center"
+            android:padding="6dp"
+            android:src="@drawable/ic_repeat_one_white_36dp" />
+
+        <ImageView
+            android:id="@+id/btnBlind"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/btn_white_circle"
+            android:gravity="center"
+            android:padding="6dp"
+            android:src="@drawable/ic_speaker_notes_off_white_36dp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/nowShadowingPopup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:background="@drawable/bg_kadomaru"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="@string/menu_speech_gap_repetition"
+            android:textColor="#FFF" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 </FrameLayout>

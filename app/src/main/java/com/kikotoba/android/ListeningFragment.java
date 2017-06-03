@@ -7,8 +7,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseError;
 import com.kikotoba.android.model.entity.Article;
@@ -20,6 +22,7 @@ import com.kikotoba.android.model.listening.WebAppInterface;
 import com.kikotoba.android.repository.BaseRepository;
 import com.kikotoba.android.repository.UserLogRepository;
 import com.kikotoba.android.util.Pref;
+import com.kikotoba.android.util.WebChromeClientDefault;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,12 +64,32 @@ public class ListeningFragment extends BaseFragment {
 
     @BindView(R.id.nowShadowingPopup) TextView mNowShadowingPopup;
     @BindView(R.id.btnRepeat) ImageView mBtnRepeat;
+    @BindView(R.id.btnBlind) ImageView mBtnBlind;
+    @BindView(R.id.progressBar) View mProgressBar;
 
-    private View.OnClickListener repeatListener = new View.OnClickListener() {
+
+
+    private View.OnClickListener repeaBtntListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            boolean isRepeatMode = mWebAppInterface.toggleRepeatMode();
-            mBtnRepeat.setSelected(isRepeatMode);
+            boolean enabled = mWebAppInterface.toggleRepeatMode();
+            mBtnRepeat.setSelected(enabled);
+
+            String onoff = enabled ? ": On" : ": Off";
+            Toast.makeText(getActivity(), getString(R.string.listening_repeat_mode) + onoff, Toast.LENGTH_SHORT)
+                    .show();
+        }
+    };
+
+    private View.OnClickListener blindBtnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            boolean enabled = mWebAppInterface.toggleBlindMode();
+            mBtnBlind.setSelected(enabled);
+
+            String onoff = enabled ? ": On" : ": Off";
+            Toast.makeText(getActivity(), getString(R.string.listening_blind_mode) + onoff, Toast.LENGTH_SHORT)
+                    .show();
         }
     };
 
@@ -136,8 +159,17 @@ public class ListeningFragment extends BaseFragment {
 
     private void init(View rootView) {
         webView = (ViewerWebView) rootView.findViewById(R.id.webview);
+        webView.setWebChromeClient(new WebChromeClientDefault(webView) {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress >= 100) {
+                    mProgressBar.setVisibility(View.GONE);
+                }
+            }
+        });
 
-        mBtnRepeat.setOnClickListener(repeatListener);
+        mBtnRepeat.setOnClickListener(repeaBtntListener);
+        mBtnBlind.setOnClickListener(blindBtnListener);
 
         mWebAppInterface = new WebAppInterface(
                 webView,

@@ -311,6 +311,7 @@ public class ArticleListFragment extends Fragment {
                 holder.mTextViewPlaybackTime.setText(log.calcListeningPlaybackTime());
             }
 
+            holder.mImageView.setImageResource(R.mipmap.ic_launcher);
             Glide.with(holder.mImageView.getContext())
                     .load(holder.mArticlePair.getImage())
                     .fitCenter()
@@ -391,7 +392,19 @@ public class ArticleListFragment extends Fragment {
                                             progressDialog.dismiss();
                                             holder.mArticleStatus = ViewHolder.ArticleStatus.READY;
                                             view(holder);
-                                            showMenuDialog(context, holder);
+
+                                            // v0.1.0 リスニングを表示
+                                            mContext.startActivity(
+                                                    ListeningActivity.newIntent(
+                                                            mContext,
+                                                            holder.mArticlePair.getId(),
+                                                            holder.mTextView.getText().toString(),
+                                                            holder.mArticlePair,
+                                                            holder.mArticlePair.getUserLogByArticle() != null ? holder.mArticlePair.getUserLogByArticle().getCurrentReadingIndex() : 0
+                                                    )
+                                            );
+
+//                                            showMenuDialog(context, holder);
                                         }
 
                                         @Override
