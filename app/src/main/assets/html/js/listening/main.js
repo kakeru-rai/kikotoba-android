@@ -61,9 +61,12 @@ $(function() {
     // ############ 記事
     /**
      * @param {string} text
+     * @param {number} fromSec
+     * @param {number} toSec
+     * @param {number} translationIndex
      */
-    AppInterface.prototype.addSentence = function addSentence(sentence, fromSec, toSec) {
-        this.article.addSentence(sentence, fromSec, toSec);
+    AppInterface.prototype.addSentence = function addSentence(sentence, fromSec, toSec, translationIndex) {
+        this.article.addSentence(sentence, fromSec, toSec, translationIndex);
     };
 
     AppInterface.prototype.flushParagraph = function flushParagraph() {

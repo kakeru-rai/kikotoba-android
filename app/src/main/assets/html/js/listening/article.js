@@ -24,6 +24,7 @@ $(function() {
         });
     }
     Article.CLASS_SENTENCE = 'script';
+    Article.CLASS_TRANSLATION_UNIT = 'translationUnit';
     Article.CLASS_PARAGRAPH = 'paragraph';
     Article.CLASS_CURRENT_PLAYING = 'current-playing';
     Article.CLASS_BLIND = 'blind';
@@ -39,8 +40,14 @@ $(function() {
         this.$sentenceBuffer.push($sentence);
     };
 
-    Article.prototype.addSentence = function addSentence(sentence, fromSec, toSec) {
-        var sentence = new window.sri.Sentence(sentence, fromSec, toSec);
+    /**
+     * @param {string} sentence
+     * @param {number} fromSec
+     * @param {number} toSec
+     * @param {number} translationIndex
+     */
+    Article.prototype.addSentence = function addSentence(sentence, fromSec, toSec, translationIndex) {
+        var sentence = new window.sri.Sentence(sentence, fromSec, toSec, translationIndex);
         this.$sentenceBuffer.push(sentence.createElement());
         return;
 
@@ -153,20 +160,30 @@ $(function() {
     }
 
     Article.prototype._refreshUI = function _refreshUI() {
+        // 読み上げ中
         this.$container.find('.' + Article.CLASS_SENTENCE)
                 .removeClass(Article.CLASS_CURRENT_PLAYING);
         if (this.$sentenceArray[this.currentSentenceIndex]) {
             this.$sentenceArray[this.currentSentenceIndex].addClass(Article.CLASS_CURRENT_PLAYING);
         }
 
+        // ポップアップ隠す
         this.$popup.hide();
 
+        // 目隠し
         this.$container
                 .find('.' + Article.CLASS_BLIND)
                 .removeClass(Article.CLASS_BLIND);
         if (this.isBlindMode && this.$sentenceArray[this.currentSentenceIndex]) {
             this.$sentenceArray[this.currentSentenceIndex].addClass(Article.CLASS_BLIND);
         }
+
+        // 翻訳
+        this.$container
+                .find('.' + Article.CLASS_TRANSLATION_UNIT)
+                .removeClass(Article.CLASS_TRANSLATION_UNIT);
+        var translationIndex = this.$sentenceArray[this.currentSentenceIndex].data('translation-index');
+        $('[data-translation-index=' + translationIndex + ']').addClass(Article.CLASS_TRANSLATION_UNIT);
     }
 
     /**

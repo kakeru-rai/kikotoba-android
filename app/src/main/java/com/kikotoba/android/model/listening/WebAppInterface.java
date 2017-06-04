@@ -316,7 +316,7 @@ public class WebAppInterface implements AudioController.Player {
             }
 
             // 文を結合
-            jsAddSentence(targetSentence.getText(), targetSentence.getFromSec(), targetSentence.getToSec());
+            jsAddSentence(targetSentence.getText(), targetSentence.getFromSec(), targetSentence.getToSec(), i);
 
             if (previousTargetSentence == null) {
                 previousTargetSentence = targetSentence;
@@ -348,12 +348,13 @@ public class WebAppInterface implements AudioController.Player {
         mWebView.loadUrl("javascript: web.setTitle('" + title + "');");
     }
 
-    private void jsAddSentence(String sentence, float fromSec, float toSec) {
+    private void jsAddSentence(String sentence, float fromSec, float toSec, int translationIndex) {
         mWebView.loadUrl(String.format(
-                "javascript: web.addSentence('%s', %f, %f);",
+                "javascript: web.addSentence('%s', %f, %f, %d);",
                 Util.escapeJsArgumentFromUrl(sentence),
                 fromSec,
-                toSec));
+                toSec,
+                translationIndex));
     }
 
     private void jsFlushParagraph() {

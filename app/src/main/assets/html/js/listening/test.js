@@ -10,13 +10,13 @@ $(function() {
     };
     
     ListeningTest.prototype.testBuildArticle = function testBuildArticle() {
-        web.addSentence('a', 1, 2);
-        web.addSentence('b', 2, 4);
-        web.addSentence('c', 4, 6);
+        web.addSentence('aaa', 1, 2, 1);
+        web.addSentence('bbb', 2, 4, 2);
+        web.addSentence('ccc', 4, 6, 2);
         web.flushParagraph();
-        web.addSentence('d');
-        web.addSentence('e');
-        web.addSentence('f');
+        web.addSentence('ddd', 7, 10, 3);
+        web.addSentence('eee', 11, 14, 4);
+        web.addSentence('fff', 15, 18, 5);
         web.flushParagraph();
         
         web.setPhotoSrc('https://gdb.voanews.com/E5D3FE73-172C-4B29-A3BF-8A01452547AE_cx0_cy13_cw0_w250_r1_s.jpg');
