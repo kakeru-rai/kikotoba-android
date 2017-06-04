@@ -46,6 +46,7 @@ public class WebAppInterface implements AudioController.Player {
     private long playTimeSec = 0;
     private boolean mIsRepeateMode = false;
     private boolean mIsBlindMode = false;
+    private boolean mIsPlayerFunctionCalledDuringTrackGapSleep = false;
 
     public WebAppInterface(WebView webView,
                            AudioController mediaController,
@@ -121,24 +122,35 @@ public class WebAppInterface implements AudioController.Player {
             });
         }
 
-        try {
-            Thread.sleep(calcCurrentSentenceSpeechGapMsec());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        mHandler.post(new Runnable() {
+        // ここはwebviewのAppInterfaceから呼ばれる非UIスレッド
+        // ここでsleepするとAppInterfaceへのリクエスト（url(javascript:xxx)）が止まってしまうので
+        // さらに別のスレッドをスタートしたうえで、UIへの変更はhandlerを使う
+        mIsPlayerFunctionCalledDuringTrackGapSleep = false;
+        new Thread(new Runnable() {
             public void run() {
-                if (mIsRepeateMode) {
-                    rew();
-                } else if (hasNext()) {
-                    next();
-                } else {
-                    pause();
+                try {
+                    Thread.sleep(calcCurrentSentenceSpeechGapMsec());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                mNowShadowing.clearAnimation();
-                mNowShadowing.setVisibility(View.GONE);
+                if (mIsPlayerFunctionCalledDuringTrackGapSleep) {
+                    // スリープ中に操作されたらその後の動作はキャンセルする
+                    return;
+                }
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        if (mIsRepeateMode) {
+                            rew();
+                        } else if (hasNext()) {
+                            next();
+                        } else {
+                            pause();
+                        }
+                        cancelTrackGapSleep();
+                    }
+                });
             }
-        });
+        }).start();
     }
 
     @JavascriptInterface
@@ -166,6 +178,7 @@ public class WebAppInterface implements AudioController.Player {
      */
     @Override
     public void play() {
+        cancelTrackGapSleep();
         if (playStartCalender == null) {
             playStartCalender = Calendar.getInstance();
         }
@@ -181,6 +194,7 @@ public class WebAppInterface implements AudioController.Player {
      */
     @Override
     public void pause() {
+        cancelTrackGapSleep();
         playTimeSec = flushPlayTimeSec();
 
         jsPause();
@@ -192,6 +206,7 @@ public class WebAppInterface implements AudioController.Player {
      */
     @Override
     public void next() {
+        cancelTrackGapSleep();
         if (hasNext()) {
             mCurrentSentenceIndex += 1;
         }
@@ -202,6 +217,7 @@ public class WebAppInterface implements AudioController.Player {
 
     @Override
     public void rew() {
+        cancelTrackGapSleep();
         playIfPlaying();
     }
 
@@ -217,12 +233,19 @@ public class WebAppInterface implements AudioController.Player {
      */
     @Override
     public void prev() {
+        cancelTrackGapSleep();
         if (mCurrentSentenceIndex > 0) {
             mCurrentSentenceIndex -= 1;
         }
         jsSetCurrentSentenceIndex(mCurrentSentenceIndex);
 
         playIfPlaying();
+    }
+
+    private void cancelTrackGapSleep() {
+        mIsPlayerFunctionCalledDuringTrackGapSleep = true;
+        mNowShadowing.clearAnimation();
+        mNowShadowing.setVisibility(View.GONE);
     }
 
     public long clearPlaybackTimeSec() {
