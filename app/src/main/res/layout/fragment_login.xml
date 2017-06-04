@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:background="@drawable/bg_blurred_sky"
     tools:context="com.kikotoba.android.LoginActivity">
 
     <!-- Login progress -->
@@ -45,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:lineSpacingExtra="12dp"
             android:text="@string/login_message_sub" />
 
         <Space
@@ -59,6 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
+            android:background="@drawable/btn_default_light"
             android:text="@string/login_start"
             android:textStyle="bold" />
 
@@ -67,32 +70,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="#AAA"
+            android:textColor="#777"
             android:textSize="12dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="6dp"
             android:text="@string/term_message" />
 
-        <TextView
-            android:id="@+id/textViewTerm"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tmpl_term"
-            android:textColor="#AAA"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="4dp"
-            android:textSize="12dp"
-            />
+            android:layout_gravity="center"
+            >
 
-        <TextView
-            android:id="@+id/textViewPrivacy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tmpl_privacy_policy"
-            android:textColor="#AAA"
-            android:layout_gravity="center_horizontal"
-            android:textSize="12dp"
-            />
+            <TextView
+                android:id="@+id/textViewTerm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tmpl_term"
+                android:textColor="#777"
+                android:layout_marginRight="14dp"
+                android:textSize="12dp"
+                />
+
+            <TextView
+                android:id="@+id/textViewPrivacy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tmpl_privacy_policy"
+                android:textColor="#777"
+                android:textSize="12dp"
+                />
+
+        </LinearLayout>
 
 
     </LinearLayout>

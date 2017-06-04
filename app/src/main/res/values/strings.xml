@@ -8,7 +8,7 @@
 
     <!-- ログイン -->
     <string name="login_start">はじめる</string>
-    <string name="login_message_sub">聞いて鍛えるリスニング</string>
+    <string name="login_message_sub">生きた言葉を学ぶ\nリスニングワークアウト</string>
     <string name="login_start_failed">通信に失敗しました。ネットワークをご確認下さい。</string>
     <string name="start_with_account">アカウントでログイン</string>
     <string name="start_without_register">登録せずに始める</string>
