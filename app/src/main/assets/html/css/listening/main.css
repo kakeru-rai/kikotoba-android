@@ -25,12 +25,11 @@
 }
 
 .translationUnit {
-    border: #AFB dashed 1px;
     background: #AFB;
 }
 
 .current-playing {
-    border: #444 dashed 1px;
+    border-bottom: #1a1a1a solid 1px;
 }
 
 .current-playing.blind {
@@ -53,7 +52,7 @@ body {
 //    font-family: 'Noto Sans Japanese', serif;
 	font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, Georgia,serif,sans-serif;
 	font-size: 1.1em;
-	line-height: 1.6em;
+	line-height: 1.8em;
 	color: #1a1a1a;
 	-webkit-text-size-adjust: 100%;
 	

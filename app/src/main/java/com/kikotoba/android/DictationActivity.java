@@ -147,7 +147,7 @@ public class DictationActivity extends BaseActivity {
             public void onReady() {
                 mHandler.post(new Runnable() {
                     public void run() {
-                        mAudioWebInterface.setAudioSrc(mArticle.getAudio());
+                        mAudioWebInterface.setAudioSrc(mArticle);
                     }
                 });
             }

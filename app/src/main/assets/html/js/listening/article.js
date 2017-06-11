@@ -13,6 +13,8 @@ $(function() {
         this.isBlindMode = false;
 
         this.$sentenceArray = [];
+
+        // 文をバッファにつめて段落ごとに吐き出す
         this.$sentenceBuffer = [];
         this.currentSentenceIndex = 0;
         this.onSentenceSelectedListener = function() {};
@@ -101,7 +103,12 @@ $(function() {
             return;
         }
         this.$popupContents.text(text);
-        var position = $current.height() + $current.offset().top + 20;
+
+        // 翻訳の
+        var $translationUnits = this.$container.find('.' + Article.CLASS_TRANSLATION_UNIT);
+        var $lastTranslationUnit = $translationUnits.eq($translationUnits.length - 1);
+
+        var position = $lastTranslationUnit.height() + $lastTranslationUnit.offset().top + 20;
         this.$popup
                 .css('top', position)
                 .show();

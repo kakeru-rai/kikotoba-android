@@ -4,6 +4,8 @@ import android.content.Context;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+import com.kikotoba.android.model.WorkingDirectory;
+import com.kikotoba.android.model.entity.Article;
 import com.kikotoba.android.util.IOUtil;
 
 import java.io.File;
@@ -41,8 +43,9 @@ public abstract class AudioWebInterface {
         mWebView.loadUrl("javascript: audioPlayer.pause();");
     }
 
-    public void setAudioSrc(String audioUrl) {
+    public void setAudioSrc(Article article) {
         try {
+            String audioUrl = WorkingDirectory.getAudioPath(article, "../../");
             String encoded = URLEncoder.encode(audioUrl, "UTF-8");
             mWebView.loadUrl(String.format("javascript: audioPlayer.setAudioSrc('%s');", encoded));
         } catch (UnsupportedEncodingException e) {

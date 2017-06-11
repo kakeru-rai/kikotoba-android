@@ -10,6 +10,7 @@ public class Sentence {
     private int track;
     private float fromSec;
     private float toSec;
+    private int translationIndex;
 
     public String getText() {
         return text;
@@ -49,5 +50,13 @@ public class Sentence {
 
     public void setToSec(float toSec) {
         this.toSec = toSec;
+    }
+
+    public int getTranslationIndex() {
+        return translationIndex;
+    }
+
+    public void setTranslationIndex(int translationIndex) {
+        this.translationIndex = translationIndex;
     }
 }

@@ -14,6 +14,8 @@ public class Article {
     private String origin;
     private String language;
     private List<Sentence> sentences;
+    private int audioVersion;
+    private List<String> translations;
 
     public String createListeningHtml() {
         return "";
@@ -72,12 +74,20 @@ public class Article {
         return this;
     }
 
-    public String getAudio() {
-        return String.format("../../audio/%s/%s.mp3", id, language);
+    public int getAudioVersion() {
+        return audioVersion;
     }
 
-    private String makeAudioPath() {
-        return String.format("../../audio/%s/%s.mp3", id, language);
+    public void setAudioVersion(int audioVersion) {
+        this.audioVersion = audioVersion;
+    }
+
+    public List<String> getTranslations() {
+        return translations;
+    }
+
+    public void setTranslations(List<String> translations) {
+        this.translations = translations;
     }
 
 }

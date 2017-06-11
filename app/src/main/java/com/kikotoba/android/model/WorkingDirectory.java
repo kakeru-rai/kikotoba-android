@@ -19,6 +19,19 @@ import java.io.IOException;
 
 public class WorkingDirectory {
 
+    /**
+     * @param article
+     * @param relativePath "../../"とか。ルートなら空文字""
+     * @return
+     */
+    public static String getAudioPath(Article article, String relativePath) {
+        return String.format("%s/audio/%s/%s_%d.mp3",
+                relativePath,
+                article.getId(),
+                article.getLanguage(),
+                article.getAudioVersion());
+    }
+
     private static WorkingDirectory instance = new WorkingDirectory();
     public static WorkingDirectory getInstance() {
         return instance;
@@ -26,6 +39,7 @@ public class WorkingDirectory {
 
     public boolean hasAudioDownloaded(Context context, Article article) {
         File audioFile = createAudioDestinationFile(context, article);
+        audioFile.list();
         return audioFile.exists();
     }
 
@@ -35,11 +49,7 @@ public class WorkingDirectory {
 
     public File createAudioDestinationFile(Context context, Article article) {
         File toDir = FileUtil.createPrivateExternalDir(context, "");
-        return new File(toDir, getAudioPath(article));
-    }
-
-    private String getAudioPath(Article article) {
-        return String.format("/audio/%s/%s.mp3", article.getId(), article.getLanguage());
+        return new File(toDir, getAudioPath(article, ""));
     }
 
     public void deleteAudio(Context context) {

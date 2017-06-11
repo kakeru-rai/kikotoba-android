@@ -34,6 +34,10 @@ public class FirebaseUtil {
     }
 
     private static String getAudioPath(Article article) {
-        return String.format("article/%s/%s.mp3", article.getId(), article.getLanguage());
+        return String.format("article/%s/%s_%d.mp3",
+                article.getId(),
+                article.getLanguage(),
+                article.getAudioVersion()
+        );
     }
 }

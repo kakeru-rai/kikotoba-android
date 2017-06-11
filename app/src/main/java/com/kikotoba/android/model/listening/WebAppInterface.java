@@ -9,6 +9,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import com.kikotoba.android.model.WorkingDirectory;
 import com.kikotoba.android.model.entity.Article;
 import com.kikotoba.android.model.entity.Sentence;
 import com.kikotoba.android.util.IOUtil;
@@ -106,7 +107,7 @@ public class WebAppInterface implements AudioController.Player {
     public void onReady() {
         mHandler.post(new Runnable() {
             public void run() {
-                setArticle();
+                buildArticle();
             }
         });
     }
@@ -223,8 +224,9 @@ public class WebAppInterface implements AudioController.Player {
 
     @Override
     public void popup() {
-        String transcript = mTranscriptArticle.getSentences().get(mCurrentSentenceIndex).getText();
-        jsPopup(transcript);
+        int translationIndex = mTargetArticle.getSentences().get(mCurrentSentenceIndex).getTranslationIndex();
+        String translation = mTranscriptArticle.getTranslations().get(translationIndex);
+        jsPopup(translation);
     }
 
 
@@ -290,7 +292,8 @@ public class WebAppInterface implements AudioController.Player {
         return total;
     }
 
-    private void setAudioSrc(String audioUrl) {
+    private void setAudioSrc(Article article) {
+        String audioUrl = WorkingDirectory.getAudioPath(article, "../../");
         jsSetAudioSrc(audioUrl);
     }
 
@@ -298,7 +301,7 @@ public class WebAppInterface implements AudioController.Player {
         return mCurrentSentenceIndex < mTargetArticle.getSentences().size() - 1;
     }
 
-    private void setArticle() {
+    private void buildArticle() {
         List<Sentence> targetSentences = mTargetArticle.getSentences();
 
         if (mTargetArticle.getImage() != null) {
@@ -316,7 +319,11 @@ public class WebAppInterface implements AudioController.Player {
             }
 
             // 文を結合
-            jsAddSentence(targetSentence.getText(), targetSentence.getFromSec(), targetSentence.getToSec(), i);
+            jsAddSentence(
+                    targetSentence.getText(),
+                    targetSentence.getFromSec(),
+                    targetSentence.getToSec(),
+                    targetSentence.getTranslationIndex());
 
             if (previousTargetSentence == null) {
                 previousTargetSentence = targetSentence;
@@ -332,7 +339,7 @@ public class WebAppInterface implements AudioController.Player {
             jsScrollUpToSentence();
         }
 
-        setAudioSrc(this.mTargetArticle.getAudio());
+        setAudioSrc(mTargetArticle);
     }
 
     private void jsRefreshUI() {

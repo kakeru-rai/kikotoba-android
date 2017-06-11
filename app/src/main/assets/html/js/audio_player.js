@@ -13,19 +13,6 @@ $(function() {
         });
     }
 
-//    /**
-//     * @param {string} articleId
-//     * @param {int} trackIndex
-//     */
-//    AudioPlayer.prototype.setSrc = function setSrc(articleId, trackIndex) {
-//        this.$audio.off('timeupdate.AudioPlayer');
-//
-//        trackIndex++;
-//        var fileName = ('000' + trackIndex).slice(-3);
-//        var src = '../../audio/en/' + articleId + '/' + fileName + '.mp3';
-//        this.audio.src = src;
-//    };
-
     AudioPlayer.prototype.setAudioSrc = function setAudioSrc(src) {
         this.$audio.off('timeupdate.AudioPlayer');
         this.audio.src = src;

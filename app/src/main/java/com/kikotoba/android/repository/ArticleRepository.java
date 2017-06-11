@@ -19,7 +19,9 @@ import java.util.Map;
  */
 public class ArticleRepository extends BaseRepository {
 
-    private static final String PATH = "/master/article";
+    private static final String SCHEME_VERSION = "v1";
+    private static final String PATH = "/master/article_" + SCHEME_VERSION;
+//    private static final String PATH = "/master/article";
 
     private static final String KEY_ORIGIN = "origin";
     private static final String KEY_IMAGE = "image";

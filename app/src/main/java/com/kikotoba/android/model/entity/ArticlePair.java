@@ -27,9 +27,6 @@ public class ArticlePair {
         if (tranlated == null) {
             throw new IllegalArgumentException("言語ペアがそろいませんでした。translated:" + LanguagePair.getInstance().getMother());
         }
-        if (target.getSentences().size() != tranlated.getSentences().size()) {
-            throw new IllegalArgumentException("文の数が合っていません。id:" + target.getId());
-        }
         this.target = target;
         this.translated = tranlated;
     }
