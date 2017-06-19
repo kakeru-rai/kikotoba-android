@@ -19,7 +19,7 @@ public class UserLogByArticle {
     private int listeningPlaybackTime = 0;
     private int currentReadingIndex = 0;
     private Map<String, Boolean> speakingCorrect = new HashMap();
-    private Map<String, Boolean> dictationCorrect = new HashMap();
+    private int dictationScore = 0;
 
     public int getListeningPlaybackTime() {
         return listeningPlaybackTime;
@@ -37,20 +37,12 @@ public class UserLogByArticle {
         this.speakingCorrect = speakingCorrect;
     }
 
-    public Map<String, Boolean> getDictationCorrect() {
-        return dictationCorrect;
+    public int getDictationScore() {
+        return dictationScore;
     }
 
-    public void setDictationCorrect(Map<String, Boolean> dictationCorrect) {
-        this.dictationCorrect = dictationCorrect;
-    }
-
-    public void setDictationCorrectByIndex(int index) {
-        dictationCorrect.put(String.valueOf(index) + "_", true);
-    }
-
-    public boolean isDictationCorrect(int index) {
-        return getDictationCorrect().containsKey(String.valueOf(index) + "_");
+    public void setDictationScore(int dictationScore) {
+        this.dictationScore = dictationScore;
     }
 
     public void setSpeakingCorrectByIndex(int index) {
@@ -61,17 +53,9 @@ public class UserLogByArticle {
         return currentReadingIndex;
     }
 
-    public void setCurrentReadingIndex(int currentReadingIndex) {
-        this.currentReadingIndex = currentReadingIndex;
-    }
-
     public boolean isSpeakingCorrect(int index) {
 //        return true;
         return getSpeakingCorrect().containsKey(String.valueOf(index) + "_");
-    }
-
-    public int calcDictationTotal() {
-        return dictationCorrect.size();
     }
 
     public int calcSpeakingTotal() {

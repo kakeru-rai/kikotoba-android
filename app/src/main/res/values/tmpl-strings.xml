@@ -15,6 +15,8 @@
     <string name="tmpl_ok">OK</string>
     <string name="tmpl_submit">Submit</string>
     <string name="tmpl_cancel">Cancel</string>
+    <string name="tmpl_correct">Correct</string>
+    <string name="tmpl_finish">Finish</string>
     <string name="tmpl_next">Next</string>
     <string name="tmpl_yes">Yes</string>
     <string name="tmpl_no">No</string>
@@ -38,7 +40,8 @@
     <string name="tmpl_logout">Logout</string>
     <string name="tmpl_download">Download</string>
     <string name="tmpl_get_started">Get started</string>
-    
+    <string name="tmpl_start">Start</string>
+
     <string name="tmpl_back">Back</string>
     <string name="tmpl_agree">Agree</string>
     <string name="tmpl_close">Close</string>

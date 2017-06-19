@@ -59,4 +59,6 @@ public class Sentence {
     public void setTranslationIndex(int translationIndex) {
         this.translationIndex = translationIndex;
     }
+
+    // setter/getter>
 }

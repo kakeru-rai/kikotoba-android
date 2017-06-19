@@ -18,6 +18,7 @@ public class UserLogRepository extends BaseRepository {
     private static final String PATH = "/user/log/%s/by_article/%s";
     private static final String KEY_LISTENING_PLAYBACK_TIME = "listeningPlaybackTime";
     private static final String KEY_CURRENT_READING_INDEX = "currentReadingIndex";
+    private static final String KEY_DICTATION_SCORE = "dictationScore";
 
     public void setListeningPlaybackTime(String uid, String articleId, long playbackTimeSec) {
         DatabaseReference ref = firebaseDatabase.getReference(String.format(PATH, uid, articleId));
@@ -29,6 +30,12 @@ public class UserLogRepository extends BaseRepository {
         DatabaseReference ref = firebaseDatabase.getReference(String.format(PATH, uid, articleId));
         DatabaseReference refChild = ref.child(KEY_CURRENT_READING_INDEX);
         refChild.setValue(index);
+    }
+
+    public Task setDictationScore(String uid, String articleId, int score) {
+        DatabaseReference ref = firebaseDatabase.getReference(String.format(PATH, uid, articleId));
+        DatabaseReference refChild = ref.child(KEY_DICTATION_SCORE);
+        return refChild.setValue(score);
     }
 
     public void bindUserLogByArticle(String uid, String articleId, final EntityEventListener<UserLogByArticle> listener) {
@@ -64,7 +71,7 @@ public class UserLogRepository extends BaseRepository {
                 .child(articleId)
                 .setValue(log);
 //                .child("dictationCorrect")
-//                .setValue(log.getDictationCorrect());
+//                .setValue(log.getDictationScore());
     }
 
 }

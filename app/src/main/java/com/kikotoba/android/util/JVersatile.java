@@ -50,6 +50,14 @@ public class JVersatile {
 		return (int) Math.floor(Math.random() * (max - min + 1) + min);
 	}
 
+	public static List<Integer> range(int from, int to) {
+		ArrayList<Integer> list = new ArrayList<>();
+		for (int i = from; i <= to; ++i) {
+			list.add(i);
+		}
+		return list;
+	}
+
 	public static int[] toArray(List<Integer> list) {
 		int[] ret = new int[list.size()];
 		for (int i = 0; i < ret.length; i++)

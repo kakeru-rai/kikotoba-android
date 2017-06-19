@@ -1,5 +1,6 @@
 package com.kikotoba.android.model.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -88,6 +89,16 @@ public class Article {
 
     public void setTranslations(List<String> translations) {
         this.translations = translations;
+    }
+
+    // setter/getter>
+
+    public List<String> makeSenteceStringList() {
+        List<String> scripts = new ArrayList<>();
+        for (Sentence sentence : sentences) {
+            scripts.add(sentence.getText());
+        }
+        return scripts;
     }
 
 }

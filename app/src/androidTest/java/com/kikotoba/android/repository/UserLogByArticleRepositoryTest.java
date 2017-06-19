@@ -37,10 +37,7 @@ public class UserLogByArticleRepositoryTest extends BaseRepositoryTest {
         // 作成
         UserLogByArticle log = new UserLogByArticle();
         log.setListeningPlaybackTime(100);
-        Map<String, Boolean> dictation = new HashMap();
-        dictation.put("1", true);
-        dictation.put("3", true);
-        log.setDictationCorrect(dictation);
+        log.setDictationScore(1);
         Map<String, Boolean> speaking = new HashMap();
         speaking.put("2", true);
         speaking.put("4", true);

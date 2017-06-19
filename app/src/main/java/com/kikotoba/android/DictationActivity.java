@@ -1,38 +1,58 @@
 package com.kikotoba.android;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.kikotoba.android.model.audio.AudioWebInterface;
+import com.kikotoba.android.model.dictation.DictationScore;
+import com.kikotoba.android.model.dictation.DictationSentencePicker;
+import com.kikotoba.android.model.dictation.DictationSentencePicker.Level;
 import com.kikotoba.android.model.entity.Article;
 import com.kikotoba.android.model.entity.ArticlePair;
 import com.kikotoba.android.model.entity.Sentence;
+import com.kikotoba.android.model.entity.UserLogByArticle;
+import com.kikotoba.android.repository.BaseRepository;
+import com.kikotoba.android.repository.UserLogRepository;
 import com.kikotoba.android.util.WebViewDefault;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DictationActivity extends BaseActivity {
-    private static final String TAG = "SpeakingActivity";
+    private static final String TAG = "DictationActivity";
 
     public static final String ARTICLE_ID = "article_id";
     public static final String ARTICLE_TITLE = "article_title";
     public static final String ARTICLE_PAIR = "article_pair";
 
-    public static Intent newIntent(Context context, String articleId, String title, ArticlePair articlePair) {
+    public static final int QUESTION_COUNT_EASY = 4;
+    public static final int QUESTION_COUNT_HARD = 3;
+
+    public static Intent newIntent(Context context,
+                                   String articleId,
+                                   String title,
+                                   ArticlePair articlePair) {
         Intent intent = new Intent(context, DictationActivity.class);
         intent.putExtra(DictationActivity.ARTICLE_ID, articleId);
         intent.putExtra(DictationActivity.ARTICLE_TITLE, title);
@@ -57,14 +77,22 @@ public class DictationActivity extends BaseActivity {
     private Handler mHandler = new Handler();
     private AudioWebInterface mAudioWebInterface;
     private Article mArticle;
+    private Article mTranslationArticle;
+    private UserLogByArticle userLog;
+    private DictationActivity mThis;
+
+    // 状態変数
+    private DictationScore dictationScore = new DictationScore(QUESTION_COUNT_EASY + QUESTION_COUNT_HARD);
+
     @BindView(R.id.audioWebview) WebViewDefault webView;
+    @BindView(R.id.dictationProgressLayout) View dictationProgressLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictation);
-
         ButterKnife.bind(this);
+        mThis = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -73,6 +101,7 @@ public class DictationActivity extends BaseActivity {
         actionBar.setTitle(getArticleTitle());
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        dictationProgressLayout.setVisibility(View.VISIBLE);
         init();
     }
 
@@ -80,16 +109,75 @@ public class DictationActivity extends BaseActivity {
         String json = getIntent().getStringExtra(DictationActivity.ARTICLE_PAIR);
         ArticlePair entity = ArticlePair.fromJson(json);
         mArticle = entity.getTarget();
+        mTranslationArticle = entity.getTranslated();
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mArticle.getSentences());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), pickupSentence(mArticle));
         mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.canScrollHorizontally(-1);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setupWithViewPager(mViewPager);
+        initUserLog();
+    }
 
-        mAudioWebInterface = createDictationWebInterface(webView);
+    private void initUserLog() {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final UserLogRepository repo = new UserLogRepository();
+        repo.getUserLogByArticle(user.getUid(), mArticle.getId(), new BaseRepository.EntityEventListener<UserLogByArticle>() {
+            @Override
+            public void onSuccess(UserLogByArticle entity) {
+                if (entity == null) {
+                    entity = new UserLogByArticle();
+                }
+                userLog = entity;
+
+                initAudioWebInterface(webView);
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                new AlertDialog.Builder(mThis)
+                        .setTitle(R.string.msg_error_common)
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                mThis.finish();
+                            }
+                        })
+                        .setNeutralButton(R.string.tmpl_close, null)
+                        .show();
+            }
+        });
+    }
+
+    private void initAudioWebInterface(final WebView webView){
+        mAudioWebInterface = new AudioWebInterface(webView) {
+            @JavascriptInterface
+            @Override
+            public void onReady() {
+                runOnUiThread(new Runnable() {
+//                mHandler.post(new Runnable() {
+                    public void run() {
+                        mAudioWebInterface.setAudioSrc(mArticle);
+                        dictationProgressLayout.setVisibility(View.GONE);
+                    }
+                });
+            }
+        };
+    }
+
+    private List<Integer> pickupSentence(Article article) {
+        DictationSentencePicker pickerEasy = new DictationSentencePicker(
+                article.makeSenteceStringList(), Level.EASY, QUESTION_COUNT_EASY);
+        pickerEasy.pickup();
+
+        DictationSentencePicker pickerHard = new DictationSentencePicker(
+                article.makeSenteceStringList(), Level.HARD, QUESTION_COUNT_HARD);
+        pickerHard.pickup();
+
+        List<Integer> list = new ArrayList<>();
+        list.addAll(pickerEasy.getResultIndexList());
+        list.addAll(pickerHard.getResultIndexList());
+        return list;
     }
 
     private String getArticleId() {
@@ -112,21 +200,21 @@ public class DictationActivity extends BaseActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private List<Sentence> sentences;
+        private List<Integer> sentenceIndex;
 
-        public SectionsPagerAdapter(FragmentManager fm, List<Sentence> sentences) {
+        public SectionsPagerAdapter(FragmentManager fm, List<Integer> sentenceIndex) {
             super(fm);
-            this.sentences = sentences;
+            this.sentenceIndex = sentenceIndex;
         }
 
         @Override
-        public Fragment getItem(int position) {
-            return DictationFragment.newInstance(getArticleId(), position);
+        public DictationFragment getItem(int position) {
+            return DictationFragment.newInstance(sentenceIndex.get(position), position);
         }
 
         @Override
         public int getCount() {
-            return sentences.size();
+            return sentenceIndex.size();
         }
 
         @Override
@@ -135,22 +223,60 @@ public class DictationActivity extends BaseActivity {
         }
     }
 
+    public void updateDictationScore() {
+        int newScore = dictationScore.calcScoreRank().typeValue;
+        if (userLog.getDictationScore() >= newScore) {
+            return;
+        }
+        // 記録を更新したらDBに反映
+        userLog.setDictationScore(newScore);
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final UserLogRepository repo = new UserLogRepository();
+
+        Task task = repo.setDictationScore(
+                user.getUid(),
+                mArticle.getId(),
+                newScore);
+
+        task.addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.getException() != null) {
+                    task.getException().printStackTrace();
+                }
+            }
+        });
+    }
+
+    public Article getArticle() {
+        return mArticle;
+    }
+
+    public Article getTranslationArticle() {
+        return mTranslationArticle;
+    }
+
     public void play(int index) {
         Sentence sentence = mArticle.getSentences().get(index);
         mAudioWebInterface.play(sentence.getFromSec(), sentence.getToSec());
     }
 
-    private AudioWebInterface createDictationWebInterface(WebView webView){
-        return new AudioWebInterface(webView) {
-            @JavascriptInterface
-            @Override
-            public void onReady() {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        mAudioWebInterface.setAudioSrc(mArticle);
-                    }
-                });
-            }
-        };
+    public void next() {
+        int nextPosition = mViewPager.getCurrentItem() + 1;
+        mViewPager.setCurrentItem(nextPosition);
+        ((DictationFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, nextPosition)).onPageSelected();
+    }
+
+    public int getCurrentPageIndex() {
+        return mViewPager.getCurrentItem();
+    }
+
+    public boolean isLastQuestion() {
+        return mSectionsPagerAdapter.getCount() - 1 <= mViewPager.getCurrentItem();
+    }
+
+    public DictationScore getDictationScore() {
+        return dictationScore;
     }
 }

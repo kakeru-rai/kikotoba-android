@@ -12,5 +12,7 @@ if (!window.Android) {
 var audioPlayer = {};
 $(function() {
     window.audioPlayer = new window.sri.AudioPlayer($('#audioPlayer'));
+    console.log(1111);
     Android.onReady();
+    console.log(2222);
 });

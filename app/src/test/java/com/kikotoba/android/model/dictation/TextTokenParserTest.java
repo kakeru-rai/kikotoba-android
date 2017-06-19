@@ -59,7 +59,7 @@ public class TextTokenParserTest {
         TextTokenParser parser = new TextTokenParser();
         List<TextToken> tokenList = parser.parse(text);
 
-        BlankTokenPicker picker = new BlankTokenPicker();
+        BlankTokenPicker picker = new BlankTokenPicker(DictationSentencePicker.Level.EASY);
         picker.pick(tokenList);
 
         for (TextToken t : tokenList) {

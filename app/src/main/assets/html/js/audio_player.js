@@ -29,6 +29,8 @@ $(function() {
             // ここでは実際のdurationをロードするために初期化と同時にsetCurrentTimeSec()している
             console.log(_this.audio.currentTime);
             _this.setCurrentTimeSec(1);
+            _this.play();
+            _this.pause();
             console.log(_this.audio.currentTime);
             _this.$audio.off('canplaythrough.AudioPlayer')
         });

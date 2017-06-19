@@ -18,7 +18,7 @@ import java.net.URLEncoder;
 public abstract class AudioWebInterface {
     public static String INTERFACE_NAME = "Android";
 
-    private WebView mWebView;
+    protected WebView mWebView;
 
     public AudioWebInterface(WebView webView) {
         mWebView = webView;

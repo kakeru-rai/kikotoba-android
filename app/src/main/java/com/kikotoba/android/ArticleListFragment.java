@@ -39,7 +39,6 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
-
 import com.kikotoba.android.model.WorkingDirectory;
 import com.kikotoba.android.model.audio.AudioDownloadTask;
 import com.kikotoba.android.model.entity.ArticlePair;
@@ -94,6 +93,9 @@ public class ArticleListFragment extends Fragment {
         repo.queryArticles(new BaseRepository.EntityListEventListener<ArticlePair>() {
             @Override
             public void onSuccess(List<ArticlePair> entities) {
+                if (getActivity() == null) {
+                    return;
+                }
                 moveListLoadStateComplete();
 
                 articlePairs = entities;
@@ -117,6 +119,9 @@ public class ArticleListFragment extends Fragment {
 
             @Override
             public void onError(DatabaseError error) {
+                if (getActivity() == null) {
+                    return;
+                }
                 error.toException().printStackTrace();
                 moveListLoadStateRetry();
             }
@@ -174,15 +179,22 @@ public class ArticleListFragment extends Fragment {
             public final ImageView mImageView;
             public final TextView mTextView;
             public final ImageView mImageViewDownload;
-            public final TextView mTextViewDictationScore;
+//            public final TextView mTextViewDictationScore;
             public final ImageView mImageViewDictationIcon;
             public final TextView mTextViewSpeakingScore;
             public final ImageView mImageViewSpeakingIcon;
             public final TextView mTextViewPlaybackTime;
             public final ImageView mImageViewPlaybackTimeIcon;
 
+            @BindView(R.id.dictationScore1) ImageView dictationScore1;
+            @BindView(R.id.dictationScore2) ImageView dictationScore2;
+            @BindView(R.id.dictationScore3) ImageView dictationScore3;
+            @BindView(R.id.dictationScoreEmpty) View dictationScoreEmpty;
+
+
             public ViewHolder(View view) {
                 super(view);
+                ButterKnife.bind(this, view);
                 mView = view;
 
                 mDummyLayout = view.findViewById(R.id.dummyLayout);
@@ -191,7 +203,7 @@ public class ArticleListFragment extends Fragment {
                 mTextView = (TextView) view.findViewById(android.R.id.text1);
                 mImageViewDownload = (ImageView) view.findViewById(R.id.audioDownload);
                 mImageViewDictationIcon = (ImageView) view.findViewById(R.id.dictationIcon);
-                mTextViewDictationScore = (TextView) view.findViewById(R.id.dictationScore);
+//                mTextViewDictationScore = (TextView) view.findViewById(R.id.dictationScore);
                 mImageViewSpeakingIcon = (ImageView) view.findViewById(R.id.speakingIcon);
                 mTextViewSpeakingScore = (TextView) view.findViewById(R.id.speakingScore);
                 mImageViewPlaybackTimeIcon = (ImageView) view.findViewById(R.id.playbackTimeIcon);
@@ -249,20 +261,7 @@ public class ArticleListFragment extends Fragment {
                     holder.mCardView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
-                            // v0.1.0 リスニングを表示
-                            mContext.startActivity(
-                                    ListeningActivity.newIntent(
-                                            mContext,
-                                            holder.mArticlePair.getId(),
-                                            holder.mTextView.getText().toString(),
-                                            holder.mArticlePair,
-                                            holder.mArticlePair.getUserLogByArticle() != null ? holder.mArticlePair.getUserLogByArticle().getCurrentReadingIndex() : 0
-                                    )
-                            );
-
-                            // 機能メニューは一旦非表示
-//                            showMenuDialog(mContext, holder);
+                            showMenuDialog(mContext, holder);
                         }
                     });
                     break;
@@ -296,19 +295,35 @@ public class ArticleListFragment extends Fragment {
             int sentenceSize = holder.mArticlePair.getTarget().getSentences().size();
 
             // 利用ログの有無
-            if (holder.mArticlePair.getUserLogByArticle() == null) {
-                holder.mTextViewDictationScore.setText(String.format("--/%d", sentenceSize));
-                holder.mTextViewSpeakingScore.setText(String.format("--/%d", sentenceSize));
+            UserLogByArticle userLog = holder.mArticlePair.getUserLogByArticle();
+            if (userLog == null) {
                 holder.mTextViewPlaybackTime.setText(String.format("--:--:--", sentenceSize));
+                holder.mTextViewSpeakingScore.setText(String.format("--/%d", sentenceSize));
             } else {
-                UserLogByArticle log = holder.mArticlePair.getUserLogByArticle();
+                holder.mTextViewPlaybackTime.setText(userLog.calcListeningPlaybackTime());
+
                 holder.mTextViewSpeakingScore.setText(String.format("%d/%d",
-                        log.calcSpeakingTotal(),
+                        userLog.calcSpeakingTotal(),
                         sentenceSize));
-                holder.mTextViewDictationScore.setText(String.format("%d/%d",
-                        log.calcDictationTotal(),
-                        sentenceSize));
-                holder.mTextViewPlaybackTime.setText(log.calcListeningPlaybackTime());
+            }
+
+            // dictation
+            if (userLog == null || userLog.getDictationScore() == 0) {
+                holder.dictationScoreEmpty.setVisibility(View.VISIBLE);
+                holder.dictationScore1.setVisibility(View.GONE);
+                holder.dictationScore2.setVisibility(View.GONE);
+                holder.dictationScore3.setVisibility(View.GONE);
+            } else {
+                holder.dictationScoreEmpty.setVisibility(View.GONE);
+                holder.dictationScore1.setVisibility(View.VISIBLE);
+                holder.dictationScore2.setVisibility(View.VISIBLE);
+                holder.dictationScore3.setVisibility(View.VISIBLE);
+                holder.dictationScore1.setImageResource(
+                        userLog.getDictationScore() >= 1 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
+                holder.dictationScore2.setImageResource(
+                        userLog.getDictationScore() >= 2 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
+                holder.dictationScore3.setImageResource(
+                        userLog.getDictationScore() >= 3 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
             }
 
             holder.mImageView.setImageResource(R.mipmap.ic_launcher);
@@ -393,18 +408,7 @@ public class ArticleListFragment extends Fragment {
                                             holder.mArticleStatus = ViewHolder.ArticleStatus.READY;
                                             view(holder);
 
-                                            // v0.1.0 リスニングを表示
-                                            mContext.startActivity(
-                                                    ListeningActivity.newIntent(
-                                                            mContext,
-                                                            holder.mArticlePair.getId(),
-                                                            holder.mTextView.getText().toString(),
-                                                            holder.mArticlePair,
-                                                            holder.mArticlePair.getUserLogByArticle() != null ? holder.mArticlePair.getUserLogByArticle().getCurrentReadingIndex() : 0
-                                                    )
-                                            );
-
-//                                            showMenuDialog(context, holder);
+                                            showMenuDialog(context, holder);
                                         }
 
                                         @Override

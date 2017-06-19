@@ -20,6 +20,12 @@ public class BlankTokenPicker {
      */
     private Set<Integer> blankIndexSet;
 
+    private DictationSentencePicker.Level mLevel;
+
+    public BlankTokenPicker(DictationSentencePicker.Level level) {
+        mLevel = level;
+    }
+
     /**
      * tokenListから穴埋め対象のTextTokenを決定する
      * @param tokenList
@@ -58,6 +64,14 @@ public class BlankTokenPicker {
 
     private void selectRandom() {
         double blankRatio = 1.0 / 3.0;
+        switch (mLevel) {
+            case EASY:
+                blankRatio = 1.0 / 3.0;
+                break;
+            case HARD:
+                blankRatio = 3.0 / 4.0;
+                break;
+        }
         Random r = new Random(SEED);
         for (Integer index : alphabetIndexList.keySet()) {
             double d = r.nextDouble();

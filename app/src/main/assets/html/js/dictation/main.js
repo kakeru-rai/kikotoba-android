@@ -16,6 +16,8 @@ $(function() {
 
         // 要素の横幅を測定する
         this.$ruler = $('#ruler');
+
+        this.inputTextIndex = 0;
     }
 
     /**
@@ -36,8 +38,22 @@ $(function() {
      */
     AppInterface.prototype.addInput = function(text) {
         var $input = $('<input type="text">');
-        $input.attr('data-text', text);
-        $input.css('width', '' + this._measureWidth(text) + 'px');
+
+        var inputTextIndex = this.inputTextIndex;
+        ++this.inputTextIndex;
+        $input.data('text', text)
+                .data('input-text-index', inputTextIndex)
+                .css('width', '' + this._measureWidth(text) + 'px')
+                .on('keyup', function(event) {
+                console.log(event.keyCode);
+                    if (event.keyCode === 13) {
+                        var nextIndex = Number($(this).data('input-text-index')) + 1;
+                console.log($(this).data('input-text-index'));
+                console.log(nextIndex);
+                console.log($('[data-input-text-index=' + nextIndex + ']'));
+                        $('[data-input-text-index=' + nextIndex + ']').focus();
+                    }
+                });
 
         var $spanAnswer = $('<span class="answer jsAnswerIncorrect">');
         $spanAnswer
@@ -90,6 +106,15 @@ $(function() {
 
         Android.submitCallback(isCleared);
     };
+
+    AppInterface.prototype.showAnswer = function() {
+        $inputs = this.$container.find('input');
+        $inputs.each(function() {
+            var $this = $(this);
+            $this.val($this.data('text'));
+        });
+
+    }
 
     window.web = new AppInterface();
 

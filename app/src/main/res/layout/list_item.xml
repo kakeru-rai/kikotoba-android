@@ -79,6 +79,7 @@
                     android:layout_height="@dimen/cardview_mini_icon"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="2dp"
+                    android:alpha="0.8"
                     android:src="@drawable/ic_action_news_light" />
 
                 <TextView
@@ -102,7 +103,6 @@
                     android:layout_height="wrap_content"
                     android:text=""
                     android:visibility="gone"
-
                     />
 
                 <ImageView
@@ -112,15 +112,47 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="2dp"
                     android:src="@drawable/ic_action_volume_on_light"
-
-                    android:visibility="gone" />
+                    />
 
                 <TextView
-                    android:id="@+id/dictationScore"
+                    android:id="@+id/dictationScoreEmpty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:visibility="gone" />
+                    android:text="--"
+                    />
+
+                <ImageView
+                    android:id="@+id/dictationScore1"
+                    android:layout_width="@dimen/cardview_mini_icon"
+                    android:layout_height="@dimen/cardview_mini_icon"
+                    android:alpha="0.5"
+                    android:src="@drawable/ic_star_black_48dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/dictationScore2"
+                    android:layout_width="@dimen/cardview_mini_icon"
+                    android:layout_height="@dimen/cardview_mini_icon"
+                    android:alpha="0.5"
+                    android:src="@drawable/ic_star_black_48dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/dictationScore3"
+                    android:layout_width="@dimen/cardview_mini_icon"
+                    android:layout_height="@dimen/cardview_mini_icon"
+                    android:alpha="0.5"
+                    android:src="@drawable/ic_star_black_48dp"
+                    />
+
+                <!--<TextView-->
+                    <!--android:id="@+id/dictationScore"-->
+                    <!--android:layout_width="24dp"-->
+                    <!--android:layout_height="24dp"-->
+                    <!--android:background="@drawable/ic_circle_silver"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="G" />-->
+
             </LinearLayout>
 
         </LinearLayout>
@@ -133,6 +165,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginTop="4dp"
+            android:visibility="gone"
             android:background="@drawable/bg_stitch">
 
 

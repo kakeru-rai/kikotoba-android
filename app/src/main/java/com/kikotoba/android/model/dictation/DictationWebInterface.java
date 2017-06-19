@@ -52,4 +52,8 @@ public abstract class DictationWebInterface {
     public void addInput(String text) {
         mWebView.loadUrl(String.format("javascript: web.addInput('%s');", Util.escapeJsArgumentFromUrl(text)));
     }
+
+    public void showAnswer() {
+        mWebView.loadUrl(String.format("javascript: web.showAnswer();"));
+    }
 }

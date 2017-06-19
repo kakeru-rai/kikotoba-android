@@ -15,7 +15,9 @@
     <string name="tmpl_ok">OK</string>
     <string name="tmpl_submit">Submit</string>
     <string name="tmpl_cancel">Cancel</string>
-    <string name="tmpl_next">Next</string>
+    <string name="tmpl_correct">正解</string>
+    <string name="tmpl_finish">終了</string>
+    <string name="tmpl_next">次へ</string>
     <string name="tmpl_yes">Yes</string>
     <string name="tmpl_no">No</string>
     <string name="tmpl_move">Move</string>
@@ -38,10 +40,11 @@
     <string name="tmpl_logout">ログアウト</string>
     <string name="tmpl_download">ダウンロード</string>
     <string name="tmpl_get_started">Get started</string>
-    
+    <string name="tmpl_start">スタート</string>
+
     <string name="tmpl_back">Back</string>
     <string name="tmpl_agree">Agree</string>
-    <string name="tmpl_close">Close</string>
+    <string name="tmpl_close">閉じる</string>
     <string name="tmpl_do_later">Do later</string>
     <string name="tmpl_copy_to_clipboard">Copy to clipboard</string>
 

@@ -33,6 +33,7 @@
     <string name="target_language">en</string>
     <string name="is_cleared">クリアー</string>
     <string name="is_not_cleared">未正解</string>
+    <string name="msg_error_common">画面の準備ができませんでした</string>
 
     <!-- リスニング -->
     <string name="listening_repeat_mode">リピートモード</string>
@@ -47,8 +48,14 @@
     <string name="speaking_speech_error">エラーが発生しました：</string>
 
     <!-- ディクテーション -->
-    <string name="dictation_play">再生</string>
-    <string name="dictation_submit">回答</string>
+    <string name="dictation_question_number">第%1$d問</string>
+    <string name="dictation_play">もう一度聞く</string>
+    <string name="dictation_submit">回答する</string>
+    <string name="dictation_give_up">ギブアップ</string>
+    <string name="dictation_msg_finish">クリアーおめでとう！</string>
+    <string name="dictation_msg_finish_not_cleared">もう一度チャレンジ！</string>
+    <string name="dictation_caption_life">ライフ</string>
+    <string name="dictation_caption_correct_answer">正解数</string>
 
     <!-- 設定 -->
     <string name="title_activity_settings">設定</string>
