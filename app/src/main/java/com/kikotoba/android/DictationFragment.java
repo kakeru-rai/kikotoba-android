@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.kikotoba.android.model.dictation.BlankTokenPicker;
 import com.kikotoba.android.model.dictation.DictationScore;
-import com.kikotoba.android.model.dictation.DictationSentencePicker;
 import com.kikotoba.android.model.dictation.DictationWebInterface;
+import com.kikotoba.android.model.dictation.Level;
 import com.kikotoba.android.model.dictation.TextToken;
 import com.kikotoba.android.model.dictation.TextTokenParser;
 import com.kikotoba.android.model.entity.Article;
@@ -212,9 +212,9 @@ public class DictationFragment extends Fragment {
         TextTokenParser parser = new TextTokenParser();
         List<TextToken> tokenList = parser.parse(text);
 
-        DictationSentencePicker.Level level = getOwner().getCurrentPageIndex() < DictationActivity.QUESTION_COUNT_EASY
-                ? DictationSentencePicker.Level.EASY
-                : DictationSentencePicker.Level.HARD;
+        Level level = getOwner().getCurrentPageIndex() < DictationActivity.QUESTION_COUNT_EASY
+                ? Level.EASY
+                : Level.HARD;
         BlankTokenPicker picker = new BlankTokenPicker(level);
         picker.pick(tokenList);
         return tokenList;

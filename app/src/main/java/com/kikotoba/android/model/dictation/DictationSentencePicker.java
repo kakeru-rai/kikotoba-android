@@ -12,11 +12,6 @@ import java.util.List;
  */
 public class DictationSentencePicker {
 
-    public enum Level {
-        EASY,
-        HARD,
-    }
-
     private Comparator<String> mScriptLengthCompAsc = new Comparator<String>() {
         public int compare(String s1, String s2) {
             return Math.abs(s1.length()) - Math.abs(s2.length());

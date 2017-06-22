@@ -31,7 +31,7 @@ public class DictationSentencePickerTest {
         // easy
         dictationSentencePicker = new DictationSentencePicker(
                 sentenceList,
-                DictationSentencePicker.Level.EASY,
+                Level.EASY,
                 MAX_PICKING_COUNT);
         scripts= dictationSentencePicker.pickup();
 
@@ -44,7 +44,7 @@ public class DictationSentencePickerTest {
         // hard
         dictationSentencePicker = new DictationSentencePicker(
                 sentenceList,
-                DictationSentencePicker.Level.HARD,
+                Level.HARD,
                 MAX_PICKING_COUNT);
         scripts = dictationSentencePicker.pickup();
 
@@ -73,7 +73,7 @@ public class DictationSentencePickerTest {
         // easy
         dictationSentencePicker = new DictationSentencePicker(
                 sentenceList,
-                DictationSentencePicker.Level.EASY,
+                Level.EASY,
                 MAX_PICKING_COUNT);
         scripts= dictationSentencePicker.pickup();
 
@@ -89,7 +89,7 @@ public class DictationSentencePickerTest {
         // hard
         dictationSentencePicker = new DictationSentencePicker(
                 sentenceList,
-                DictationSentencePicker.Level.HARD,
+                Level.HARD,
                 MAX_PICKING_COUNT);
         scripts = dictationSentencePicker.pickup();
 
@@ -132,7 +132,7 @@ public class DictationSentencePickerTest {
         // easy
         dictationSentencePicker = new DictationSentencePicker(
                 sentenceList,
-                DictationSentencePicker.Level.EASY,
+                Level.EASY,
                 MAX_PICKING_COUNT);
         scripts= dictationSentencePicker.pickup();
 
@@ -154,7 +154,7 @@ public class DictationSentencePickerTest {
         // hard
         dictationSentencePicker = new DictationSentencePicker(
                 sentenceList,
-                DictationSentencePicker.Level.HARD,
+                Level.HARD,
                 MAX_PICKING_COUNT);
         scripts = dictationSentencePicker.pickup();
 

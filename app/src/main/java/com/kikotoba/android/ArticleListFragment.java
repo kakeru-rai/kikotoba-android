@@ -41,12 +41,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.kikotoba.android.model.WorkingDirectory;
 import com.kikotoba.android.model.audio.AudioDownloadTask;
+import com.kikotoba.android.model.dictation.Level;
 import com.kikotoba.android.model.entity.ArticlePair;
 import com.kikotoba.android.model.entity.ArticlePairDummy;
 import com.kikotoba.android.model.entity.UserLogByArticle;
 import com.kikotoba.android.repository.ArticleRepository;
 import com.kikotoba.android.repository.BaseRepository;
 import com.kikotoba.android.repository.UserLogRepository;
+import com.kikotoba.android.view.StarList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -178,7 +180,6 @@ public class ArticleListFragment extends Fragment {
             public final View mDummyLayout;
             public final ImageView mImageView;
             public final TextView mTextView;
-            public final ImageView mImageViewDownload;
 //            public final TextView mTextViewDictationScore;
             public final ImageView mImageViewDictationIcon;
             public final TextView mTextViewSpeakingScore;
@@ -186,10 +187,17 @@ public class ArticleListFragment extends Fragment {
             public final TextView mTextViewPlaybackTime;
             public final ImageView mImageViewPlaybackTimeIcon;
 
-            @BindView(R.id.dictationScore1) ImageView dictationScore1;
-            @BindView(R.id.dictationScore2) ImageView dictationScore2;
-            @BindView(R.id.dictationScore3) ImageView dictationScore3;
-            @BindView(R.id.dictationScoreEmpty) View dictationScoreEmpty;
+            @BindView(R.id.cardButtonListening) View buttonListening;
+            @BindView(R.id.cardButtonLevel1) View buttonLevel1;
+            @BindView(R.id.cardButtonLevel2) View buttonLevel2;
+            @BindView(R.id.cardButtonLevel3) View buttonLevel3;
+
+            @BindView(R.id.cardStarList1) StarList starList1;
+            @BindView(R.id.cardStarList2) StarList starList2;
+            @BindView(R.id.cardStarList3) StarList starList3;
+
+            @BindView(R.id.cardDownloadLayout) View downloadLayout;
+
 
 
             public ViewHolder(View view) {
@@ -201,7 +209,6 @@ public class ArticleListFragment extends Fragment {
                 mCardView = (CardView) view.findViewById(R.id.cardView);
                 mImageView = (ImageView) view.findViewById(R.id.avatar);
                 mTextView = (TextView) view.findViewById(android.R.id.text1);
-                mImageViewDownload = (ImageView) view.findViewById(R.id.audioDownload);
                 mImageViewDictationIcon = (ImageView) view.findViewById(R.id.dictationIcon);
 //                mTextViewDictationScore = (TextView) view.findViewById(R.id.dictationScore);
                 mImageViewSpeakingIcon = (ImageView) view.findViewById(R.id.speakingIcon);
@@ -257,18 +264,18 @@ public class ArticleListFragment extends Fragment {
             switch (holder.mArticleStatus) {
                 case READY:
                     holder.mDummyLayout.setVisibility(View.GONE);
-                    holder.mImageViewDownload.setImageResource(R.drawable.ic_cloud_done_black_24dp);
-                    holder.mCardView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            showMenuDialog(mContext, holder);
-                        }
-                    });
+                    holder.downloadLayout.setVisibility(View.GONE);
+//                    holder.mCardView.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            showMenuDialog(mContext, holder);
+//                        }
+//                    });
                     break;
                 case AUDIO_NOT_DOWNLOADED:
                     holder.mDummyLayout.setVisibility(View.GONE);
-                    holder.mImageViewDownload.setImageResource(R.drawable.ic_cloud_download_black_24dp);
-                    holder.mCardView.setOnClickListener(new View.OnClickListener() {
+                    holder.downloadLayout.setVisibility(View.VISIBLE);
+                    holder.downloadLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             showStartDownloadDialog(mContext, holder);
@@ -277,6 +284,7 @@ public class ArticleListFragment extends Fragment {
                     break;
                 case UNDER_CONSTRUCTION:
                     holder.mDummyLayout.setVisibility(View.VISIBLE);
+                    holder.downloadLayout.setVisibility(View.GONE);
                     holder.mCardView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -289,6 +297,32 @@ public class ArticleListFragment extends Fragment {
             if (holder.mArticleStatus == ViewHolder.ArticleStatus.UNDER_CONSTRUCTION) {
                 return;
             }
+
+
+            holder.buttonListening.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    moveToListening(holder);
+                }
+            });
+            holder.buttonLevel1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    moveToDictation(holder, Level.EASY);
+                }
+            });
+            holder.buttonLevel2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    moveToDictation(holder, Level.EASY);
+                }
+            });
+            holder.buttonLevel3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    moveToDictation(holder, Level.HARD);
+                }
+            });
 
             holder.mTextView.setText(holder.mArticlePair.getTranslated().getTitle());
 
@@ -308,23 +342,27 @@ public class ArticleListFragment extends Fragment {
             }
 
             // dictation
-            if (userLog == null || userLog.getDictationScore() == 0) {
-                holder.dictationScoreEmpty.setVisibility(View.VISIBLE);
-                holder.dictationScore1.setVisibility(View.GONE);
-                holder.dictationScore2.setVisibility(View.GONE);
-                holder.dictationScore3.setVisibility(View.GONE);
-            } else {
-                holder.dictationScoreEmpty.setVisibility(View.GONE);
-                holder.dictationScore1.setVisibility(View.VISIBLE);
-                holder.dictationScore2.setVisibility(View.VISIBLE);
-                holder.dictationScore3.setVisibility(View.VISIBLE);
-                holder.dictationScore1.setImageResource(
-                        userLog.getDictationScore() >= 1 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
-                holder.dictationScore2.setImageResource(
-                        userLog.getDictationScore() >= 2 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
-                holder.dictationScore3.setImageResource(
-                        userLog.getDictationScore() >= 3 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
-            }
+//            if (userLog == null || userLog.getDictationScore() == 0) {
+//                holder.dictationScoreEmpty.setVisibility(View.VISIBLE);
+//                holder.dictationScore1.setVisibility(View.GONE);
+//                holder.dictationScore2.setVisibility(View.GONE);
+//                holder.dictationScore3.setVisibility(View.GONE);
+//            } else {
+//                holder.dictationScoreEmpty.setVisibility(View.GONE);
+//                holder.dictationScore1.setVisibility(View.VISIBLE);
+//                holder.dictationScore2.setVisibility(View.VISIBLE);
+//                holder.dictationScore3.setVisibility(View.VISIBLE);
+//                holder.dictationScore1.setImageResource(
+//                        userLog.getDictationScore() >= 1 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
+//                holder.dictationScore2.setImageResource(
+//                        userLog.getDictationScore() >= 2 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
+//                holder.dictationScore3.setImageResource(
+//                        userLog.getDictationScore() >= 3 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
+//            }
+
+            holder.starList1.setStarCount(userLog != null ? userLog.getDictationScore() : 0);
+            holder.starList2.setStarCount(userLog != null ? userLog.getDictationScore() : 0);
+            holder.starList3.setStarCount(userLog != null ? userLog.getDictationScore() : 0);
 
             holder.mImageView.setImageResource(R.mipmap.ic_launcher);
             Glide.with(holder.mImageView.getContext())
@@ -373,16 +411,8 @@ public class ArticleListFragment extends Fragment {
 //                                    );
 //                                    break;
 //                                case 2:
-                                case 1: // ディクテーション
-                                    context.startActivity(
-                                            DictationActivity.newIntent(
-                                                    context,
-                                                    holder.mArticlePair.getId(),
-                                                    holder.mTextView.getText().toString(),
-                                                    holder.mArticlePair
-                                            )
-                                    );
-                                    break;
+//                                case 1: // ディクテーション
+//                                    break;
                             }
                         }
                     })
@@ -455,6 +485,30 @@ public class ArticleListFragment extends Fragment {
             progressDialog.setMax(100);
             progressDialog.setProgress(0);
             return progressDialog;
+        }
+
+        private void moveToListening(ViewHolder holder) {
+            mContext.startActivity(
+                    ListeningActivity.newIntent(
+                            mContext,
+                            holder.mArticlePair.getId(),
+                            holder.mTextView.getText().toString(),
+                            holder.mArticlePair,
+                            holder.mArticlePair.getUserLogByArticle() != null ? holder.mArticlePair.getUserLogByArticle().getCurrentReadingIndex() : 0
+                    )
+            );
+        }
+
+        private void moveToDictation(ViewHolder holder, Level level) {
+            mContext.startActivity(
+                    DictationActivity.newIntent(
+                            mContext,
+                            holder.mArticlePair.getId(),
+                            holder.mTextView.getText().toString(),
+                            holder.mArticlePair,
+                            level
+                    )
+            );
         }
 
         @Override

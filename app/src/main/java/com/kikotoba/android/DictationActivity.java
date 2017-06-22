@@ -24,7 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.kikotoba.android.model.audio.AudioWebInterface;
 import com.kikotoba.android.model.dictation.DictationScore;
 import com.kikotoba.android.model.dictation.DictationSentencePicker;
-import com.kikotoba.android.model.dictation.DictationSentencePicker.Level;
+import com.kikotoba.android.model.dictation.Level;
 import com.kikotoba.android.model.entity.Article;
 import com.kikotoba.android.model.entity.ArticlePair;
 import com.kikotoba.android.model.entity.Sentence;
@@ -45,6 +45,7 @@ public class DictationActivity extends BaseActivity {
     public static final String ARTICLE_ID = "article_id";
     public static final String ARTICLE_TITLE = "article_title";
     public static final String ARTICLE_PAIR = "article_pair";
+    public static final String ARTICLE_LEVEL = "level";
 
     public static final int QUESTION_COUNT_EASY = 4;
     public static final int QUESTION_COUNT_HARD = 3;
@@ -52,11 +53,13 @@ public class DictationActivity extends BaseActivity {
     public static Intent newIntent(Context context,
                                    String articleId,
                                    String title,
-                                   ArticlePair articlePair) {
+                                   ArticlePair articlePair,
+                                   Level level) {
         Intent intent = new Intent(context, DictationActivity.class);
         intent.putExtra(DictationActivity.ARTICLE_ID, articleId);
         intent.putExtra(DictationActivity.ARTICLE_TITLE, title);
         intent.putExtra(DictationActivity.ARTICLE_PAIR, articlePair.toJson());
+        intent.putExtra(DictationActivity.ARTICLE_LEVEL, level.name());
         return intent;
     }
 
@@ -186,6 +189,10 @@ public class DictationActivity extends BaseActivity {
 
     private String getArticleTitle() {
         return getIntent().getStringExtra(ARTICLE_TITLE);
+    }
+
+    private Level getLevel() {
+        return Level.valueOf(getIntent().getStringExtra(ARTICLE_LEVEL));
     }
 
     @Override

@@ -20,9 +20,9 @@ public class BlankTokenPicker {
      */
     private Set<Integer> blankIndexSet;
 
-    private DictationSentencePicker.Level mLevel;
+    private Level mLevel;
 
-    public BlankTokenPicker(DictationSentencePicker.Level level) {
+    public BlankTokenPicker(Level level) {
         mLevel = level;
     }
 
