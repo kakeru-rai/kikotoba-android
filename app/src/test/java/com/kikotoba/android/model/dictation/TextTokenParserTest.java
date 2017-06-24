@@ -53,40 +53,4 @@ public class TextTokenParserTest {
         assertEquals("2",               result.get(19).text);assertEquals(TextToken.CHAR_TYPE.SIGN, result.get(19).charType);
         assertEquals("分割数", 20, result.size());
     }
-
-    @Test
-    public void pick_blankTokenCorrectly() throws Exception {
-        TextTokenParser parser = new TextTokenParser();
-        List<TextToken> tokenList = parser.parse(text);
-
-        BlankTokenPicker picker = new BlankTokenPicker(DictationSentencePicker.Level.EASY);
-        picker.pick(tokenList);
-
-        for (TextToken t : tokenList) {
-            if (t.isBlank) {
-                System.out.println(t.text);
-            }
-        }
-
-        assertEquals(false, tokenList.get(0).isBlank);
-        assertEquals(false, tokenList.get(1).isBlank);
-        assertEquals(true,  tokenList.get(2).isBlank);
-        assertEquals(false, tokenList.get(3).isBlank);
-        assertEquals(true,  tokenList.get(4).isBlank);
-        assertEquals(false, tokenList.get(5).isBlank);
-        assertEquals(false, tokenList.get(6).isBlank);
-        assertEquals(false, tokenList.get(7).isBlank);
-        assertEquals(false, tokenList.get(8).isBlank);
-        assertEquals(true,  tokenList.get(9).isBlank);
-        assertEquals(false, tokenList.get(10).isBlank);
-        assertEquals(false, tokenList.get(11).isBlank);
-        assertEquals(false, tokenList.get(12).isBlank);
-        assertEquals(false, tokenList.get(13).isBlank);
-        assertEquals(false, tokenList.get(14).isBlank);
-        assertEquals(false, tokenList.get(15).isBlank);
-        assertEquals(false, tokenList.get(16).isBlank);
-        assertEquals(false, tokenList.get(17).isBlank);
-        assertEquals(false, tokenList.get(18).isBlank);
-        assertEquals(false, tokenList.get(19).isBlank);
-    }
 }

@@ -49,6 +49,7 @@ public class MainActivity extends BaseActivity {
 
         WorkingDirectory wd = new WorkingDirectory();
         wd.createWorkingDirectory(this);
+//        wd.deleteAudio(this);
 
         init();
 

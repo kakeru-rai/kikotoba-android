@@ -5,7 +5,13 @@ package com.kikotoba.android.model.dictation;
  */
 
 public enum Level {
-    EASY,
-    HARD,
+    EASY("a"),
+    NORMAL("b"),
+    HARD("c"),
     ;
+
+    public final String firebaseKey;
+    Level(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
+    }
 }

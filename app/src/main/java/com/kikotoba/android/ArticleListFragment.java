@@ -177,7 +177,6 @@ public class ArticleListFragment extends Fragment {
             // view
             public final View mView;
             public final CardView mCardView;
-            public final View mDummyLayout;
             public final ImageView mImageView;
             public final TextView mTextView;
 //            public final TextView mTextViewDictationScore;
@@ -197,6 +196,8 @@ public class ArticleListFragment extends Fragment {
             @BindView(R.id.cardStarList3) StarList starList3;
 
             @BindView(R.id.cardDownloadLayout) View downloadLayout;
+            @BindView(R.id.cardPreparingLayout) View preparingLayout;
+            @BindView(R.id.cardNormalLayout) View normalLayout;
 
 
 
@@ -205,7 +206,6 @@ public class ArticleListFragment extends Fragment {
                 ButterKnife.bind(this, view);
                 mView = view;
 
-                mDummyLayout = view.findViewById(R.id.dummyLayout);
                 mCardView = (CardView) view.findViewById(R.id.cardView);
                 mImageView = (ImageView) view.findViewById(R.id.avatar);
                 mTextView = (TextView) view.findViewById(android.R.id.text1);
@@ -263,7 +263,8 @@ public class ArticleListFragment extends Fragment {
         private void view(final ViewHolder holder) {
             switch (holder.mArticleStatus) {
                 case READY:
-                    holder.mDummyLayout.setVisibility(View.GONE);
+                    holder.normalLayout.setVisibility(View.VISIBLE);
+                    holder.preparingLayout.setVisibility(View.GONE);
                     holder.downloadLayout.setVisibility(View.GONE);
 //                    holder.mCardView.setOnClickListener(new View.OnClickListener() {
 //                        @Override
@@ -273,7 +274,8 @@ public class ArticleListFragment extends Fragment {
 //                    });
                     break;
                 case AUDIO_NOT_DOWNLOADED:
-                    holder.mDummyLayout.setVisibility(View.GONE);
+                    holder.normalLayout.setVisibility(View.GONE);
+                    holder.preparingLayout.setVisibility(View.GONE);
                     holder.downloadLayout.setVisibility(View.VISIBLE);
                     holder.downloadLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -283,7 +285,8 @@ public class ArticleListFragment extends Fragment {
                     });
                     break;
                 case UNDER_CONSTRUCTION:
-                    holder.mDummyLayout.setVisibility(View.VISIBLE);
+                    holder.normalLayout.setVisibility(View.GONE);
+                    holder.preparingLayout.setVisibility(View.VISIBLE);
                     holder.downloadLayout.setVisibility(View.GONE);
                     holder.mCardView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -314,7 +317,7 @@ public class ArticleListFragment extends Fragment {
             holder.buttonLevel2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    moveToDictation(holder, Level.EASY);
+                    moveToDictation(holder, Level.NORMAL);
                 }
             });
             holder.buttonLevel3.setOnClickListener(new View.OnClickListener() {
@@ -342,7 +345,7 @@ public class ArticleListFragment extends Fragment {
             }
 
             // dictation
-//            if (userLog == null || userLog.getDictationScore() == 0) {
+//            if (userLog == null || userLog.getScore() == 0) {
 //                holder.dictationScoreEmpty.setVisibility(View.VISIBLE);
 //                holder.dictationScore1.setVisibility(View.GONE);
 //                holder.dictationScore2.setVisibility(View.GONE);
@@ -353,16 +356,22 @@ public class ArticleListFragment extends Fragment {
 //                holder.dictationScore2.setVisibility(View.VISIBLE);
 //                holder.dictationScore3.setVisibility(View.VISIBLE);
 //                holder.dictationScore1.setImageResource(
-//                        userLog.getDictationScore() >= 1 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
+//                        userLog.getScore() >= 1 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
 //                holder.dictationScore2.setImageResource(
-//                        userLog.getDictationScore() >= 2 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
+//                        userLog.getScore() >= 2 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
 //                holder.dictationScore3.setImageResource(
-//                        userLog.getDictationScore() >= 3 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
+//                        userLog.getScore() >= 3 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
 //            }
 
-            holder.starList1.setStarCount(userLog != null ? userLog.getDictationScore() : 0);
-            holder.starList2.setStarCount(userLog != null ? userLog.getDictationScore() : 0);
-            holder.starList3.setStarCount(userLog != null ? userLog.getDictationScore() : 0);
+            if (userLog == null) {
+                holder.starList1.setStarCount(0);
+                holder.starList2.setStarCount(0);
+                holder.starList3.setStarCount(0);
+            } else {
+                holder.starList1.setStarCount(userLog._getScore(Level.EASY));
+                holder.starList2.setStarCount(userLog._getScore(Level.NORMAL));
+                holder.starList3.setStarCount(userLog._getScore(Level.HARD));
+            }
 
             holder.mImageView.setImageResource(R.mipmap.ic_launcher);
             Glide.with(holder.mImageView.getContext())
@@ -437,8 +446,6 @@ public class ArticleListFragment extends Fragment {
                                             progressDialog.dismiss();
                                             holder.mArticleStatus = ViewHolder.ArticleStatus.READY;
                                             view(holder);
-
-                                            showMenuDialog(context, holder);
                                         }
 
                                         @Override
@@ -494,7 +501,9 @@ public class ArticleListFragment extends Fragment {
                             holder.mArticlePair.getId(),
                             holder.mTextView.getText().toString(),
                             holder.mArticlePair,
-                            holder.mArticlePair.getUserLogByArticle() != null ? holder.mArticlePair.getUserLogByArticle().getCurrentReadingIndex() : 0
+                            holder.mArticlePair.getUserLogByArticle() != null
+                                    ? holder.mArticlePair.getUserLogByArticle().getCurrentReadingIndex()
+                                    : 0
                     )
             );
         }

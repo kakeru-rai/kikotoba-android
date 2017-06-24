@@ -2,6 +2,8 @@ package com.kikotoba.android.model.entity;
 
 import android.support.annotation.NonNull;
 
+import com.kikotoba.android.model.dictation.Level;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,15 +13,19 @@ import java.util.Map;
 import java.util.TimeZone;
 
 /**
- * Created by raix on 2017/03/26.
+ * ※firebaseの注意点
+ * ・getter/setterを作るとプロパティと判定されるので、マッピング対象以外にget/setは使わないこと
+ * ・mapのキーに文字列で整数をセットしても配列として扱われるので、本質的に配列データでなければ数値以外の文字をキーとする
+ * ・型を変更するために、ルールとサーバーデータを更新して、クラス内のメンバの型を変えても、ローカルに保存済みの旧データがある場合エラーとなる
+ * 　リリース済みのデータは型の変更は行わず、変数の追加とした方が無難。
  */
-
 public class UserLogByArticle {
 
     private int listeningPlaybackTime = 0;
     private int currentReadingIndex = 0;
     private Map<String, Boolean> speakingCorrect = new HashMap();
-    private int dictationScore = 0;
+    private Map<String, Integer> score = new HashMap();
+//    private int score = 0;
 
     public int getListeningPlaybackTime() {
         return listeningPlaybackTime;
@@ -37,14 +43,25 @@ public class UserLogByArticle {
         this.speakingCorrect = speakingCorrect;
     }
 
-    public int getDictationScore() {
-        return dictationScore;
+    public Map<String, Integer> getScore() {
+        return score;
     }
 
-    public void setDictationScore(int dictationScore) {
-        this.dictationScore = dictationScore;
+    public void setScore(Map<String, Integer> score) {
+        if (score == null) {
+            score = new HashMap();
+        }
+        this.score = score;
     }
 
+//    public int getScore() {
+//        return score;
+//    }
+//
+//    public void setScore(int score) {
+//        this.score = score;
+//    }
+//
     public void setSpeakingCorrectByIndex(int index) {
         speakingCorrect.put(String.valueOf(index) + "_", true);
     }
@@ -68,6 +85,15 @@ public class UserLogByArticle {
         DateFormat df = new SimpleDateFormat("HH:mm:ss");
         df.setTimeZone(cal.getTimeZone());
         return df.format(cal.getTime());
+    }
+
+    public void _setScore(Level level, int score) {
+        this.score.put(level.firebaseKey, score);
+    }
+
+    public int _getScore(Level level) {
+        Integer score = this.score.get(level.firebaseKey);
+        return score == null ? 0 : score;
     }
 
 }

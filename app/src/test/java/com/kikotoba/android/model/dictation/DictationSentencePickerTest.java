@@ -17,7 +17,26 @@ public class DictationSentencePickerTest {
     private static final int MAX_PICKING_COUNT = 5;
 
     @Test
-    public void pickup_tinyCountScripts_rangeAllScripts() throws Exception {
+    public void pickup_eachLevel() throws Exception {
+        List<String> sentenceList = new ArrayList<>(Arrays.asList(
+                "dddd",
+                "ccc",
+                "bb",
+                "a"
+        ));
+
+        DictationSentencePicker dictationSentencePicker;
+        List<String> scripts;
+
+        for (int i = 0; i < Level.values().length; ++i) {
+            dictationSentencePicker = newDictationSentencePicker(sentenceList, Level.EASY);
+            scripts = dictationSentencePicker.pickup();
+        }
+        assertTrue("各Levelで実行できること", true);
+    }
+
+    @Test
+    public void pickup_tooTinyCountScripts_allLevelWillSelectAllScripts() throws Exception {
         List<String> sentenceList = new ArrayList<>(Arrays.asList(
                 "dddd",
                 "ccc",
@@ -29,10 +48,7 @@ public class DictationSentencePickerTest {
         List<String> scripts;
 
         // easy
-        dictationSentencePicker = new DictationSentencePicker(
-                sentenceList,
-                Level.EASY,
-                MAX_PICKING_COUNT);
+        dictationSentencePicker =newDictationSentencePicker(sentenceList, Level.EASY);
         scripts= dictationSentencePicker.pickup();
 
         assertEquals("全て選択される。", sentenceList.size(), scripts.size());
@@ -41,11 +57,19 @@ public class DictationSentencePickerTest {
         assertTrue(scripts.contains("ccc"));
         assertTrue(scripts.contains("dddd"));
 
+        // normal
+        dictationSentencePicker =newDictationSentencePicker(sentenceList, Level.NORMAL);
+        scripts= dictationSentencePicker.pickup();
+
+        assertEquals("全て選択される。", sentenceList.size(), scripts.size());
+        assertTrue("全て選択される", scripts.contains("a"));
+        assertTrue(scripts.contains("bb"));
+        assertTrue(scripts.contains("ccc"));
+        assertTrue(scripts.contains("dddd"));
+
+
         // hard
-        dictationSentencePicker = new DictationSentencePicker(
-                sentenceList,
-                Level.HARD,
-                MAX_PICKING_COUNT);
+        dictationSentencePicker =newDictationSentencePicker(sentenceList, Level.HARD);
         scripts = dictationSentencePicker.pickup();
 
         assertEquals("全て選択される", sentenceList.size(), scripts.size());
@@ -71,11 +95,8 @@ public class DictationSentencePickerTest {
         List<String> scripts;
 
         // easy
-        dictationSentencePicker = new DictationSentencePicker(
-                sentenceList,
-                Level.EASY,
-                MAX_PICKING_COUNT);
-        scripts= dictationSentencePicker.pickup();
+        dictationSentencePicker =newDictationSentencePicker(sentenceList, Level.EASY);
+        scripts = dictationSentencePicker.pickup();
 
         assertEquals("所定の数だけ選ぶ", MAX_PICKING_COUNT, scripts.size());
         assertTrue("小さい方から選ぶ", scripts.contains("a"));
@@ -86,11 +107,21 @@ public class DictationSentencePickerTest {
         assertFalse(scripts.contains("fffff"));
         assertFalse(scripts.contains("gggggg"));
 
+        // normal
+        dictationSentencePicker =newDictationSentencePicker(sentenceList, Level.NORMAL);
+        scripts= dictationSentencePicker.pickup();
+
+        assertEquals("所定の数だけ選ぶ", MAX_PICKING_COUNT, scripts.size());
+        assertFalse("中間から選ぶ", scripts.contains("a"));
+        assertTrue(scripts.contains("bb"));
+        assertTrue(scripts.contains("ccc"));
+        assertTrue(scripts.contains("dddd"));
+        assertTrue(scripts.contains("eeee"));
+        assertTrue(scripts.contains("fffff"));
+        assertFalse(scripts.contains("gggggg"));
+
         // hard
-        dictationSentencePicker = new DictationSentencePicker(
-                sentenceList,
-                Level.HARD,
-                MAX_PICKING_COUNT);
+        dictationSentencePicker =newDictationSentencePicker(sentenceList, Level.HARD);
         scripts = dictationSentencePicker.pickup();
 
         assertEquals("所定の数だけ選ぶ", MAX_PICKING_COUNT, scripts.size());
@@ -106,9 +137,11 @@ public class DictationSentencePickerTest {
     @Test
     public void pickup_largeCountScripts_rangeDividedLevelCount() throws Exception {
         List<String> sentenceList = new ArrayList<>(Arrays.asList(
+                "ssssssssssssssssss", // 19
+                "rrrrrrrrrrrrrrrrr",
                 "qqqqqqqqqqqqqqqq",
-                "ppppppppppppppp", // 15
-                "oooooooooooooo",
+                "ppppppppppppppp",
+                "oooooooooooooo", // 15
                 "nnnnnnnnnnnnnn",
                 "mmmmmmmmmmmm",
                 "lllllllllll",
@@ -130,10 +163,7 @@ public class DictationSentencePickerTest {
         int hitCount = 0;
 
         // easy
-        dictationSentencePicker = new DictationSentencePicker(
-                sentenceList,
-                Level.EASY,
-                MAX_PICKING_COUNT);
+        dictationSentencePicker =newDictationSentencePicker(sentenceList, Level.EASY);
         scripts= dictationSentencePicker.pickup();
 
         assertEquals("所定の数だけ選ぶ", MAX_PICKING_COUNT, scripts.size());
@@ -151,27 +181,52 @@ public class DictationSentencePickerTest {
         }
         assertEquals("小さい方から選ぶ", MAX_PICKING_COUNT, hitCount);
 
+
+        // normal
+        dictationSentencePicker =newDictationSentencePicker(sentenceList, Level.NORMAL);
+        scripts= dictationSentencePicker.pickup();
+
+        assertEquals("所定の数だけ選ぶ", MAX_PICKING_COUNT, scripts.size());
+        List<String> normalCandidateList = new ArrayList<>(Arrays.asList(
+                "mmmmmmmmmmmm",
+                "lllllllllll",
+                "kkkkkkkkkk",
+                "jjjjjjjjj", // 10
+                "iiiiiiii",
+                "hhhhhhh",
+                "gggggg"
+        ));
+        hitCount = 0;
+        for (String script : normalCandidateList) {
+            hitCount += scripts.contains(script) ? 1 : 0;
+        }
+        assertEquals("中間から選ぶ", MAX_PICKING_COUNT, hitCount);
+
         // hard
-        dictationSentencePicker = new DictationSentencePicker(
-                sentenceList,
-                Level.HARD,
-                MAX_PICKING_COUNT);
+        dictationSentencePicker =newDictationSentencePicker(sentenceList, Level.HARD);
         scripts = dictationSentencePicker.pickup();
 
         assertEquals("所定の数だけ選ぶ", MAX_PICKING_COUNT, scripts.size());
         List<String> hardCandidateList = new ArrayList<>(Arrays.asList(
+                "ssssssssssssssssss", // 19
+                "rrrrrrrrrrrrrrrrr",
                 "qqqqqqqqqqqqqqqq",
-                "ppppppppppppppp", // 15
-                "oooooooooooooo",
-                "nnnnnnnnnnnnnn",
-                "mmmmmmmmmmmm",
-                "lllllllllll"
+                "ppppppppppppppp",
+                "oooooooooooooo", // 15
+                "nnnnnnnnnnnnnn"
         ));
         hitCount = 0;
         for (String script : hardCandidateList) {
             hitCount += scripts.contains(script) ? 1 : 0;
         }
         assertEquals("大きい方から選ぶ", MAX_PICKING_COUNT, hitCount);
+    }
+
+    private DictationSentencePicker newDictationSentencePicker(List<String> sentenceList, Level level) {
+        return new DictationSentencePicker(
+                sentenceList,
+                level,
+                MAX_PICKING_COUNT);
     }
 
     private Sentence newSentence(String text) {

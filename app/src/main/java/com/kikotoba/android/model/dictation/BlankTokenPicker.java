@@ -1,5 +1,7 @@
 package com.kikotoba.android.model.dictation;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -7,8 +9,6 @@ import java.util.Random;
 import java.util.Set;
 
 public class BlankTokenPicker {
-
-    private static final int SEED = 1;
 
     /**
      * トークンリストの中で穴埋め対象となるインデックスと文字列のマップ
@@ -32,10 +32,9 @@ public class BlankTokenPicker {
      * @throws Exception
      */
     public void pick(List<TextToken> tokenList) throws Exception {
-        alphabetIndexList = new HashMap<Integer, String>();
         blankIndexSet = new HashSet();
 
-        scanAlphabetIndex(tokenList);
+        alphabetIndexList = scanAlphabetIndex(tokenList);
 
         selectSmallWord();
         selectRandom();
@@ -47,13 +46,15 @@ public class BlankTokenPicker {
      * 穴埋め対象のみ抽出する
      * @param tokenList
      */
-    private void scanAlphabetIndex(List<TextToken> tokenList) {
+    private HashMap<Integer, String> scanAlphabetIndex(List<TextToken> tokenList) {
+        HashMap<Integer, String> alphabetIndexList = new HashMap<Integer, String>();
         for (int i = 0; i < tokenList.size(); i++) {
             TextToken token = tokenList.get(i);
             if (token.charType == TextToken.CHAR_TYPE.ALPHABET) {
                 alphabetIndexList.put(i, token.text);
             }
         }
+        return alphabetIndexList;
     }
 
     /**
@@ -66,18 +67,30 @@ public class BlankTokenPicker {
         double blankRatio = 1.0 / 3.0;
         switch (mLevel) {
             case EASY:
-                blankRatio = 1.0 / 3.0;
+                blankRatio = 1.0 / 4.0;
+                break;
+            case NORMAL:
+                blankRatio = 1.0 / 2.0;
                 break;
             case HARD:
-                blankRatio = 3.0 / 4.0;
+                blankRatio = 4.0 / 5.0;
                 break;
+            default:
+                throw new RuntimeException("予期せぬDictationLevelが指定されました");
         }
-        Random r = new Random(SEED);
+        Random r = new Random((int)(Math.random() * 100 / 10));
+        List<Integer> indexList = new ArrayList();
         for (Integer index : alphabetIndexList.keySet()) {
-            double d = r.nextDouble();
-            if (d < blankRatio) {
-                blankIndexSet.add(index);
-            }
+            indexList.add(index);
+        }
+
+        Collections.shuffle(indexList);
+        int selectCount = (int) (blankRatio * indexList.size());
+        if (selectCount == 0) {
+            ++selectCount;
+        }
+        for (int i = 0; i < selectCount; ++i) {
+            blankIndexSet.add(indexList.get(i));
         }
     }
 

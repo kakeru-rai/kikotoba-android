@@ -1,7 +1,6 @@
 package com.kikotoba.android.model;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.kikotoba.android.model.entity.Article;
 import com.kikotoba.android.util.D;
@@ -76,10 +75,10 @@ public class WorkingDirectory {
             e.printStackTrace();
         }
 
-        D.d.d(sd.getAbsolutePath());
-        D.d.d(sd.getPath());
-        D.dir(sd);
-        Log.v("####### end ", "###########################");
+//        D.d.d(sd.getAbsolutePath());
+//        D.d.d(sd.getPath());
+//        D.dir(sd);
+//        Log.v("####### end ", "###########################");
     }
 
 }

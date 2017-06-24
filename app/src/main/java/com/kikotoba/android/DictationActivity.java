@@ -47,8 +47,7 @@ public class DictationActivity extends BaseActivity {
     public static final String ARTICLE_PAIR = "article_pair";
     public static final String ARTICLE_LEVEL = "level";
 
-    public static final int QUESTION_COUNT_EASY = 4;
-    public static final int QUESTION_COUNT_HARD = 3;
+    public static final int QUESTION_COUNT = 5;
 
     public static Intent newIntent(Context context,
                                    String articleId,
@@ -85,7 +84,7 @@ public class DictationActivity extends BaseActivity {
     private DictationActivity mThis;
 
     // 状態変数
-    private DictationScore dictationScore = new DictationScore(QUESTION_COUNT_EASY + QUESTION_COUNT_HARD);
+    private DictationScore dictationScore = new DictationScore(QUESTION_COUNT);
 
     @BindView(R.id.audioWebview) WebViewDefault webView;
     @BindView(R.id.dictationProgressLayout) View dictationProgressLayout;
@@ -169,17 +168,12 @@ public class DictationActivity extends BaseActivity {
     }
 
     private List<Integer> pickupSentence(Article article) {
-        DictationSentencePicker pickerEasy = new DictationSentencePicker(
-                article.makeSenteceStringList(), Level.EASY, QUESTION_COUNT_EASY);
-        pickerEasy.pickup();
-
-        DictationSentencePicker pickerHard = new DictationSentencePicker(
-                article.makeSenteceStringList(), Level.HARD, QUESTION_COUNT_HARD);
-        pickerHard.pickup();
+        DictationSentencePicker picker = new DictationSentencePicker(
+                article.makeSenteceStringList(), getLevel(), QUESTION_COUNT);
+        picker.pickup();
 
         List<Integer> list = new ArrayList<>();
-        list.addAll(pickerEasy.getResultIndexList());
-        list.addAll(pickerHard.getResultIndexList());
+        list.addAll(picker.getResultIndexList());
         return list;
     }
 
@@ -191,7 +185,7 @@ public class DictationActivity extends BaseActivity {
         return getIntent().getStringExtra(ARTICLE_TITLE);
     }
 
-    private Level getLevel() {
+    public Level getLevel() {
         return Level.valueOf(getIntent().getStringExtra(ARTICLE_LEVEL));
     }
 
@@ -232,11 +226,11 @@ public class DictationActivity extends BaseActivity {
 
     public void updateDictationScore() {
         int newScore = dictationScore.calcScoreRank().typeValue;
-        if (userLog.getDictationScore() >= newScore) {
+        if (userLog._getScore(getLevel()) >= newScore) {
             return;
         }
         // 記録を更新したらDBに反映
-        userLog.setDictationScore(newScore);
+        userLog._setScore(getLevel(), newScore);
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final UserLogRepository repo = new UserLogRepository();
@@ -244,6 +238,7 @@ public class DictationActivity extends BaseActivity {
         Task task = repo.setDictationScore(
                 user.getUid(),
                 mArticle.getId(),
+                getLevel(),
                 newScore);
 
         task.addOnCompleteListener(new OnCompleteListener() {

@@ -46,33 +46,11 @@ public class DictationSentencePicker {
         Collections.sort(sortedScripts, mScriptLengthCompAsc);
 
         // 抽出範囲
-        int fromIndex;
-        int toIndex;
         int levelDividedRange = (sortedScripts.size() / (Level.values().length + 1));
-        switch (mLevel) {
-            case EASY:
-                fromIndex = 0;
-                if (sortedScripts.size() < maxPickingCount) {
-                    toIndex = sortedScripts.size() - 1;
-                } else if (levelDividedRange < maxPickingCount) {
-                    toIndex = maxPickingCount - 1;
-                } else {
-                    toIndex = levelDividedRange;
-                }
-                break;
-            case HARD:
-                if (sortedScripts.size() < maxPickingCount) {
-                    fromIndex = 0;
-                } else if (levelDividedRange < maxPickingCount) {
-                    fromIndex = sortedScripts.size() - maxPickingCount;
-                } else {
-                    fromIndex = sortedScripts.size() - 1 - levelDividedRange;
-                }
-                toIndex = sortedScripts.size() - 1;
-                break;
-            default:
-                throw new RuntimeException("予期せぬDictationLevelが指定されました");
-        }
+        FromToDeterminater fromToDeterminator = createDterminFromToCallback();
+        fromToDeterminator.determine(sortedScripts, levelDividedRange);
+        int fromIndex = fromToDeterminator.fromIndex;
+        int toIndex = fromToDeterminator.toIndex;
         List<Integer> candidateIndexList = JVersatile.range(fromIndex, toIndex);
 
         // 候補の中からランダム抽出
@@ -87,5 +65,71 @@ public class DictationSentencePicker {
         }
 
         return resultScriptList;
+    }
+
+    private FromToDeterminater createDterminFromToCallback() {
+        switch (mLevel) {
+            case EASY:
+                return easyDeterminator;
+            case NORMAL:
+                return normalDeterminator;
+            case HARD:
+                return hardDeterminator;
+            default:
+                throw new RuntimeException("予期せぬDictationLevelが指定されました");
+        }
+    }
+
+    private FromToDeterminater easyDeterminator = new FromToDeterminater() {
+        @Override
+        public void determine(List<String> sortedScripts, int levelDividedRange) {
+            fromIndex = 0;
+            if (sortedScripts.size() < maxPickingCount) {
+                toIndex = sortedScripts.size() - 1;
+            } else if (levelDividedRange < maxPickingCount) {
+                toIndex = maxPickingCount - 1;
+            } else {
+                toIndex = levelDividedRange - 1;
+            }
+        }
+    };
+
+    private FromToDeterminater normalDeterminator = new FromToDeterminater() {
+        @Override
+        public void determine(List<String> sortedScripts, int levelDividedRange) {
+            if (sortedScripts.size() < maxPickingCount) {
+                fromIndex = 0;
+                toIndex = sortedScripts.size() - 1;
+            } else if (levelDividedRange < maxPickingCount) {
+                // maxPickingCountの中心が全体の中心になるようにfrom-toをとる
+                int halfTotal = sortedScripts.size() / 2;
+                int halfPicking = maxPickingCount / 2;
+                fromIndex = halfTotal - halfPicking;
+                toIndex = halfTotal + halfPicking;
+            } else {
+                fromIndex = levelDividedRange;
+                toIndex = sortedScripts.size() - 1 - levelDividedRange;
+            }
+        }
+    };
+
+    private FromToDeterminater hardDeterminator = new FromToDeterminater() {
+        @Override
+        public void determine(List<String> sortedScripts, int levelDividedRange) {
+            if (sortedScripts.size() < maxPickingCount) {
+                fromIndex = 0;
+            } else if (levelDividedRange < maxPickingCount) {
+                fromIndex = sortedScripts.size() - maxPickingCount;
+            } else {
+                fromIndex = sortedScripts.size() - 1 - levelDividedRange;
+            }
+            toIndex = sortedScripts.size() - 1;
+        }
+    };
+
+    abstract class FromToDeterminater {
+        public int fromIndex;
+        public int toIndex;
+        public abstract void determine(List<String> sortedScripts, int levelDividedRange);
     }
 }
