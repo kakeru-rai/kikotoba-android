@@ -94,7 +94,7 @@ public class UserLogByArticle {
 //        log.setListeningPlaybackTime(listeningPlaybackTime);
 //        log.setCurrentReadingIndex(currentReadingIndex);
         log.setScore(score);
-        part.put(Util.fbIindex(0), log);
+        part.put(Util.fbIindex(0), log); // part1のスコアとして移行
         return true;
     }
 

@@ -218,11 +218,6 @@ public class ListeningFragment extends BaseFragment {
                         getUser().getUid(),
                         articlePair._getId(),
                         mWebAppInterface.clearPlaybackTimeSec() + entity.getListeningPlaybackTime());
-                repo.setCurrentReadingIndex(
-                        getUser().getUid(),
-                        articlePair._getId(),
-                        partIndex,
-                        articlePair._getTarget().getSentences().size() - 1 > mWebAppInterface.getCurrentIndex() ? mWebAppInterface.getCurrentIndex() : 0);
             }
 
             @Override

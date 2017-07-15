@@ -16,32 +16,32 @@ import com.kikotoba.android.util.Util;
 
 public class UserLogRepository extends BaseRepository {
 
+    /**
+     * uid, articleId
+     */
     private static final String PATH = "/user/log/%s/by_article/%s";
-    private static final String PATH_PART = "/user/log/%s/by_article/%s/part/%s";
+//    private static final String PATH_PART = PATH + "/part/%s";
 
-    private static final String PATH_LISTENING_PLAYBACK_TIME = "/user/log/%s/by_article/%s/listeningPlaybackTime";
+    private static final String PATH_LISTENING_PLAYBACK_TIME = PATH + "/listeningPlaybackTime";
 
-    private static final String KEY_LISTENING_PLAYBACK_TIME = "listeningPlaybackTime";
-    private static final String KEY_CURRENT_READING_INDEX = "currentReadingIndex";
-    private static final String KEY_DICTATION_SCORE = "score/%s";
+    /**
+     * partId, scoreId
+     */
+    private static final String PATH_DICTATION_SCORE = PATH + "/part/%s/score/%s";
 
     public void setListeningPlaybackTime(String uid, String articleId, long playbackTimeSec) {
-//    public void setListeningPlaybackTime(String uid, String articleId, int partIndex, long playbackTimeSec) {
         DatabaseReference ref = firebaseDatabase.getReference(String.format(PATH_LISTENING_PLAYBACK_TIME, uid, articleId));
-//        DatabaseReference refChild = ref.child(KEY_LISTENING_PLAYBACK_TIME);
         ref.setValue(playbackTimeSec);
     }
 
-    public void setCurrentReadingIndex(String uid, String articleId, int partIndex, int index) {
-        DatabaseReference ref = firebaseDatabase.getReference(String.format(PATH_PART, uid, articleId, partIndex));
-        DatabaseReference refChild = ref.child(KEY_CURRENT_READING_INDEX);
-        refChild.setValue(index);
-    }
-
     public Task setDictationScore(String uid, String articleId, Level level, int partIndex, int score) {
-        DatabaseReference ref = firebaseDatabase.getReference(String.format(PATH_PART, uid, articleId, Util.fbIindex(partIndex)));
-        DatabaseReference refChild = ref.child(String.format(KEY_DICTATION_SCORE, level.firebaseKey));
-        return refChild.setValue(score);
+        String path = String.format(PATH_DICTATION_SCORE,
+                uid,
+                articleId,
+                Util.fbIindex(partIndex),
+                level.firebaseKey);
+        DatabaseReference ref = firebaseDatabase.getReference(path);
+        return ref.setValue(score);
     }
 
     public void bindUserLogByArticle(String uid, String articleId, final EntityEventListener<UserLogByArticle> listener) {
