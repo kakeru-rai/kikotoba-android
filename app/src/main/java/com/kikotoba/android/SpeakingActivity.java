@@ -21,9 +21,9 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import com.kikotoba.android.model.audio.AudioWebInterface;
-import com.kikotoba.android.model.entity.Article;
-import com.kikotoba.android.model.entity.ArticlePair;
-import com.kikotoba.android.model.entity.Sentence;
+import com.kikotoba.android.model.entity.master.Article;
+import com.kikotoba.android.model.entity.master.ArticlePair;
+import com.kikotoba.android.model.entity.master.Sentence;
 import com.kikotoba.android.util.WebViewDefault;
 
 import java.util.ArrayList;
@@ -161,7 +161,7 @@ public class SpeakingActivity extends BaseActivity {
     private void init() {
         String json = getIntent().getStringExtra(SpeakingActivity.ARTICLE_PAIR);
         ArticlePair entity = ArticlePair.fromJson(json);
-        mArticle = entity.getTarget();
+        mArticle = entity._getTarget();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mArticle.getSentences());
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -181,7 +181,7 @@ public class SpeakingActivity extends BaseActivity {
             public void onReady() {
                 mHandler.post(new Runnable() {
                     public void run() {
-                        mAudioWebInterface.setAudioSrc(mArticle);
+//                        mAudioWebInterface.setAudioSrc();
                     }
                 });
             }

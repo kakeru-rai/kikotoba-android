@@ -17,10 +17,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 
-import com.kikotoba.android.model.entity.Article;
-import com.kikotoba.android.model.entity.ArticlePair;
-import com.kikotoba.android.model.entity.Sentence;
-import com.kikotoba.android.model.entity.UserLogByArticle;
+import com.kikotoba.android.model.entity.master.Article;
+import com.kikotoba.android.model.entity.master.ArticlePair;
+import com.kikotoba.android.model.entity.master.Sentence;
+import com.kikotoba.android.model.entity.user.UserLogByArticle;
 import com.kikotoba.android.repository.ArticleRepository;
 import com.kikotoba.android.repository.BaseRepository;
 import com.kikotoba.android.repository.UserLogRepository;
@@ -110,9 +110,9 @@ public class SpeakingFragment extends Fragment {
         userLogRepo.getUserLogByArticle(user.getUid(), getArticleId(), new BaseRepository.EntityEventListener<UserLogByArticle>() {
             @Override
             public void onSuccess(UserLogByArticle entity) {
-                if (entity != null && entity.isSpeakingCorrect(getTrack())) {
-                    tvCleared.setText(R.string.is_cleared);
-                }
+//                if (entity != null && entity.isSpeakingCorrect(getTrack())) {
+//                    tvCleared.setText(R.string.is_cleared);
+//                }
             }
 
             @Override
@@ -124,7 +124,7 @@ public class SpeakingFragment extends Fragment {
     }
 
     private void init(ArticlePair entity) {
-        mArticle = entity.getTarget();
+        mArticle = entity._getTarget();
         Sentence sentence = mArticle.getSentences().get(getTrack());
         sentenceText = sentence.getText();
 
@@ -220,7 +220,7 @@ public class SpeakingFragment extends Fragment {
                 if (entity == null) {
                     entity = new UserLogByArticle();
                 }
-                entity.setSpeakingCorrectByIndex(getTrack());
+//                entity.setSpeakingCorrectByIndex(getTrack());
             }
 
             @Override

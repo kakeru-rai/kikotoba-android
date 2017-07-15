@@ -2,17 +2,20 @@ package com.kikotoba.android;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-
+import com.kikotoba.android.model.WorkingDirectory;
 import com.kikotoba.android.util.Navigation;
 import com.kikotoba.android.util.Util;
 import com.kikotoba.android.util.Versatile;
@@ -200,15 +203,43 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     mLogoutClickCount += 1;
-                    if (mLogoutClickCount == 10) {
-                        FirebaseAuth.getInstance().signOut();
-                        getActivity().finish();
-                        getActivity().startActivity(new Intent(getActivity(), SplashActivity.class));
+                    if (mLogoutClickCount > 10) {
+                        showDebugDialog();
                     }
                     return true;
                 }
             });
         }
+    }
+
+    private void showDebugDialog() {
+        String[] items = {"アカウントリセット", "音声ファイル削除"};
+        new AlertDialog.Builder(getActivity())
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i) {
+                            case 0:
+                                FirebaseAuth.getInstance().signOut();
+                                getActivity().finish();
+                                getActivity().startActivity(new Intent(getActivity(), SplashActivity.class));
+                                break;
+                            case 1:
+                                WorkingDirectory.getInstance().deleteAudio(getActivity());
+                                Toast.makeText(getActivity(), "audio deleted", Toast.LENGTH_SHORT)
+                                        .show();
+                                break;
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.tmpl_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+                .show();
+
     }
 
     @Override

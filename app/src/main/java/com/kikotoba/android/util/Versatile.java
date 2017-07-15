@@ -695,5 +695,23 @@ public class Versatile {
 		return ni.isConnectedOrConnecting();
 	}
 
+	public static void setMargins(View v, int t, int r, int b, int l) {
+		if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+			ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
 
+			Context context = v.getContext();
+			p.setMargins(dpToPx(context, l), dpToPx(context, t), dpToPx(context, r), dpToPx(context, b));
+			v.requestLayout();
+		}
+	}
+
+	public static int dpToPx(Context context, int dp) {
+		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+		return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+	}
+
+	public static int pxToDp(Context context, int px) {
+		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+		return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+	}
 }

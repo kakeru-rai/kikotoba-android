@@ -1,6 +1,6 @@
 package com.kikotoba.android.model.dictation;
 
-import com.kikotoba.android.model.entity.Sentence;
+import com.kikotoba.android.model.entity.master.Sentence;
 
 import org.junit.Test;
 

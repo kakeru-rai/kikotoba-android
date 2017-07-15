@@ -39,15 +39,20 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
+import com.kikotoba.android.model.LanguagePair;
 import com.kikotoba.android.model.WorkingDirectory;
+import com.kikotoba.android.model.articlelist.ArticleCardItem;
 import com.kikotoba.android.model.audio.AudioDownloadTask;
 import com.kikotoba.android.model.dictation.Level;
-import com.kikotoba.android.model.entity.ArticlePair;
-import com.kikotoba.android.model.entity.ArticlePairDummy;
-import com.kikotoba.android.model.entity.UserLogByArticle;
+import com.kikotoba.android.model.entity.master.ArticlePair;
+import com.kikotoba.android.model.entity.master.ArticlePairDummy;
+import com.kikotoba.android.model.entity.master.PartIndex;
+import com.kikotoba.android.model.entity.user.UserLogByArticle;
+import com.kikotoba.android.model.entity.user.Part;
 import com.kikotoba.android.repository.ArticleRepository;
 import com.kikotoba.android.repository.BaseRepository;
 import com.kikotoba.android.repository.UserLogRepository;
+import com.kikotoba.android.util.Versatile;
 import com.kikotoba.android.view.StarList;
 
 import java.util.ArrayList;
@@ -101,12 +106,26 @@ public class ArticleListFragment extends Fragment {
                 moveListLoadStateComplete();
 
                 articlePairs = entities;
+                List<ArticleCardItem> articleCardItems = new ArrayList();
+                for (final ArticlePair articlePair : articlePairs) {
+                    int i = 0;
+                    for (PartIndex partIndex : articlePair.getPartIndex()) {
+                        articleCardItems.add(new ArticleCardItem(articlePair, i, articlePair.getPartIndex().size()));
+                        ++i;
+                    }
+                }
 
                 for (final ArticlePair articlePair : articlePairs) {
-                    userLogRepo.bindUserLogByArticle(user.getUid(), articlePair.getId(), new BaseRepository.EntityEventListener<UserLogByArticle>() {
+                    userLogRepo.bindUserLogByArticle(user.getUid(), articlePair._getId(), new BaseRepository.EntityEventListener<UserLogByArticle>() {
                         @Override
                         public void onSuccess(UserLogByArticle entity) {
-                            articlePair.setUserLogByArticle(entity);
+                            if (entity != null) {
+                                boolean isMigrated = entity.migratePartScore();
+                                if (isMigrated) {
+                                    userLogRepo.setUserLogByArticle(user.getUid(), articlePair._getId(), entity);
+                                }
+                            }
+                            articlePair._setUserLogByArticle(entity);
                             adapter.notifyDataSetChanged();
                         }
 
@@ -116,7 +135,7 @@ public class ArticleListFragment extends Fragment {
                     });
                 }
 
-                setupRecyclerView(mRecyclerView);
+                setupRecyclerView(mRecyclerView, articleCardItems);
             }
 
             @Override
@@ -145,10 +164,10 @@ public class ArticleListFragment extends Fragment {
         mProgressBar.setVisibility(View.GONE);
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
+    private void setupRecyclerView(RecyclerView recyclerView, List<ArticleCardItem> articleCardItem) {
         adapter = new SimpleStringRecyclerViewAdapter(
                 getActivity(),
-                articlePairs
+                articleCardItem
         );
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(adapter);
@@ -160,7 +179,8 @@ public class ArticleListFragment extends Fragment {
         private Context mContext;
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
-        private List<ArticlePair> mValues;
+        private List<ArticleCardItem> mValues;
+        private SimpleStringRecyclerViewAdapter _this = this;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -172,6 +192,7 @@ public class ArticleListFragment extends Fragment {
 
             // data
             public ArticlePair mArticlePair;
+            public ArticleCardItem articleCardItem;
             private ArticleStatus mArticleStatus;
 
             // view
@@ -185,6 +206,9 @@ public class ArticleListFragment extends Fragment {
             public final ImageView mImageViewSpeakingIcon;
             public final TextView mTextViewPlaybackTime;
             public final ImageView mImageViewPlaybackTimeIcon;
+
+            @BindView(R.id.cardTextPartText) TextView textPart;
+            @BindView(R.id.cardTopLayout) View topLayout;
 
             @BindView(R.id.cardButtonListening) View buttonListening;
             @BindView(R.id.cardButtonLevel1) View buttonLevel1;
@@ -222,21 +246,9 @@ public class ArticleListFragment extends Fragment {
                 return super.toString() + " '" + mTextView.getText();
             }
 
-//            public void setAudioDownloaded(boolean downloaded) {
-//                isAudioDownloaded = downloaded;
-//                if (downloaded) {
-//                    mImageViewDownload.setImageResource(R.drawable.ic_cloud_done_black_24dp);
-//                } else {
-//                    mImageViewDownload.setImageResource(R.drawable.ic_cloud_download_black_24dp);
-//                }
-//            }
         }
 
-        public String getValueAt(int position) {
-            return mValues.get(position).getTranslated().getTitle();
-        }
-
-        public SimpleStringRecyclerViewAdapter(Context context, List<ArticlePair> items) {
+        public SimpleStringRecyclerViewAdapter(Context context, List<ArticleCardItem> items) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mContext = context;
             mBackground = mTypedValue.resourceId;
@@ -253,14 +265,21 @@ public class ArticleListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            ArticlePair articlePair = mValues.get(position);
+            ArticlePair articlePair = mValues.get(position).getArticlePair();
             holder.mArticlePair = articlePair;
+            holder.articleCardItem = mValues.get(position);
             holder.mArticleStatus = getStatus(articlePair);
 
             view(holder);
         }
 
+        @Override
+        public int getItemCount() {
+            return mValues.size();
+        }
+
         private void view(final ViewHolder holder) {
+            holder.mCardView.setVisibility(View.VISIBLE);
             switch (holder.mArticleStatus) {
                 case READY:
                     holder.normalLayout.setVisibility(View.VISIBLE);
@@ -274,15 +293,20 @@ public class ArticleListFragment extends Fragment {
 //                    });
                     break;
                 case AUDIO_NOT_DOWNLOADED:
-                    holder.normalLayout.setVisibility(View.GONE);
-                    holder.preparingLayout.setVisibility(View.GONE);
-                    holder.downloadLayout.setVisibility(View.VISIBLE);
-                    holder.downloadLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            showStartDownloadDialog(mContext, holder);
-                        }
-                    });
+                    if (holder.articleCardItem.getPartIndex() == 0) {
+                        holder.normalLayout.setVisibility(View.GONE);
+                        holder.preparingLayout.setVisibility(View.GONE);
+                        holder.downloadLayout.setVisibility(View.VISIBLE);
+                        holder.downloadLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                showStartDownloadDialog(mContext, holder);
+                            }
+                        });
+                        holder.mCardView.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.mCardView.setVisibility(View.GONE);
+                    }
                     break;
                 case UNDER_CONSTRUCTION:
                     holder.normalLayout.setVisibility(View.GONE);
@@ -301,7 +325,7 @@ public class ArticleListFragment extends Fragment {
                 return;
             }
 
-
+            // リスナ
             holder.buttonListening.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -327,125 +351,108 @@ public class ArticleListFragment extends Fragment {
                 }
             });
 
-            holder.mTextView.setText(holder.mArticlePair.getTranslated().getTitle());
+            // ユーザーデータ
+            holder.mTextView.setText(holder.mArticlePair._getTranslated().getTitle());
+            int sentenceSize = holder.mArticlePair._getTarget().getSentences().size();
+            try {
+                // 利用ログの有無
+                Part log = holder.mArticlePair._getUserLogByArticle(holder.articleCardItem.getPartIndex());
 
-            int sentenceSize = holder.mArticlePair.getTarget().getSentences().size();
+                holder.mTextViewPlaybackTime.setText(holder.mArticlePair._getUserLogByArticle().calcListeningPlaybackTime());
 
-            // 利用ログの有無
-            UserLogByArticle userLog = holder.mArticlePair.getUserLogByArticle();
-            if (userLog == null) {
+                // dictation
+                holder.starList1.setStarCount(log._getScore(Level.EASY));
+                holder.starList2.setStarCount(log._getScore(Level.NORMAL));
+                holder.starList3.setStarCount(log._getScore(Level.HARD));
+            } catch (Exception e) {
                 holder.mTextViewPlaybackTime.setText(String.format("--:--:--", sentenceSize));
                 holder.mTextViewSpeakingScore.setText(String.format("--/%d", sentenceSize));
-            } else {
-                holder.mTextViewPlaybackTime.setText(userLog.calcListeningPlaybackTime());
 
-                holder.mTextViewSpeakingScore.setText(String.format("%d/%d",
-                        userLog.calcSpeakingTotal(),
-                        sentenceSize));
-            }
-
-            // dictation
-//            if (userLog == null || userLog.getScore() == 0) {
-//                holder.dictationScoreEmpty.setVisibility(View.VISIBLE);
-//                holder.dictationScore1.setVisibility(View.GONE);
-//                holder.dictationScore2.setVisibility(View.GONE);
-//                holder.dictationScore3.setVisibility(View.GONE);
-//            } else {
-//                holder.dictationScoreEmpty.setVisibility(View.GONE);
-//                holder.dictationScore1.setVisibility(View.VISIBLE);
-//                holder.dictationScore2.setVisibility(View.VISIBLE);
-//                holder.dictationScore3.setVisibility(View.VISIBLE);
-//                holder.dictationScore1.setImageResource(
-//                        userLog.getScore() >= 1 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
-//                holder.dictationScore2.setImageResource(
-//                        userLog.getScore() >= 2 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
-//                holder.dictationScore3.setImageResource(
-//                        userLog.getScore() >= 3 ? R.drawable.ic_star_black_48dp : R.drawable.ic_star_border_black_48dp);
-//            }
-
-            if (userLog == null) {
+                // dictation
                 holder.starList1.setStarCount(0);
                 holder.starList2.setStarCount(0);
                 holder.starList3.setStarCount(0);
-            } else {
-                holder.starList1.setStarCount(userLog._getScore(Level.EASY));
-                holder.starList2.setStarCount(userLog._getScore(Level.NORMAL));
-                holder.starList3.setStarCount(userLog._getScore(Level.HARD));
             }
 
-            holder.mImageView.setImageResource(R.mipmap.ic_launcher);
-            Glide.with(holder.mImageView.getContext())
-                    .load(holder.mArticlePair.getImage())
-                    .fitCenter()
-                    .into(holder.mImageView);
+            // UI
+            if (holder.articleCardItem.isFirst() && holder.articleCardItem.isLast()) {
+                // 単一part
+                holder.mImageView.setVisibility(View.VISIBLE);
+                holder.mImageView.setImageResource(R.mipmap.ic_launcher);
+                Glide.with(holder.mImageView.getContext())
+                        .load(holder.mArticlePair.getImage())
+                        .fitCenter()
+                        .into(holder.mImageView);
+
+                holder.topLayout.setVisibility(View.VISIBLE);
+                holder.textPart.setVisibility(View.GONE);
+
+                Versatile.setMargins(holder.mCardView, 8, 16, 8, 16);
+            } else if (holder.articleCardItem.isFirst()) {
+                // 複数part：先頭
+                holder.mImageView.setVisibility(View.VISIBLE);
+                holder.mImageView.setImageResource(R.mipmap.ic_launcher);
+                Glide.with(holder.mImageView.getContext())
+                        .load(holder.mArticlePair.getImage())
+                        .fitCenter()
+                        .into(holder.mImageView);
+
+                holder.topLayout.setVisibility(View.VISIBLE);
+                holder.textPart.setVisibility(View.VISIBLE);
+                holder.textPart.setText(String.format("Part%d", holder.articleCardItem.getPartIndex() + 1));
+
+                Versatile.setMargins(holder.mCardView, 8, 16, 0, 16);
+            } else if (holder.articleCardItem.isLast()) {
+                // 複数part：末尾
+                holder.mImageView.setVisibility(View.GONE);
+
+                holder.topLayout.setVisibility(View.GONE);
+                holder.textPart.setVisibility(View.VISIBLE);
+                holder.textPart.setText(String.format("Part%d", holder.articleCardItem.getPartIndex() + 1));
+
+                Versatile.setMargins(holder.mCardView, 0, 16, 8, 16);
+            } else {
+                // 複数part:中間
+                holder.mImageView.setVisibility(View.GONE);
+
+                holder.topLayout.setVisibility(View.GONE);
+                holder.textPart.setVisibility(View.VISIBLE);
+                holder.textPart.setText(String.format("Part%d", holder.articleCardItem.getPartIndex() + 1));
+
+                Versatile.setMargins(holder.mCardView, 0, 16, 0, 16);
+            }
         }
 
         private ViewHolder.ArticleStatus getStatus(ArticlePair articlePair) {
             if (articlePair instanceof ArticlePairDummy) {
                 return UNDER_CONSTRUCTION;
-            } else if (WorkingDirectory.getInstance().hasAudioDownloaded(mContext, articlePair.getTarget())) {
+            } else if (WorkingDirectory.getInstance().hasAudioDownloaded(mContext, articlePair, LanguagePair.getInstance().getTarget())) {
                 return ViewHolder.ArticleStatus.READY;
             } else {
                 return ViewHolder.ArticleStatus.AUDIO_NOT_DOWNLOADED;
             }
         }
 
-        private void showMenuDialog(final Context context, final ViewHolder holder) {
-            final String[] items = context.getResources().getStringArray(R.array.article_function_names);
-            new AlertDialog.Builder(context)
-                    .setTitle(holder.mArticlePair.getTranslated().getTitle())
-                    .setItems(items, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case 0: // リスニング
-                                    context.startActivity(
-                                            ListeningActivity.newIntent(
-                                                    context,
-                                                    holder.mArticlePair.getId(),
-                                                    holder.mTextView.getText().toString(),
-                                                    holder.mArticlePair,
-                                                    holder.mArticlePair.getUserLogByArticle() != null ? holder.mArticlePair.getUserLogByArticle().getCurrentReadingIndex() : 0
-                                            )
-                                    );
-                                    break;
-//                                case 1: // スピーキング
-//                                    context.startActivity(
-//                                            SpeakingActivity.newIntent(
-//                                                    context,
-//                                                    holder.mArticlePair.getId(),
-//                                                    holder.mTextView.getText().toString(),
-//                                                    holder.mArticlePair
-//                                            )
-//                                    );
-//                                    break;
-//                                case 2:
-//                                case 1: // ディクテーション
-//                                    break;
-                            }
-                        }
-                    })
-                    .show();
-        }
-
         private void showStartDownloadDialog(final Context context, final ViewHolder holder) {
             new AlertDialog.Builder(context)
-                    .setTitle(holder.mArticlePair.getTranslated().getTitle())
+                    .setTitle(holder.mArticlePair._getTranslated().getTitle())
                     .setMessage(R.string.audio_download_message)
                     .setPositiveButton(R.string.tmpl_download, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            final ProgressDialog progressDialog = createDownloadProgressDialog(context, holder.mArticlePair.getTranslated().getTitle());
+                            final ProgressDialog progressDialog = createDownloadProgressDialog(context, holder.mArticlePair._getTranslated().getTitle());
                             progressDialog.show();
                             AudioDownloadTask task = new AudioDownloadTask(
                                     context,
-                                    holder.mArticlePair.getTarget(),
+                                    holder.mArticlePair,
+                                    LanguagePair.getInstance().getTarget(),
                                     new AudioDownloadTask.AudioDownloadTaskListener() {
                                         @Override
                                         public void onSuccess() {
                                             progressDialog.dismiss();
-                                            holder.mArticleStatus = ViewHolder.ArticleStatus.READY;
-                                            view(holder);
+//                                            holder.mArticleStatus = ViewHolder.ArticleStatus.READY;
+//                                            view(holder);
+                                            _this.notifyDataSetChanged();
                                         }
 
                                         @Override
@@ -498,12 +505,8 @@ public class ArticleListFragment extends Fragment {
             mContext.startActivity(
                     ListeningActivity.newIntent(
                             mContext,
-                            holder.mArticlePair.getId(),
-                            holder.mTextView.getText().toString(),
                             holder.mArticlePair,
-                            holder.mArticlePair.getUserLogByArticle() != null
-                                    ? holder.mArticlePair.getUserLogByArticle().getCurrentReadingIndex()
-                                    : 0
+                            holder.articleCardItem.getPartIndex()
                     )
             );
         }
@@ -512,17 +515,12 @@ public class ArticleListFragment extends Fragment {
             mContext.startActivity(
                     DictationActivity.newIntent(
                             mContext,
-                            holder.mArticlePair.getId(),
-                            holder.mTextView.getText().toString(),
                             holder.mArticlePair,
+                            holder.articleCardItem.getPartIndex(),
                             level
                     )
             );
         }
 
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
     }
 }

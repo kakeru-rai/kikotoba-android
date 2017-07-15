@@ -9,9 +9,11 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import com.kikotoba.android.model.LanguagePair;
 import com.kikotoba.android.model.WorkingDirectory;
-import com.kikotoba.android.model.entity.Article;
-import com.kikotoba.android.model.entity.Sentence;
+import com.kikotoba.android.model.entity.master.Article;
+import com.kikotoba.android.model.entity.master.ArticlePair;
+import com.kikotoba.android.model.entity.master.Sentence;
 import com.kikotoba.android.util.IOUtil;
 import com.kikotoba.android.util.Pref;
 import com.kikotoba.android.util.Util;
@@ -33,6 +35,7 @@ public class WebAppInterface implements AudioController.Player {
     private Pref.SpeechGap mSpeechGap = Pref.SpeechGap.NORMAL;
     private WebView mWebView;
     private int mCurrentSentenceIndex = 0;
+    private ArticlePair articlePair;
     private Article mTargetArticle;
     private Article mTranscriptArticle;
     private boolean mIsPlaying = false;
@@ -51,15 +54,15 @@ public class WebAppInterface implements AudioController.Player {
 
     public WebAppInterface(WebView webView,
                            AudioController mediaController,
-                           Article targetArticle,
-                           Article transcriptArticle,
+                           ArticlePair articlePair,
                            int currentIndex,
                            TextView nowShadowing
     ) {
         mMediaController = mediaController;
         mediaController.setPlayer(this);
-        mTargetArticle = targetArticle;
-        mTranscriptArticle = transcriptArticle;
+        this.articlePair = articlePair;
+        mTargetArticle = articlePair._getTarget();
+        mTranscriptArticle = articlePair._getTranslated();
         mWebView = webView;
         mWebView.addJavascriptInterface(this, INTERFACE_NAME);
         mCurrentSentenceIndex = currentIndex;
@@ -292,8 +295,8 @@ public class WebAppInterface implements AudioController.Player {
         return total;
     }
 
-    private void setAudioSrc(Article article) {
-        String audioUrl = WorkingDirectory.getAudioPath(article, "../../");
+    private void setAudioSrc(ArticlePair articlePair, String language) {
+        String audioUrl = WorkingDirectory.getAudioPath(articlePair, language, "../../");
         jsSetAudioSrc(audioUrl);
     }
 
@@ -304,8 +307,8 @@ public class WebAppInterface implements AudioController.Player {
     private void buildArticle() {
         List<Sentence> targetSentences = mTargetArticle.getSentences();
 
-        if (mTargetArticle.getImage() != null) {
-            jsSetPhotoSrc(mTargetArticle.getImage());
+        if (articlePair.getImage() != null) {
+            jsSetPhotoSrc(articlePair.getImage());
         }
         jsSetTitle(mTargetArticle.getTitle());
 
@@ -339,7 +342,7 @@ public class WebAppInterface implements AudioController.Player {
             jsScrollUpToSentence();
         }
 
-        setAudioSrc(mTargetArticle);
+        setAudioSrc(articlePair, LanguagePair.getInstance().getTarget());
     }
 
     private void jsRefreshUI() {

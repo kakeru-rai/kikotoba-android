@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -21,14 +20,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
+import com.kikotoba.android.model.LanguagePair;
 import com.kikotoba.android.model.audio.AudioWebInterface;
 import com.kikotoba.android.model.dictation.DictationScore;
 import com.kikotoba.android.model.dictation.DictationSentencePicker;
 import com.kikotoba.android.model.dictation.Level;
-import com.kikotoba.android.model.entity.Article;
-import com.kikotoba.android.model.entity.ArticlePair;
-import com.kikotoba.android.model.entity.Sentence;
-import com.kikotoba.android.model.entity.UserLogByArticle;
+import com.kikotoba.android.model.entity.master.Article;
+import com.kikotoba.android.model.entity.master.ArticlePair;
+import com.kikotoba.android.model.entity.master.Sentence;
+import com.kikotoba.android.model.entity.user.UserLogByArticle;
 import com.kikotoba.android.repository.BaseRepository;
 import com.kikotoba.android.repository.UserLogRepository;
 import com.kikotoba.android.util.WebViewDefault;
@@ -42,22 +42,21 @@ import butterknife.ButterKnife;
 public class DictationActivity extends BaseActivity {
     private static final String TAG = "DictationActivity";
 
-    public static final String ARTICLE_ID = "article_id";
-    public static final String ARTICLE_TITLE = "article_title";
     public static final String ARTICLE_PAIR = "article_pair";
+    public static final String ARTICLE_PART_INDEX = "article_part_index";
     public static final String ARTICLE_LEVEL = "level";
 
     public static final int QUESTION_COUNT = 5;
 
     public static Intent newIntent(Context context,
-                                   String articleId,
-                                   String title,
                                    ArticlePair articlePair,
+                                   int partIndex,
                                    Level level) {
+        ArticlePair partialArticlePair = articlePair.devideToPart(partIndex);
+
         Intent intent = new Intent(context, DictationActivity.class);
-        intent.putExtra(DictationActivity.ARTICLE_ID, articleId);
-        intent.putExtra(DictationActivity.ARTICLE_TITLE, title);
-        intent.putExtra(DictationActivity.ARTICLE_PAIR, articlePair.toJson());
+        intent.putExtra(DictationActivity.ARTICLE_PAIR, partialArticlePair.toJson());
+        intent.putExtra(DictationActivity.ARTICLE_PART_INDEX, partIndex);
         intent.putExtra(DictationActivity.ARTICLE_LEVEL, level.name());
         return intent;
     }
@@ -76,8 +75,8 @@ public class DictationActivity extends BaseActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private Handler mHandler = new Handler();
     private AudioWebInterface mAudioWebInterface;
+    private ArticlePair articlePair;
     private Article mArticle;
     private Article mTranslationArticle;
     private UserLogByArticle userLog;
@@ -99,19 +98,19 @@ public class DictationActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getArticleTitle());
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
         dictationProgressLayout.setVisibility(View.VISIBLE);
         init();
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getTranslationArticle().getTitle());
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void init() {
         String json = getIntent().getStringExtra(DictationActivity.ARTICLE_PAIR);
-        ArticlePair entity = ArticlePair.fromJson(json);
-        mArticle = entity.getTarget();
-        mTranslationArticle = entity.getTranslated();
+        articlePair = ArticlePair.fromJson(json);
+        mArticle = articlePair._getTarget();
+        mTranslationArticle = articlePair._getTranslated();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), pickupSentence(mArticle));
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -124,7 +123,7 @@ public class DictationActivity extends BaseActivity {
     private void initUserLog() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final UserLogRepository repo = new UserLogRepository();
-        repo.getUserLogByArticle(user.getUid(), mArticle.getId(), new BaseRepository.EntityEventListener<UserLogByArticle>() {
+        repo.getUserLogByArticle(user.getUid(), articlePair._getId(), new BaseRepository.EntityEventListener<UserLogByArticle>() {
             @Override
             public void onSuccess(UserLogByArticle entity) {
                 if (entity == null) {
@@ -159,7 +158,7 @@ public class DictationActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
 //                mHandler.post(new Runnable() {
                     public void run() {
-                        mAudioWebInterface.setAudioSrc(mArticle);
+                        mAudioWebInterface.setAudioSrc(articlePair, LanguagePair.getInstance().getTarget());
                         dictationProgressLayout.setVisibility(View.GONE);
                     }
                 });
@@ -177,14 +176,9 @@ public class DictationActivity extends BaseActivity {
         return list;
     }
 
-    private String getArticleId() {
-        return getIntent().getStringExtra(ARTICLE_ID);
+    public int getPartIndex() {
+        return getIntent().getIntExtra(ARTICLE_PART_INDEX, 0);
     }
-
-    private String getArticleTitle() {
-        return getIntent().getStringExtra(ARTICLE_TITLE);
-    }
-
     public Level getLevel() {
         return Level.valueOf(getIntent().getStringExtra(ARTICLE_LEVEL));
     }
@@ -226,19 +220,20 @@ public class DictationActivity extends BaseActivity {
 
     public void updateDictationScore() {
         int newScore = dictationScore.calcScoreRank().typeValue;
-        if (userLog._getScore(getLevel()) >= newScore) {
+        if (userLog._getPart(getPartIndex())._getScore(getLevel()) >= newScore) {
             return;
         }
         // 記録を更新したらDBに反映
-        userLog._setScore(getLevel(), newScore);
+        userLog._getPart(getPartIndex())._setScore(getLevel(), newScore);
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final UserLogRepository repo = new UserLogRepository();
 
         Task task = repo.setDictationScore(
                 user.getUid(),
-                mArticle.getId(),
+                articlePair._getId(),
                 getLevel(),
+                getPartIndex(),
                 newScore);
 
         task.addOnCompleteListener(new OnCompleteListener() {
@@ -268,10 +263,6 @@ public class DictationActivity extends BaseActivity {
         int nextPosition = mViewPager.getCurrentItem() + 1;
         mViewPager.setCurrentItem(nextPosition);
         ((DictationFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, nextPosition)).onPageSelected();
-    }
-
-    public int getCurrentPageIndex() {
-        return mViewPager.getCurrentItem();
     }
 
     public boolean isLastQuestion() {

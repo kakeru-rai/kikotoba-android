@@ -1,8 +1,6 @@
-package com.kikotoba.android.model.entity;
+package com.kikotoba.android.model.entity.user;
 
-import android.support.annotation.NonNull;
-
-import com.kikotoba.android.model.dictation.Level;
+import com.kikotoba.android.util.Util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,14 +16,26 @@ import java.util.TimeZone;
  * ・mapのキーに文字列で整数をセットしても配列として扱われるので、本質的に配列データでなければ数値以外の文字をキーとする
  * ・型を変更するために、ルールとサーバーデータを更新して、クラス内のメンバの型を変えても、ローカルに保存済みの旧データがある場合エラーとなる
  * 　リリース済みのデータは型の変更は行わず、変数の追加とした方が無難。
+ * ・valueEventListenerの中で対象entityの値を更新するとループしてしまう
  */
 public class UserLogByArticle {
+    private Map<String, Part> part = new HashMap();
 
+    public Map<String, Part> getPart() {
+        return part;
+    }
+
+    public void setPart(Map<String, Part> part) {
+        if (part == null) {
+            part = new HashMap();
+        }
+        this.part = part;
+    }
+
+    // v0.5.0でdeprecated
     private int listeningPlaybackTime = 0;
     private int currentReadingIndex = 0;
-    private Map<String, Boolean> speakingCorrect = new HashMap();
     private Map<String, Integer> score = new HashMap();
-//    private int score = 0;
 
     public int getListeningPlaybackTime() {
         return listeningPlaybackTime;
@@ -35,18 +45,12 @@ public class UserLogByArticle {
         this.listeningPlaybackTime = listeningPlaybackTime;
     }
 
-    public Map<String, Boolean> getSpeakingCorrect() {
-        return speakingCorrect;
-    }
-
-    public void setSpeakingCorrect(@NonNull Map<String, Boolean> speakingCorrect) {
-        this.speakingCorrect = speakingCorrect;
-    }
-
+    @Deprecated
     public Map<String, Integer> getScore() {
         return score;
     }
 
+    @Deprecated
     public void setScore(Map<String, Integer> score) {
         if (score == null) {
             score = new HashMap();
@@ -54,29 +58,14 @@ public class UserLogByArticle {
         this.score = score;
     }
 
-//    public int getScore() {
-//        return score;
-//    }
-//
-//    public void setScore(int score) {
-//        this.score = score;
-//    }
-//
-    public void setSpeakingCorrectByIndex(int index) {
-        speakingCorrect.put(String.valueOf(index) + "_", true);
-    }
-
+    @Deprecated
     public int getCurrentReadingIndex() {
         return currentReadingIndex;
     }
 
-    public boolean isSpeakingCorrect(int index) {
-//        return true;
-        return getSpeakingCorrect().containsKey(String.valueOf(index) + "_");
-    }
-
-    public int calcSpeakingTotal() {
-        return speakingCorrect.size();
+    public Part _getPart(int partIndex) {
+        Part p = part.get(Util.fbIindex(partIndex));
+        return p != null ? p : new Part();
     }
 
     public String calcListeningPlaybackTime() {
@@ -87,13 +76,26 @@ public class UserLogByArticle {
         return df.format(cal.getTime());
     }
 
-    public void _setScore(Level level, int score) {
-        this.score.put(level.firebaseKey, score);
-    }
-
-    public int _getScore(Level level) {
-        Integer score = this.score.get(level.firebaseKey);
-        return score == null ? 0 : score;
+    /**
+     * v0.5.0へのマイグレーション
+     */
+    public boolean migratePartScore() {
+        if (part != null && part.size() > 0) {
+            // migrate済み
+            return false;
+        }
+        if (listeningPlaybackTime == 0
+                && currentReadingIndex == 0
+                && (score == null || score.size() == 0)) {
+            // 初期ユーザー。migrate必要なし
+            return false;
+        }
+        Part log = new Part();
+//        log.setListeningPlaybackTime(listeningPlaybackTime);
+//        log.setCurrentReadingIndex(currentReadingIndex);
+        log.setScore(score);
+        part.put(Util.fbIindex(0), log);
+        return true;
     }
 
 }

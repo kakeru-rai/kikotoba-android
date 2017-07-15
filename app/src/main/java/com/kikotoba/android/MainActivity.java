@@ -47,8 +47,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        WorkingDirectory wd = new WorkingDirectory();
-        wd.createWorkingDirectory(this);
+        WorkingDirectory.getInstance().createWorkingDirectory(this);
 //        wd.deleteAudio(this);
 
         init();
@@ -78,8 +77,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                WorkingDirectory wd = new WorkingDirectory();
-                wd.deleteAudio(MainActivity.this);
+                WorkingDirectory.getInstance().deleteAudio(MainActivity.this);
             }
         });
 

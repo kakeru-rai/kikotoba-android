@@ -24,23 +24,28 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.view.WindowManager;
 
-import com.kikotoba.android.model.entity.ArticlePair;
+import com.kikotoba.android.model.entity.master.ArticlePair;
 
 public class ListeningActivity extends BaseActivity {
 
-    public static final String ARTICLE_ID = "article_id";
-    public static final String ARTICLE_TITLE = "article_title";
     public static final String ARTICLE_PAIR = "article_pair";
+    public static final String ARTICLE_PART_INDEX = "article_part_index";
     public static final String CURRENT_READING_INDEX = "current_reading_index";
 
-    public static Intent newIntent(Context context, String articleId, String title, ArticlePair articlePair, int currentReadingIndex) {
+    public static Intent newIntent(Context context,
+                                   ArticlePair articlePair, int partIndex) {
+//        int currentReadingIndex = articlePair._getUserLogByArticle(partIndex).getCurrentReadingIndex();
+
+        ArticlePair partialArticlePair = articlePair.devideToPart(partIndex);
+
         Intent intent = new Intent(context, ListeningActivity.class);
-        intent.putExtra(ListeningActivity.ARTICLE_ID, articleId);
-        intent.putExtra(ListeningActivity.ARTICLE_TITLE, title);
-        intent.putExtra(ListeningActivity.ARTICLE_PAIR, articlePair.toJson());
-        intent.putExtra(ListeningActivity.CURRENT_READING_INDEX, currentReadingIndex);
+        intent.putExtra(ListeningActivity.ARTICLE_PAIR, partialArticlePair.toJson());
+        intent.putExtra(ListeningActivity.ARTICLE_PART_INDEX, partIndex);
+        intent.putExtra(ListeningActivity.CURRENT_READING_INDEX, 0);
         return intent;
     }
+
+    private ArticlePair articlePair;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,10 +53,10 @@ public class ListeningActivity extends BaseActivity {
         setContentView(R.layout.activity_listening);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        Intent intent = getIntent();
-        final String title = intent.getStringExtra(ARTICLE_TITLE);
+        init();
+
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(title);
+        actionBar.setTitle(articlePair._getTranslated().getTitle());
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         addFragment();
@@ -66,6 +71,19 @@ public class ListeningActivity extends BaseActivity {
         );
         fragmentTransaction.add(R.id.fragmentContainer, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void init() {
+        String json = getIntent().getStringExtra(DictationActivity.ARTICLE_PAIR);
+        articlePair = ArticlePair.fromJson(json);
+    }
+
+    public int getPartIndex() {
+        return getIntent().getIntExtra(ARTICLE_PART_INDEX, 0);
+    }
+
+    public ArticlePair getArticlePair() {
+        return articlePair;
     }
 
 }

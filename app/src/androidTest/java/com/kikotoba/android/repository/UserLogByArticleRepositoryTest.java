@@ -6,9 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
-
 import com.kikotoba.android.WaitUtil;
-import com.kikotoba.android.model.entity.UserLogByArticle;
+import com.kikotoba.android.model.entity.user.UserLogByArticle;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +15,6 @@ import org.junit.runner.RunWith;
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -36,12 +34,9 @@ public class UserLogByArticleRepositoryTest extends BaseRepositoryTest {
 
         // 作成
         UserLogByArticle log = new UserLogByArticle();
-        log.setListeningPlaybackTime(100);
-        log.setScore(1);
         Map<String, Boolean> speaking = new HashMap();
         speaking.put("2", true);
         speaking.put("4", true);
-        log.setSpeakingCorrect(speaking);
 
         UserLogRepository repo = new UserLogRepository();
         String articleId = "voa_001";
@@ -70,7 +65,5 @@ public class UserLogByArticleRepositoryTest extends BaseRepositoryTest {
         });
         waitUtil.waitForDone();
         assertTrue(waitUtil.isDone());
-
-        assertEquals(101, userLog.getListeningPlaybackTime());
     }
 }

@@ -1,7 +1,11 @@
-package com.kikotoba.android.model.entity;
+package com.kikotoba.android.model.entity.master;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kikotoba.android.model.entity.user.UserLogByArticle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ArticlePairのNullオブジェクト
@@ -15,20 +19,22 @@ public class ArticlePairDummy extends ArticlePair {
     private String origin;
     private String id;
     private UserLogByArticle userLogByArticle;
+    private List<PartIndex> partIndexList = new ArrayList();
 
     public ArticlePairDummy() {
         super();
+        partIndexList.add(new PartIndex());
     }
 
-    public Article getTarget() {
+    public Article _getTarget() {
         return target;
     }
 
-    public void setTarget(Article target) {
+    public void _setTarget(Article target) {
         this.target = target;
     }
 
-    public Article getTranslated() {
+    public Article _getTranslated() {
         return translated;
     }
 
@@ -52,20 +58,28 @@ public class ArticlePairDummy extends ArticlePair {
         this.origin = origin;
     }
 
-    public String getId() {
+    public String _getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void _setId(String id) {
         this.id = id;
     }
 
-    public UserLogByArticle getUserLogByArticle() {
+    public UserLogByArticle _getUserLogByArticle() {
         return userLogByArticle;
     }
 
-    public void setUserLogByArticle(UserLogByArticle userLogByArticle) {
+    public void _setUserLogByArticle(UserLogByArticle userLogByArticle) {
         this.userLogByArticle = userLogByArticle;
+    }
+
+    public List<PartIndex> getPartIndex() {
+        return partIndexList;
+    }
+
+    public void setPartIndex(List<PartIndex> partIndex) {
+        this.partIndexList = partIndex;
     }
 
     public String toJson() {

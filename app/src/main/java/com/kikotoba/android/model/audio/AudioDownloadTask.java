@@ -8,10 +8,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-
 import com.kikotoba.android.R;
 import com.kikotoba.android.model.WorkingDirectory;
-import com.kikotoba.android.model.entity.Article;
+import com.kikotoba.android.model.entity.master.ArticlePair;
 import com.kikotoba.android.util.FirebaseUtil;
 
 import org.apache.commons.io.FileUtils;
@@ -27,13 +26,15 @@ import java.util.List;
 public class AudioDownloadTask {
 
     private StorageReference mAudioReference;
-    private Article mArticle;
+    private ArticlePair mArticle;
+    private String language;
     private Context mContext;
     private AudioDownloadTaskListener mListener;
 
-    public AudioDownloadTask(Context context, Article article, AudioDownloadTaskListener listener) {
-        mAudioReference = FirebaseUtil.getStorageReference(article, context.getString(R.string.firebase_storage_base_url));
-        mArticle = article;
+    public AudioDownloadTask(Context context, ArticlePair articlePair, String language, AudioDownloadTaskListener listener) {
+        mAudioReference = FirebaseUtil.getStorageReference(articlePair, language, context.getString(R.string.firebase_storage_base_url));
+        mArticle = articlePair;
+        this.language = language;
         mContext = context;
         mListener = listener;
     }
@@ -46,17 +47,17 @@ public class AudioDownloadTask {
                 FileDownloadTask task = tasks.get(0);
                 startTask(task);
             } else {
-                startNewDownloadTask(mArticle);
+                startNewDownloadTask();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void startNewDownloadTask(Article mTargetArticle) throws IOException {
-        WorkingDirectory wd = new WorkingDirectory();
+    private void startNewDownloadTask() throws IOException {
+        WorkingDirectory wd = WorkingDirectory.getInstance();
         final File cacheFile = wd.createAudioCache();
-        final File toFile = wd.createAudioDestinationFile(mContext, mArticle);
+        final File toFile = wd.createAudioDestinationFile(mContext, mArticle, language);
 
         FileUtils.forceMkdirParent(toFile);
 
@@ -65,9 +66,9 @@ public class AudioDownloadTask {
     }
 
     private void startTask(FileDownloadTask task) throws IOException {
-        WorkingDirectory wd = new WorkingDirectory();
+        WorkingDirectory wd = WorkingDirectory.getInstance();
         final File cacheFile = wd.createAudioCache();
-        final File toFile = wd.createAudioDestinationFile(mContext, mArticle);
+        final File toFile = wd.createAudioDestinationFile(mContext, mArticle, language);
 
         task.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
@@ -95,6 +96,7 @@ public class AudioDownloadTask {
                 mListener.onFailure(exception);
             }
         }).addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
+            @SuppressWarnings("VisibleForTests") // taskSnapshot.getTotalByteCount()のため https://stackoverflow.com/questions/41105586/android-firebase-tasksnapshot-method-should-only-be-accessed-within-privat
             @Override
             public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
                 mListener.onProgress(taskSnapshot.getTotalByteCount(), taskSnapshot.getBytesTransferred());

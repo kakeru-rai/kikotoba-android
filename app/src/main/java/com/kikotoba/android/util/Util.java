@@ -69,4 +69,8 @@ public class Util {
         animation.setRepeatCount(1);
         return animation;
     }
+
+    public static String fbIindex(int index) {
+        return String.format("_%03d", index);
+    }
 }

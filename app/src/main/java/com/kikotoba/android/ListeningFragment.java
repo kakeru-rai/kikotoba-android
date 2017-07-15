@@ -13,9 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseError;
-import com.kikotoba.android.model.entity.Article;
-import com.kikotoba.android.model.entity.ArticlePair;
-import com.kikotoba.android.model.entity.UserLogByArticle;
+import com.kikotoba.android.model.entity.master.ArticlePair;
+import com.kikotoba.android.model.entity.user.UserLogByArticle;
 import com.kikotoba.android.model.listening.AudioController;
 import com.kikotoba.android.model.listening.ViewerWebView;
 import com.kikotoba.android.model.listening.WebAppInterface;
@@ -57,8 +56,8 @@ public class ListeningFragment extends BaseFragment {
     private AudioController mMediaController;
     private ViewerWebView webView;
     private WebAppInterface mWebAppInterface;
-    private Article mTargetArticle;
-    private Article mTranscriptArticle;
+//    private Article mTargetArticle;
+//    private Article mTranscriptArticle;
 
     private View mRootView;
 
@@ -103,8 +102,8 @@ public class ListeningFragment extends BaseFragment {
 
         ArticlePair entity = ArticlePair.fromJson(getArguments().getString(ARG_ARTICLE_PAIR, ""));
 
-        mTargetArticle = entity.getTarget();
-        mTranscriptArticle = entity.getTranslated();
+//        mTargetArticle = entity._getTarget();
+//        mTranscriptArticle = entity._getTranslated();
         setHasOptionsMenu(true);
         init(mRootView);
 
@@ -174,13 +173,16 @@ public class ListeningFragment extends BaseFragment {
         mWebAppInterface = new WebAppInterface(
                 webView,
                 mMediaController,
-                mTargetArticle,
-                mTranscriptArticle,
+                getOwner().getArticlePair(),
                 getCurrentReadingIndex(),
                 mNowShadowingPopup);
         Pref pref = new Pref(getActivity());
         mWebAppInterface.setSpeechGap(getActivity(), pref.getSpeechGap());
         mWebAppInterface.load(getActivity());
+    }
+
+    private ListeningActivity getOwner() {
+        return (ListeningActivity) getActivity();
     }
 
     private int getCurrentReadingIndex() {
@@ -200,11 +202,13 @@ public class ListeningFragment extends BaseFragment {
     public void onStop() {
         super.onStop();
         mWebAppInterface.pause();
+        final int partIndex = getOwner().getPartIndex();
         final UserLogRepository repo = new UserLogRepository();
-        repo.getUserLogByArticle(getUser().getUid(), mTargetArticle.getId(), new BaseRepository.EntityEventListener<UserLogByArticle>() {
+        final ArticlePair articlePair = getOwner().getArticlePair();
+        repo.getUserLogByArticle(getUser().getUid(), getOwner().getArticlePair()._getId(), new BaseRepository.EntityEventListener<UserLogByArticle>() {
             @Override
             public void onSuccess(UserLogByArticle entity) {
-                if (mWebAppInterface == null || mWebAppInterface == null) {
+                if (mWebAppInterface == null) {
                     return;
                 }
                 if (entity == null) {
@@ -212,12 +216,13 @@ public class ListeningFragment extends BaseFragment {
                 }
                 repo.setListeningPlaybackTime(
                         getUser().getUid(),
-                        mTargetArticle.getId(),
+                        articlePair._getId(),
                         mWebAppInterface.clearPlaybackTimeSec() + entity.getListeningPlaybackTime());
                 repo.setCurrentReadingIndex(
                         getUser().getUid(),
-                        mTargetArticle.getId(),
-                        mTargetArticle.getSentences().size() - 1 > mWebAppInterface.getCurrentIndex() ? mWebAppInterface.getCurrentIndex() : 0);
+                        articlePair._getId(),
+                        partIndex,
+                        articlePair._getTarget().getSentences().size() - 1 > mWebAppInterface.getCurrentIndex() ? mWebAppInterface.getCurrentIndex() : 0);
             }
 
             @Override

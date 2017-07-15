@@ -1,4 +1,4 @@
-package com.kikotoba.android.model.entity;
+package com.kikotoba.android.model.entity.master;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,26 +9,15 @@ import java.util.List;
 
 public class Article {
 
-    private String id;
     private String title;
-    private String image;
-    private String origin;
-    private String language;
     private List<Sentence> sentences;
     private int audioVersion;
     private List<String> translations;
 
-    public String createListeningHtml() {
-        return "";
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    private String id;
+    private String image;
+    private String origin;
+    private String language;
 
     public String getTitle() {
         return title;
@@ -38,34 +27,6 @@ public class Article {
         this.title = title;
         return this;
     }
-
-    public String getImage() {
-        return image;
-    }
-
-    public Article setImage(String image) {
-        this.image = image;
-        return this;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public Article setOrigin(String origin) {
-        this.origin = origin;
-        return this;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public Article setLanguage(String language) {
-        this.language = language;
-        return this;
-    }
-
     public List<Sentence> getSentences() {
         return sentences;
     }
@@ -92,6 +53,42 @@ public class Article {
     }
 
     // setter/getter>
+
+    public String _getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String _getImage() {
+        return image;
+    }
+
+    public Article setImage(String image) {
+        this.image = image;
+        return this;
+    }
+
+    public String _getOrigin() {
+        return origin;
+    }
+
+    public Article setOrigin(String origin) {
+        this.origin = origin;
+        return this;
+    }
+
+    public String _getLanguage() {
+        return language;
+    }
+
+    public Article setLanguage(String language) {
+        this.language = language;
+        return this;
+    }
+
 
     public List<String> makeSenteceStringList() {
         List<String> scripts = new ArrayList<>();

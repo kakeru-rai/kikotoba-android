@@ -12,7 +12,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import com.kikotoba.android.WaitUtil;
-import com.kikotoba.android.model.entity.Article;
+import com.kikotoba.android.model.entity.master.Article;
 import com.kikotoba.android.util.FileUtil;
 
 import org.apache.commons.io.FileUtils;

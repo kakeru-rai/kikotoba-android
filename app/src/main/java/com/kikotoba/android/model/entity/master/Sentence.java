@@ -1,4 +1,4 @@
-package com.kikotoba.android.model.entity;
+package com.kikotoba.android.model.entity.master;
 
 /**
  * Created by raix on 2017/01/24.

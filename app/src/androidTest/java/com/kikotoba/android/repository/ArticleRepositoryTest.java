@@ -5,9 +5,9 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.firebase.database.DatabaseError;
 
 import com.kikotoba.android.WaitUtil;
-import com.kikotoba.android.model.entity.Article;
-import com.kikotoba.android.model.entity.ArticlePair;
-import com.kikotoba.android.model.entity.Sentence;
+import com.kikotoba.android.model.entity.master.Article;
+import com.kikotoba.android.model.entity.master.ArticlePair;
+import com.kikotoba.android.model.entity.master.Sentence;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,8 +36,8 @@ public class ArticleRepositoryTest {
         repo.queryArticles(new BaseRepository.EntityListEventListener<ArticlePair>() {
             @Override
             public void onSuccess(List<ArticlePair> articlePairs) {
-                target = articlePairs.get(0).getTarget();
-                translated = articlePairs.get(0).getTranslated();
+                target = articlePairs.get(0)._getTarget();
+                translated = articlePairs.get(0)._getTranslated();
                 waitUtil.hasDone();
             }
 
@@ -49,10 +49,6 @@ public class ArticleRepositoryTest {
         waitUtil.waitForDone();
 
         assertEquals("科学者グループ、脳の発達の新しい段階を発見", translated.getTitle());
-        assertEquals("voa_001", translated.getId());
-        assertEquals("https://gdb.voanews.com/1067F4DF-C746-4284-BA7B-C30F08CC3555_w987_r1_s.jpg", translated.getImage());
-        assertEquals("http://learningenglish.voanews.com/a/scientists-find-new-step-in-brain-development-health-and-lifestyle/3633193.html", translated.getOrigin());
-        assertEquals("ja", translated.getLanguage());
         assertEquals(27, translated.getSentences().size());
         Sentence sentence = translated.getSentences().get(0);
         assertEquals("長年にわたって、科学者や医療研究者は人間の脳を研究するのに多くの時間を費やしてきた。", sentence.getText());
@@ -60,10 +56,6 @@ public class ArticleRepositoryTest {
         assertEquals(1, sentence.getParagraph());
 
         assertEquals("Scientists Find New Step in Brain Development", target.getTitle());
-        assertEquals("voa_001", target.getId());
-        assertEquals("https://gdb.voanews.com/1067F4DF-C746-4284-BA7B-C30F08CC3555_w987_r1_s.jpg", target.getImage());
-        assertEquals("http://learningenglish.voanews.com/a/scientists-find-new-step-in-brain-development-health-and-lifestyle/3633193.html", target.getOrigin());
-        assertEquals("en", target.getLanguage());
         assertEquals(27, target.getSentences().size());
         sentence = target.getSentences().get(0);
         assertEquals("Over the years, scientists and medical researchers have spent much time studying the human brain.", sentence.getText());

@@ -18,8 +18,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setupActionBar();
 
-        WorkingDirectory wd = new WorkingDirectory();
-        wd.createWorkingDirectory(this);
+        WorkingDirectory.getInstance().createWorkingDirectory(this);
 
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content,
                 new LoginFragment()).commit();

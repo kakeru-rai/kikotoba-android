@@ -2,7 +2,7 @@ package com.kikotoba.android.model;
 
 import android.content.Context;
 
-import com.kikotoba.android.model.entity.Article;
+import com.kikotoba.android.model.entity.master.ArticlePair;
 import com.kikotoba.android.util.D;
 import com.kikotoba.android.util.FileUtil;
 import com.kikotoba.android.util.IOUtil;
@@ -19,16 +19,21 @@ import java.io.IOException;
 public class WorkingDirectory {
 
     /**
-     * @param article
+     *
+     * @param articlePair
+     * @param language en|ja
      * @param relativePath "../../"とか。ルートなら空文字""
      * @return
      */
-    public static String getAudioPath(Article article, String relativePath) {
+    public static String getAudioPath(ArticlePair articlePair, String language, String relativePath) {
         return String.format("%s/audio/%s/%s_%d.mp3",
                 relativePath,
-                article.getId(),
-                article.getLanguage(),
-                article.getAudioVersion());
+                articlePair._getId(),
+                language,
+                articlePair
+                        .getLanguage()
+                        .get(language)
+                        .getAudioVersion());
     }
 
     private static WorkingDirectory instance = new WorkingDirectory();
@@ -36,8 +41,10 @@ public class WorkingDirectory {
         return instance;
     }
 
-    public boolean hasAudioDownloaded(Context context, Article article) {
-        File audioFile = createAudioDestinationFile(context, article);
+    private WorkingDirectory() {}
+
+    public boolean hasAudioDownloaded(Context context, ArticlePair articlePair, String language) {
+        File audioFile = createAudioDestinationFile(context, articlePair, language);
         audioFile.list();
         return audioFile.exists();
     }
@@ -46,9 +53,9 @@ public class WorkingDirectory {
         return File.createTempFile("audio", "mp3");
     }
 
-    public File createAudioDestinationFile(Context context, Article article) {
+    public File createAudioDestinationFile(Context context, ArticlePair articlePair, String language) {
         File toDir = FileUtil.createPrivateExternalDir(context, "");
-        return new File(toDir, getAudioPath(article, ""));
+        return new File(toDir, getAudioPath(articlePair, language, ""));
     }
 
     public void deleteAudio(Context context) {
