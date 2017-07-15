@@ -282,17 +282,13 @@ public class ArticleListFragment extends Fragment {
             holder.mCardView.setVisibility(View.VISIBLE);
             switch (holder.mArticleStatus) {
                 case READY:
+                    holder.mImageView.setVisibility(View.VISIBLE);
                     holder.normalLayout.setVisibility(View.VISIBLE);
                     holder.preparingLayout.setVisibility(View.GONE);
                     holder.downloadLayout.setVisibility(View.GONE);
-//                    holder.mCardView.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            showMenuDialog(mContext, holder);
-//                        }
-//                    });
                     break;
                 case AUDIO_NOT_DOWNLOADED:
+                    holder.mImageView.setVisibility(View.GONE);
                     if (holder.articleCardItem.getPartIndex() == 0) {
                         holder.normalLayout.setVisibility(View.GONE);
                         holder.preparingLayout.setVisibility(View.GONE);
@@ -309,6 +305,7 @@ public class ArticleListFragment extends Fragment {
                     }
                     break;
                 case UNDER_CONSTRUCTION:
+                    holder.mImageView.setVisibility(View.GONE);
                     holder.normalLayout.setVisibility(View.GONE);
                     holder.preparingLayout.setVisibility(View.VISIBLE);
                     holder.downloadLayout.setVisibility(View.GONE);

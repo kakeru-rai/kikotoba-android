@@ -90,11 +90,10 @@ public class UserLogByArticle {
             // 初期ユーザー。migrate必要なし
             return false;
         }
-        Part log = new Part();
-//        log.setListeningPlaybackTime(listeningPlaybackTime);
-//        log.setCurrentReadingIndex(currentReadingIndex);
-        log.setScore(score);
-        part.put(Util.fbIindex(0), log); // part1のスコアとして移行
+        Part aPart = new Part();
+        Map<String, Integer> newScore = new HashMap(score);
+        aPart.setScore(newScore);
+        part.put(Util.fbIindex(0), aPart); // part1のスコアとして移行
         return true;
     }
 
