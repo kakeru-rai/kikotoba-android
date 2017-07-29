@@ -13,6 +13,8 @@ $(function() {
         this.$container = $('#container');
         this.$photo = $('#photo');
         this.$title = $('#title');
+        this.$subTitle = $('#subTitle');
+        this.$subTitle.hide();
         this.audioPlayer = new sri.AudioPlayer($('#audioPlayer'));
         this.audioPlayer.setOnTrackEndedListener(function() {
             Android.onTrackEnded();
@@ -79,6 +81,11 @@ $(function() {
 
     AppInterface.prototype.setTitle = function setTitle(title) {
         this.$title.text(title);
+    };
+
+    AppInterface.prototype.setSubTitle = function(title) {
+        this.$subTitle.toggle(!!title);
+        this.$subTitle.text(title);
     };
 
     AppInterface.prototype.refreshUI = function refreshUI() {

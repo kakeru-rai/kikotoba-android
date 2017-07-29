@@ -111,7 +111,9 @@ $(function() {
         $inputs = this.$container.find('input');
         $inputs.each(function() {
             var $this = $(this);
-            $this.val($this.data('text'));
+            $this
+                .addClass('red')
+                .val($this.data('text'));
         });
 
     }

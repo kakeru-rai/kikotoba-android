@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -102,7 +103,11 @@ public class DictationActivity extends BaseActivity {
         init();
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getTranslationArticle().getTitle());
+
+        String partTitle = articlePair.getPartIndex().size() == 1
+                ? ""
+                : String.format("Part%d ", getPartIndex() + 1);
+        actionBar.setTitle(partTitle + getTranslationArticle().getTitle());
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -151,6 +156,7 @@ public class DictationActivity extends BaseActivity {
     }
 
     private void initAudioWebInterface(final WebView webView){
+        final Handler handler = new Handler();
         mAudioWebInterface = new AudioWebInterface(webView) {
             @JavascriptInterface
             @Override
@@ -159,7 +165,22 @@ public class DictationActivity extends BaseActivity {
 //                mHandler.post(new Runnable() {
                     public void run() {
                         mAudioWebInterface.setAudioSrc(articlePair, LanguagePair.getInstance().getTarget());
-                        dictationProgressLayout.setVisibility(View.GONE);
+                        new Thread(new Runnable() {
+                            public void run() {
+                                try {
+                                    // 一問目の音声が再生されないことがある
+                                    // 少し待つと解消されることが多いためスリープする
+                                    Thread.sleep(1500);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                handler.post(new Runnable() {
+                                    public void run() {
+                                        dictationProgressLayout.setVisibility(View.GONE);
+                                    }
+                                });
+                            }
+                        }).start();
                     }
                 });
             }

@@ -54,6 +54,7 @@
             android:layout_height="match_parent"
             android:background="@color/colorBackgroundLight"
             android:visibility="visible"
+            android:clickable="true"
             tools:context="com.kikotoba.android.SpeakingFragment">
 
 

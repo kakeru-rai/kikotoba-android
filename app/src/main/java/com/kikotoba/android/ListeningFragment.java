@@ -175,7 +175,8 @@ public class ListeningFragment extends BaseFragment {
                 mMediaController,
                 getOwner().getArticlePair(),
                 getCurrentReadingIndex(),
-                mNowShadowingPopup);
+                mNowShadowingPopup,
+                getOwner().getPartIndex());
         Pref pref = new Pref(getActivity());
         mWebAppInterface.setSpeechGap(getActivity(), pref.getSpeechGap());
         mWebAppInterface.load(getActivity());

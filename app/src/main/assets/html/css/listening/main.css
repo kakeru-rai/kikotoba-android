@@ -68,4 +68,9 @@ h1 {
     text-align: center;
 	line-height: 1.2em;
 }
+h2 {
+    font-size: 1.2em;
+    text-align: center;
+    color: #666;
+}
 

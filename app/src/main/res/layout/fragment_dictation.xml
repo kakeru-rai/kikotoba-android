@@ -195,7 +195,7 @@
         android:background="@color/colorBackgroundLight"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:context="com.kikotoba.android.SpeakingFragment">
 
         <Space
@@ -203,6 +203,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
+        <TextView
+            android:id="@+id/dictationTextLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"
+            android:text="Level1"
+            android:textSize="34dp" />
         <TextView
             android:id="@+id/textQuestionNo"
             android:layout_width="wrap_content"

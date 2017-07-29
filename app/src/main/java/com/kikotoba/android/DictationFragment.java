@@ -58,6 +58,8 @@ public class DictationFragment extends Fragment {
     @BindView(R.id.buttonNext) TextView buttonNext;
     @BindView(R.id.buttonStart) Button buttonStart;
     @BindView(R.id.textQuestionNo) TextView textQuestionNo;
+    @BindView(R.id.dictationTextLevel) TextView textLevel;
+
     @BindView(R.id.dictationStartLayout) View dictationStartLayout;
     @BindView(R.id.dictationFinishLayout) View dictationFinishLayout;
     @BindView(R.id.buttonFinish) View buttonFinish;
@@ -161,6 +163,7 @@ public class DictationFragment extends Fragment {
 
     public void initView() {
         // view
+        textLevel.setText(String.format("Level %d\n", getOwner().getLevel().ordinal() + 1));
         textQuestionNo.setText(getString(R.string.dictation_question_number, getPagerPosition() + 1));
         textViewIsCleared.setVisibility(View.GONE);
 

@@ -21,6 +21,7 @@ $(function() {
         
         web.setPhotoSrc('https://gdb.voanews.com/E5D3FE73-172C-4B29-A3BF-8A01452547AE_cx0_cy13_cw0_w250_r1_s.jpg');
         web.setTitle('title');
+        web.setSubTitle('sub title');
         
         web.popup('sadf');
         web.popup();

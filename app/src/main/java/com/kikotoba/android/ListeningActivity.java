@@ -56,7 +56,10 @@ public class ListeningActivity extends BaseActivity {
         init();
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(articlePair._getTranslated().getTitle());
+        String partTitle = articlePair.getPartIndex().size() == 1
+                ? ""
+                : String.format("Part%d ", getPartIndex() + 1);
+        actionBar.setTitle(partTitle + articlePair._getTranslated().getTitle());
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         addFragment();

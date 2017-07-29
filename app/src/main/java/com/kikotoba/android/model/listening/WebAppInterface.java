@@ -51,12 +51,14 @@ public class WebAppInterface implements AudioController.Player {
     private boolean mIsRepeateMode = false;
     private boolean mIsBlindMode = false;
     private boolean mIsPlayerFunctionCalledDuringTrackGapSleep = false;
+    private int partIndex = 0;
 
     public WebAppInterface(WebView webView,
                            AudioController mediaController,
                            ArticlePair articlePair,
                            int currentIndex,
-                           TextView nowShadowing
+                           TextView nowShadowing,
+                           int partIndex
     ) {
         mMediaController = mediaController;
         mediaController.setPlayer(this);
@@ -69,6 +71,7 @@ public class WebAppInterface implements AudioController.Player {
         mNowShadowing = nowShadowing;
         mNowShadowing.setVisibility(View.GONE);
         mAnimation = createAnimation();
+        this.partIndex = partIndex;
     }
 
     private AlphaAnimation createAnimation() {
@@ -305,12 +308,15 @@ public class WebAppInterface implements AudioController.Player {
     }
 
     private void buildArticle() {
+        setAudioSrc(articlePair, LanguagePair.getInstance().getTarget());
+
         List<Sentence> targetSentences = mTargetArticle.getSentences();
 
         if (articlePair.getImage() != null) {
             jsSetPhotoSrc(articlePair.getImage());
         }
         jsSetTitle(mTargetArticle.getTitle());
+        jsSetSubTitle(partIndex >= 0 ? String.format("- Part %d -", partIndex + 1) : "");
 
         Sentence previousTargetSentence = null;
         for (int i = 0; i < targetSentences.size(); i++) {
@@ -356,6 +362,10 @@ public class WebAppInterface implements AudioController.Player {
 
     private void jsSetTitle(String title) {
         mWebView.loadUrl("javascript: web.setTitle('" + title + "');");
+    }
+
+    private void jsSetSubTitle(String title) {
+        mWebView.loadUrl("javascript: web.setSubTitle('" + title + "');");
     }
 
     private void jsAddSentence(String sentence, float fromSec, float toSec, int translationIndex) {
