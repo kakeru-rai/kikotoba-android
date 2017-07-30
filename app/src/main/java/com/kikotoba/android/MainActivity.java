@@ -29,6 +29,7 @@ import com.kikotoba.android.util.Versatile;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.util.Calendar;
 
 public class MainActivity extends BaseActivity {
 
@@ -111,6 +112,7 @@ public class MainActivity extends BaseActivity {
                 if (StringUtils.isEmpty(entity.getStartAndroidAppVersionName())) {
                     entity.setStartAndroidAppVersionName(Versatile.getVersionName(_this));
                 }
+                entity._setLastOpenAppDate(Calendar.getInstance());
                 summaryRepository.update(user.getUid(), entity, new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {

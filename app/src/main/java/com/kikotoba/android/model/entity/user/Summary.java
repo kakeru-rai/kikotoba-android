@@ -1,5 +1,7 @@
 package com.kikotoba.android.model.entity.user;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.DateFormat;
@@ -16,7 +18,7 @@ public class Summary {
 
     private String startAndroidAppVersionName = "";
 
-    private String lastOpedAt = "";
+    private String lastOpenedAt = "";
 
     public String getStartAndroidAppVersionName() {
         return startAndroidAppVersionName;
@@ -26,33 +28,32 @@ public class Summary {
         this.startAndroidAppVersionName = startAndroidAppVersionName;
     }
 
-    public String getLastOpedAt() {
-        return lastOpedAt;
+    public String getLastOpenedAt() {
+        return lastOpenedAt;
     }
 
-    public void setLastOpedAt(String lastOpedAt) {
-        this.lastOpedAt = lastOpedAt;
+    public void setLastOpenedAt(String lastOpenedAt) {
+        this.lastOpenedAt = lastOpenedAt;
     }
 
     public Calendar _getLastOpenAppDate() {
-        DateFormat df = new SimpleDateFormat(DATE_TIME_FORMAT);
-        if (StringUtils.isEmpty(lastOpedAt)) {
+        if (StringUtils.isEmpty(lastOpenedAt)) {
             return null;
         }
-
         try {
-            Date date = df.parse(lastOpedAt);
+            DateFormat df = new SimpleDateFormat(DATE_TIME_FORMAT);
+            Date date = df.parse(lastOpenedAt);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             return cal;
         } catch (ParseException e) {
-            e.printStackTrace();
+            FirebaseCrash.report(e);
             return null;
         }
     }
 
     public void _setLastOpenAppDate(Calendar calendar) {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        lastOpedAt = sdfDate.format(calendar.getTime());
+        lastOpenedAt = sdfDate.format(calendar.getTime());
     }
 }
