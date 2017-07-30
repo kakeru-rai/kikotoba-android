@@ -36,7 +36,7 @@
     <string name="msg_error_common">画面の準備ができませんでした</string>
 
     <!-- リスニング -->
-    <string name="listening_repeat_mode">リピートモード</string>
+    <string name="listening_repeat_mode">3回リピート</string>
     <string name="listening_blind_mode">目隠しモード</string>
     <string name="listening_translate">翻訳</string>
 

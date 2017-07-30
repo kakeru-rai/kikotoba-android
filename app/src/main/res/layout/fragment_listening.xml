@@ -37,7 +37,7 @@
             android:background="@drawable/btn_white_circle"
             android:gravity="center"
             android:padding="6dp"
-            android:src="@drawable/ic_repeat_one_white_36dp" />
+            android:src="@drawable/ic_repeat_white_36dp" />
 
         <ImageView
             android:id="@+id/btnBlind"

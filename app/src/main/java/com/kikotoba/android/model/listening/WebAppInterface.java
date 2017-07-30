@@ -32,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 public class WebAppInterface implements AudioController.Player {
     public static String INTERFACE_NAME = "Android";
 
+    private static final int MAX_REPEAT_COUNT = 3;
+
     private Pref.SpeechGap mSpeechGap = Pref.SpeechGap.NORMAL;
     private WebView mWebView;
     private int mCurrentSentenceIndex = 0;
@@ -49,6 +51,7 @@ public class WebAppInterface implements AudioController.Player {
     private Calendar playStartCalender;
     private long playTimeSec = 0;
     private boolean mIsRepeateMode = false;
+    private int repeatCount = 0;
     private boolean mIsBlindMode = false;
     private boolean mIsPlayerFunctionCalledDuringTrackGapSleep = false;
     private int partIndex = 0;
@@ -146,11 +149,14 @@ public class WebAppInterface implements AudioController.Player {
                 }
                 mHandler.post(new Runnable() {
                     public void run() {
-                        if (mIsRepeateMode) {
+                        ++repeatCount;
+                        if (mIsRepeateMode && repeatCount < MAX_REPEAT_COUNT) {
                             rew();
                         } else if (hasNext()) {
+                            repeatCount = 0;
                             next();
                         } else {
+                            repeatCount = 0;
                             pause();
                         }
                         cancelTrackGapSleep();
