@@ -25,6 +25,7 @@ import android.support.v7.app.ActionBar;
 import android.view.WindowManager;
 
 import com.kikotoba.android.model.entity.master.ArticlePair;
+import com.kikotoba.android.model.system.Analytics;
 
 public class ListeningActivity extends BaseActivity {
 
@@ -79,6 +80,13 @@ public class ListeningActivity extends BaseActivity {
     private void init() {
         String json = getIntent().getStringExtra(DictationActivity.ARTICLE_PAIR);
         articlePair = ArticlePair.fromJson(json);
+
+        sendEvent();
+    }
+
+    private void sendEvent() {
+        Analytics analytics = new Analytics(this);
+        analytics.sendListening(articlePair._getId(), getPartIndex());
     }
 
     public int getPartIndex() {

@@ -13,17 +13,28 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.DatabaseError;
 import com.kikotoba.android.model.WorkingDirectory;
+import com.kikotoba.android.model.entity.user.Summary;
+import com.kikotoba.android.repository.BaseRepository;
+import com.kikotoba.android.repository.user.SummaryRepository;
 import com.kikotoba.android.util.IOUtil;
+import com.kikotoba.android.util.Versatile;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 
 public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
+
+    private MainActivity _this = this;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -81,6 +92,40 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        logUserEvent();
+
+    }
+
+    private void logUserEvent() {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            return;
+        }
+        final SummaryRepository summaryRepository = new SummaryRepository();
+        summaryRepository.get(user.getUid(), new BaseRepository.EntityEventListener<Summary>() {
+            @Override
+            public void onSuccess(Summary entity) {
+                if (entity == null) {
+                    entity = new Summary();
+                }
+                if (StringUtils.isEmpty(entity.getStartAndroidAppVersionName())) {
+                    entity.setStartAndroidAppVersionName(Versatile.getVersionName(_this));
+                }
+                summaryRepository.update(user.getUid(), entity, new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            return;
+                        }
+                        FirebaseCrash.report(task.getException());
+                    }
+                });
+            }
+            @Override
+            public void onError(DatabaseError error) {
+                FirebaseCrash.report(error.toException());
+            }
+        });
     }
 
     private FirebaseUser getUser() {

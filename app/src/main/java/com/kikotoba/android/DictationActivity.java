@@ -30,6 +30,7 @@ import com.kikotoba.android.model.entity.master.Article;
 import com.kikotoba.android.model.entity.master.ArticlePair;
 import com.kikotoba.android.model.entity.master.Sentence;
 import com.kikotoba.android.model.entity.user.UserLogByArticle;
+import com.kikotoba.android.model.system.Analytics;
 import com.kikotoba.android.repository.BaseRepository;
 import com.kikotoba.android.repository.UserLogRepository;
 import com.kikotoba.android.util.WebViewDefault;
@@ -123,6 +124,13 @@ public class DictationActivity extends BaseActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         initUserLog();
+
+        sendEvent();
+    }
+
+    private void sendEvent() {
+        Analytics analytics = new Analytics(this);
+        analytics.sendDictation(articlePair._getId(), getPartIndex(), getLevel().ordinal());
     }
 
     private void initUserLog() {

@@ -79,7 +79,7 @@ public class ArticleRepository extends BaseRepository {
     private ArticlePair map(DataSnapshot articlePairSnapshot) {
         String id = articlePairSnapshot.getKey();
         try {
-            ArticlePair articlePair_ = articlePairSnapshot.getValue(ArticlePair.class);
+            ArticlePair articlePair = articlePairSnapshot.getValue(ArticlePair.class);
 
 //            Map<String, Object> children = (Map<String, Object>) articlePairSnapshot.getValue();
 //            String origin = (String) children.get(KEY_ORIGIN);
@@ -115,18 +115,18 @@ public class ArticleRepository extends BaseRepository {
 //                }
 //            }
 
-            Article translated = articlePair_.getLanguage().get(LanguagePair.getInstance().getMother());
-            Article target = articlePair_.getLanguage().get(LanguagePair.getInstance().getTarget());
-            articlePair_._setTarget(target);
-            articlePair_._setTranslated(translated);
-            articlePair_._setId(id);
+            Article translated = articlePair.getLanguage().get(LanguagePair.getInstance().getMother());
+            Article target = articlePair.getLanguage().get(LanguagePair.getInstance().getTarget());
+            articlePair._setTarget(target);
+            articlePair._setTranslated(translated);
+            articlePair._setId(id);
 
 //            ArticlePair articlePair = new ArticlePair(target, translated);
 //            articlePair.setImage(image);
 //            articlePair.setOrigin(origin);
 //            articlePair._setId(id);
 //            articlePair.setPartIndex(partIndexList);
-            return articlePair_;
+            return articlePair;
         } catch (Exception e) {
             ArticlePairDummy articlePairDummy = new ArticlePairDummy();
             articlePairDummy._setId(id);

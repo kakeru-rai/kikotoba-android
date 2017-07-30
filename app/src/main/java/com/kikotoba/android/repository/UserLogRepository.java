@@ -72,13 +72,6 @@ public class UserLogRepository extends BaseRepository {
 
     public Task setUserLogByArticle(String uid, String articleId, UserLogByArticle log) {
         return FirebaseUtil.getDatabaseReference().child(String.format(PATH, uid, articleId)).setValue(log);
-
-//        return FirebaseUtil.getDatabaseReference()
-//                .child("user_log")
-//                .child(uid)
-//                .child("by_article")
-//                .child(articleId)
-//                .setValue(log);
     }
 
 }
