@@ -128,7 +128,7 @@ public class ArticlePair {
         ArticlePair partialArticlePair = ArticlePair.fromJson(toJson());
         int startSentenceIndex = getPartIndex().get(partIndex).getStartSentence();
         int endSentenceIndex = getPartIndex().get(partIndex).getEndSentence();
-        List newTargetSentence = partialArticlePair._getTarget().getSentences().subList(startSentenceIndex, endSentenceIndex);
+        List newTargetSentence = partialArticlePair._getTarget().getSentences().subList(startSentenceIndex, endSentenceIndex + 1);
 //        List newTranslatedSentence = partialArticlePair._getTranslated().getSentences().subList(startSentenceIndex, endSentenceIndex);
         partialArticlePair._getTarget().setSentences(newTargetSentence);
 //        partialArticlePair._getTranslated().setSentences(newTranslatedSentence);

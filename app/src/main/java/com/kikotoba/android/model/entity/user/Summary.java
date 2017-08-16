@@ -1,6 +1,7 @@
 package com.kikotoba.android.model.entity.user;
 
 import com.google.firebase.crash.FirebaseCrash;
+import com.kikotoba.android.model.entity.EntityUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,8 +18,10 @@ public class Summary {
     private final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     private String startAndroidAppVersionName = "";
+    private String currentAndroidAppVersionName = "";
 
     private String lastOpenedAt = "";
+    private String firstOpenedAt = "";
 
     public String getStartAndroidAppVersionName() {
         return startAndroidAppVersionName;
@@ -28,12 +31,28 @@ public class Summary {
         this.startAndroidAppVersionName = startAndroidAppVersionName;
     }
 
+    public String getCurrentAndroidAppVersionName() {
+        return currentAndroidAppVersionName;
+    }
+
+    public void setCurrentAndroidAppVersionName(String currentAndroidAppVersionName) {
+        this.currentAndroidAppVersionName = currentAndroidAppVersionName;
+    }
+
     public String getLastOpenedAt() {
         return lastOpenedAt;
     }
 
     public void setLastOpenedAt(String lastOpenedAt) {
         this.lastOpenedAt = lastOpenedAt;
+    }
+
+    public String getFirstOpenedAt() {
+        return firstOpenedAt;
+    }
+
+    public void setFirstOpenedAt(String firstOpenedAt) {
+        this.firstOpenedAt = firstOpenedAt;
     }
 
     public Calendar _getLastOpenAppDate() {
@@ -55,5 +74,13 @@ public class Summary {
     public void _setLastOpenAppDate(Calendar calendar) {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         lastOpenedAt = sdfDate.format(calendar.getTime());
+    }
+
+    public Calendar _getFirstOpenedAt() {
+        return EntityUtil.datetime2Calendar(firstOpenedAt);
+    }
+
+    public void _setFirstOpenedAt(Calendar firstOpenedAt) {
+        this.firstOpenedAt = EntityUtil.calendar2Datetime(firstOpenedAt);
     }
 }

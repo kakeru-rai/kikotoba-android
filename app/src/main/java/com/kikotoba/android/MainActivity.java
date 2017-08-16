@@ -94,7 +94,6 @@ public class MainActivity extends BaseActivity {
         });
 
         logUserEvent();
-
     }
 
     private void logUserEvent() {
@@ -109,10 +108,19 @@ public class MainActivity extends BaseActivity {
                 if (entity == null) {
                     entity = new Summary();
                 }
+
+                String versionName = Versatile.getVersionName(_this);
                 if (StringUtils.isEmpty(entity.getStartAndroidAppVersionName())) {
-                    entity.setStartAndroidAppVersionName(Versatile.getVersionName(_this));
+                    entity.setStartAndroidAppVersionName(versionName);
                 }
-                entity._setLastOpenAppDate(Calendar.getInstance());
+                entity.setCurrentAndroidAppVersionName(versionName);
+
+                Calendar now = Calendar.getInstance();
+                if (entity._getFirstOpenedAt() == null) {
+                    entity._setFirstOpenedAt(now);
+                }
+                entity._setLastOpenAppDate(now);
+
                 summaryRepository.update(user.getUid(), entity, new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {

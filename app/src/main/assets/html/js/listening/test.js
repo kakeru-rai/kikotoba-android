@@ -46,27 +46,34 @@ $(function() {
         $audio.css('width', '100%')
                 .attr('controls', 'controls');
         var $play = $('<button>再生</button>').on('click', function(){audio.play()});
-        var $pause = $('<button>停止</button>').on('click', function(){audio.pause()});
+        var $pause = $('<button>停止</button>').on('click', function(){
+            audio.pause()
+        });
         var $back = $('<button>1秒戻る</button>').on('click', function(){
                 audio.currentTime = audio.currentTime - 1;
                 audio.play();
             });
-        var $backHalf = $('<button>0.3秒戻る</button>').on('click', function(){
-                audio.currentTime = audio.currentTime - 0.3;
-                audio.pause();
+            var $backHalf = $('<button>0.5秒戻る</button>').on('click', function(){
+                audio.currentTime = audio.currentTime - 0.5
+                audio.pause()
             });
         var $toSeconds = $('<input type="text"></div>');
         var $jamp = $('<button>ジャンプ</button>').on('click', function(){
                 audio.currentTime = $toSeconds.val();
             });
+        var $forward = $('<button>1秒進む</button>').on('click', function(){
+                audio.currentTime = audio.currentTime + 1;
+            });
         var $seconds = $('<input type="text"></div>');
         $audio
-            .after($toSeconds)
-            .after($jamp)
-            .after($play)
-            .after($back)
-            .after($pause)
-            .after($seconds)
+            .before($seconds)
+            .before($backHalf)
+            .before($play)
+            .before($pause)
+            .before($forward)
+            .before($back)
+            .before($jamp)
+            .before($toSeconds)
             .on('timeupdate', $.throttle(20, function(){
                 var sec = Math.round(audio.currentTime * 10)/10;
                 $seconds.val(sec);
